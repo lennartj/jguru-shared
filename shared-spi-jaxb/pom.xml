@@ -16,7 +16,7 @@
 
     <groupId>se.jguru.shared.spi.jaxb</groupId>
     <artifactId>jguru-shared-spi-jaxb</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: JAXB SPI (${project.packaging}, version ${project.version})</description>
