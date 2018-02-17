@@ -1,12 +1,31 @@
+/*-
+ * #%L
+ * Nazgul Project: jguru-shared-algorithms-api
+ * %%
+ * Copyright (C) 2018 jGuru Europe AB
+ * %%
+ * Licensed under the jGuru Europe AB license (the "License"), based
+ * on Apache License, Version 2.0; you may not use this file except
+ * in compliance with the License.
+ * 
+ * You may obtain a copy of the License at
+ * 
+ *       http://www.jguru.se/licenses/jguruCorporateSourceLicense-2.0.txt
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 package se.jguru.shared.algorithms.api
 
 import java.net.Inet4Address
 import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.NetworkInterface
-import java.util.Collections
-import java.util.Comparator
-import java.util.SortedSet
+import java.util.*
 import java.util.function.Function
 import java.util.function.Predicate
 import javax.validation.constraints.NotNull
@@ -43,23 +62,27 @@ object NetworkAlgorithms {
     /**
      * Predicate identifying non-null IPv4 InetAddresses.
      */
+    @JvmStatic
     val IPV4_FILTER = Predicate<InetAddress> { candidate -> candidate is Inet4Address }
 
     /**
      * Predicate identifying non-null IPv6 InetAddresses.
      */
-    val IPV6_FILTER = { candidate: Any -> candidate is Inet6Address }
+    @JvmStatic
+    val IPV6_FILTER = Predicate<InetAddress> { candidate -> candidate is Inet6Address }
 
     /**
      * Predicate identifying non-null LoopBackAddresses.
      */
-    val LOOPBACK_FILTER = { candidate: InetAddress -> candidate.isLoopbackAddress }
+    @JvmStatic
+    val LOOPBACK_FILTER = Predicate<InetAddress> { candidate -> candidate.isLoopbackAddress }
 
     /**
      *
      * Predicate identifying non-null IPv4 InetAddress objects that are neither LinkLocal nor Loopback addresses.
      */
-    val PUBLIC_IPV4_FILTER = { candidate: Any ->
+    @JvmStatic
+    val PUBLIC_IPV4_FILTER = Predicate<Any> { candidate ->
         candidate is Inet4Address
             && !candidate.isLoopbackAddress
             && !candidate.isLinkLocalAddress
@@ -71,6 +94,7 @@ object NetworkAlgorithms {
      * It is, therefore, recommended to use this Comparator only after filtering an InetAddress
      * collection for null objects.
      */
+    @JvmStatic
     val INETADDRESS_COMPARATOR = { left: InetAddress?, right: InetAddress? ->
 
         // If any side is null, simply replace with an empty string.
@@ -88,6 +112,7 @@ object NetworkAlgorithms {
      * It is, therefore, recommended to use this Comparator only after removing null objects
      * from the respective source Collection.
      */
+    @JvmStatic
     val NETWORK_INTERFACE_COMPARATOR = kotlin.Comparator<NetworkInterface> { l, r ->
 
         // Be paranoid
@@ -101,6 +126,7 @@ object NetworkAlgorithms {
     /**
      * Finds all non-broadcast InetAddresses from the supplied NetworkInterface.
      */
+    @JvmStatic
     fun getInetAddresses(networkInterface: NetworkInterface): SortedSet<InetAddress> {
 
         val toReturn = java.util.TreeSet<InetAddress>(INETADDRESS_COMPARATOR)
@@ -121,7 +147,8 @@ object NetworkAlgorithms {
      *  1. [InetAddress.getHostAddress]
      *  1. [InetAddress.getHostName]
      */
-    val GET_ALL_ADRESSES = { addr: InetAddress? ->
+    @JvmStatic
+    val GET_ALL_ADRESSES = Function<InetAddress, Set<String>> { addr: InetAddress? ->
 
         val toReturn = java.util.TreeSet<String>()
 
@@ -144,6 +171,7 @@ object NetworkAlgorithms {
      * @see [getInetAddresses]
      * @see [PUBLIC_IPV4_FILTER]
      */
+    @JvmStatic
     val publicIPv4Addresses: SortedSet<Inet4Address>
         @NotNull get() {
 
@@ -164,10 +192,10 @@ object NetworkAlgorithms {
      * Retrieves a SortedSet containing all [NetworkInterface]s found.
      *
      * @param comparator A Comparator ordering the NetworkInterfaces found on the executing computer.
-     * If a `null` value is retrieved, [.NETWORK_INTERFACE_COMPARATOR] is used.
      * @return A SortedSet containing the NetworkInterfaces on the executing computer.
      * @throws IllegalStateException if the [NetworkInterface.getNetworkInterfaces] method fails.
      */
+    @JvmStatic
     @NotNull
     @Throws(IllegalStateException::class)
     fun getAllNetworkInterfaces(comparator: Comparator<NetworkInterface> = NETWORK_INTERFACE_COMPARATOR)
@@ -189,23 +217,24 @@ object NetworkAlgorithms {
     /**
      * Retrieves a set of string representations of the local [NetworkInterface]s found.
      *
-     * @param addressFilter A filter applied to each NetworkInterface found.
-     * If a `null` value is retrieved, [.IPV4_FILTER] is used.
-     * @param addressMapper A Function applied to all InetAddress objects filtered by the addressFilter.
-     * If a `null` value is retrieved, [.GET_ALL_ADRESSES] is used.
+     * @param addressFilter A filter applied to each [NetworkInterface] found.
+     * @param addressMapper A Function applied to all [InetAddress] objects filtered by the addressFilter.
      * @return A SortedSet containing all String representations of the local [NetworkInterface]s found.
      */
+    @JvmStatic
     @NotNull
     fun getAllLocalNetworkAddresses(
-        addressFilter: Predicate<InetAddress> = Predicate(IPV4_FILTER),
-        addressMapper: Function<InetAddress, Set<String>> = Function(GET_ALL_ADRESSES)):
-        SortedSet<String> {
+        addressFilter: Predicate<InetAddress> = IPV4_FILTER,
+        addressMapper: Function<InetAddress, Set<String>> = GET_ALL_ADRESSES): SortedSet<String> {
 
         // Check sanity
-        val filter = addressFilter ?: IPV4_FILTER
-        val mapper = addressMapper ?: GET_ALL_ADRESSES
-
         val toReturn = java.util.TreeSet<String>()
+
+
+        // TODO: Fix this.
+        getAllNetworkInterfaces()
+            .map { it.inetAddresses.toList() }
+            .stream()
 
         getAllNetworkInterfaces().forEach { networkInterface ->
 
