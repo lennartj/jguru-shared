@@ -64,6 +64,8 @@
     ################################################
     -->
     <modules>
+        <module>shared-algorithms-api</module>
+        <module>shared-entity-test</module>
         <module>shared-spi-jaxb</module>
     </modules>
 
