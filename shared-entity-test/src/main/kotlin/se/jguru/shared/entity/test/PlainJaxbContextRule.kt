@@ -397,8 +397,8 @@ class PlainJaxbContextRule(val jaxbAnnotatedClasses: SortedSet<Class<*>> = ) : T
                       toUnmarshal: String): T {
 
         // Check sanity
-        org.apache.commons.lang3.Validate.notNull(resultType, "Cannot handle null 'resultType' argument.")
-        org.apache.commons.lang3.Validate.notEmpty(toUnmarshal, "Cannot handle null or empty 'xmlToUnmarshal' argument.")
+        Validate.notNull(resultType, "Cannot handle null 'resultType' argument.")
+        Validate.notEmpty(toUnmarshal, "Cannot handle null or empty 'xmlToUnmarshal' argument.")
 
         val source = StreamSource(StringReader(toUnmarshal))
 
