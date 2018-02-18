@@ -22,14 +22,12 @@
 package se.jguru.shared.algorithms.api
 
 import javax.validation.constraints.NotNull
-import javax.xml.bind.annotation.XmlTransient
 
 /**
  * Simple argument validator, inspired by the commons-lang.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se)
  */
-@XmlTransient
 object Validate {
 
     /**
@@ -178,7 +176,7 @@ object Validate {
     private fun getMessage(@NotNull exceptionDefinition: String, @NotNull argumentName: String = ""): String {
 
         // All Done.
-        val suffix = if (argumentName.isNotEmpty()) " $argumentName" else argumentName
+        val suffix = if (argumentName.isNotEmpty()) " '$argumentName'" else argumentName
         return "Cannot handle $exceptionDefinition$suffix argument."
     }
 }

@@ -25,11 +25,12 @@ import java.net.Inet4Address
 import java.net.Inet6Address
 import java.net.InetAddress
 import java.net.NetworkInterface
-import java.util.*
+import java.util.Collections
+import java.util.Comparator
+import java.util.SortedSet
 import java.util.function.Function
 import java.util.function.Predicate
 import javax.validation.constraints.NotNull
-import javax.xml.bind.annotation.XmlTransient
 
 /**
  * Collection of network-related algorithms. The address definitions are :
@@ -56,7 +57,6 @@ import javax.xml.bind.annotation.XmlTransient
  * @see <a href="https://en.wikipedia.org/wiki/Link-local_address">Wikipedia: Link-local address definition</a>
  * @see <a href="https://en.wikipedia.org/wiki/Loopback">Wikipedia: Loopback address definition</a>
  */
-@XmlTransient
 object NetworkAlgorithms {
 
     /**
@@ -223,26 +223,19 @@ object NetworkAlgorithms {
      */
     @JvmStatic
     @NotNull
-    fun getAllLocalNetworkAddresses(
+    fun getAddressesFromAllNetworkInterfaces(
         addressFilter: Predicate<InetAddress> = IPV4_FILTER,
         addressMapper: Function<InetAddress, Set<String>> = GET_ALL_ADRESSES): SortedSet<String> {
 
         // Check sanity
         val toReturn = java.util.TreeSet<String>()
 
+        for(addressList in getAllNetworkInterfaces().map { it.inetAddresses.toList() }) {
 
-        // TODO: Fix this.
-        getAllNetworkInterfaces()
-            .map { it.inetAddresses.toList() }
-            .stream()
-
-        getAllNetworkInterfaces().forEach { networkInterface ->
-
-            getInetAddresses(networkInterface)
-                .stream()
+            addressList.stream()
                 .filter(addressFilter)
-                .map { addressMapper.apply(it) }
-                .forEach { foo -> toReturn.addAll(it) }
+                .map(addressMapper)
+                .forEach { toReturn.addAll(it) }
         }
 
         // All Done.

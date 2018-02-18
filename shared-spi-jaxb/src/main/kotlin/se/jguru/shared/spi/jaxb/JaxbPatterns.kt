@@ -40,6 +40,4 @@ object JaxbPatterns {
      * The XML namespace used by shared transport model objects.
      */
     val NAMESPACE_SHARED_TRANSPORT = "http://xmlns.jguru.se/xml/ns/transport"
-
-
 }
