@@ -27,13 +27,42 @@
         -->
         <path.in.reactor>shared-entity-test</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
+
+        <!-- Version constants -->
         <jaxb.version>2.3.0</jaxb.version>
+        <eclipselink.version>2.7.1</eclipselink.version>
     </properties>
 
     <!-- +=============================================== -->
     <!-- | Section 2:  Dependency (management) settings   -->
     <!-- +=============================================== -->
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>org.eclipse.persistence.moxy</artifactId>
+                <version>${eclipselink.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
+        <!--
+            Internal dependencies.
+        -->
+        <dependency>
+            <groupId>se.jguru.shared.algorithms.api</groupId>
+            <artifactId>jguru-shared-algorithms-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        
         <!--
             External dependencies.
         -->
@@ -52,7 +81,15 @@
             <artifactId>jaxb-api</artifactId>
             <version>${jaxb.version}</version>
         </dependency>
-        
+
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
