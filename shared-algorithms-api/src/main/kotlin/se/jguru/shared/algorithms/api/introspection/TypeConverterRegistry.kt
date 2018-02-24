@@ -1,3 +1,24 @@
+/*-
+ * #%L
+ * Nazgul Project: jguru-shared-algorithms-api
+ * %%
+ * Copyright (C) 2018 jGuru Europe AB
+ * %%
+ * Licensed under the jGuru Europe AB license (the "License"), based
+ * on Apache License, Version 2.0; you may not use this file except
+ * in compliance with the License.
+ * 
+ * You may obtain a copy of the License at
+ * 
+ *       http://www.jguru.se/licenses/jguruCorporateSourceLicense-2.0.txt
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 package se.jguru.shared.algorithms.api.introspection
 
 import java.lang.annotation.Inherited
@@ -7,20 +28,19 @@ import java.lang.annotation.Inherited
 @Inherited
 @Target(AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.EXPRESSION)
 annotation class Converter(
+
     /**
      * Parameter to indicate that this converter method or constructor accepts `null` values.
-     * Defaults to `false`.
-     * If this parameter is set to `true`, your converter [method or constructor] indicates that it
-     * should be able to provide a default value in the case of null input values. A typical example is
-     * provided below:
-     * <pre>
+     * Defaults to `false`. If this parameter is set to `true`, your converter (method or constructor) indicates
+     * that it should be able to provide a default value in the case of null input values.
      *
-     * &#64;Converter(acceptsNullValues = true)
+     * ```
+     * @Converter(acceptsNullValues = true)
      * public StringBuffer convert(final String aString) {
-     * final String bufferValue = aString == null ? "nothing!" : aString;
-     * return new StringBuffer(bufferValue);
+     *      final String bufferValue = aString == null ? "nothing!" : aString;
+     *      return new StringBuffer(bufferValue);
      * }
-    </pre> *
+     * ```
      *
      * @return `true` if this Converter accepts `null`s as values for conversion.
      */
@@ -46,12 +66,12 @@ annotation class Converter(
      * // Find out if the aFoo can be converted by this FooConverter instance.
      * }
      * }
-    </pre> *
+     * </pre>
      *
      * @return the priority of this Converter method or constructor. Members with lower priorities are
      * attempted **before** higher priority ones.
      */
-    val priority: Int = DEFAULT_PRIORITY,
+    val priority: Int = 100,
 
     /**
      *
@@ -62,38 +82,24 @@ annotation class Converter(
      * can be converted by this method.
      *
      * This attribute is ignored for Constructor Converters. A typical example would be:
-     * <pre>
+     * ```
      * class FooConverter {
      *
-     * &#64;Converter(conditionalConversionMethod = "checkFoo")
+     * @Converter(conditionalConversionMethod = "checkFoo")
      * public String convert(Foo aFoo) {
-     * ...
+     *      ...
      * }
      *
      * public boolean checkFoo(Foo aFoo) {
-     * // Find out if the aFoo can be converted by this FooConverter instance.
+     *      // Find out if the aFoo can be converted by this FooConverter instance.
      * }
-     * }
-    </pre> *
+     *
+     * }````
      *
      * @return Name of a method with a single parameter of the same source type as the `@Converter`-annotated
      * method, and returning a `boolean`.
      */
-    val conditionalConversionMethod: String = NO_CONVERTER_METHOD;
-
-    companion object {
-
-        /**
-         * The default priority value, used if no other priority has been supplied.
-         */
-        const val DEFAULT_PRIORITY = 100
-
-        /**
-         * The default converterMethod value, used to indicate that no converter method name has been supplied.
-         */
-        val NO_CONVERTER_METHOD = "##NONE##"
-    }
-}
+    val conditionalConversionMethod: String = "##NONE##")
 
 
 /**
@@ -160,33 +166,5 @@ interface TypeConverterRegistry {
      */
     @Throws(IllegalArgumentException::class)
     fun <OriginalType, TransportType> resurrectAfterTransport(toConvert: TransportType): OriginalType
-}
-
-/**
- * Simple TypeConverterRegistry implementation.
- * 
- * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
- */
-class SimpleTypeConverterRegistry : TypeConverterRegistry {
-
-    override fun addConverters(vararg converters: Any) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <TransportType, OriginalType> getTransportType(originalType: Class<OriginalType>): Class<TransportType> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <OriginalType, TransportType> getOriginalType(transportType: Class<TransportType>): Class<OriginalType> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <OriginalType, TransportType> packageForTransport(source: OriginalType): TransportType {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <OriginalType, TransportType> resurrectAfterTransport(toConvert: TransportType): OriginalType {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }
 
