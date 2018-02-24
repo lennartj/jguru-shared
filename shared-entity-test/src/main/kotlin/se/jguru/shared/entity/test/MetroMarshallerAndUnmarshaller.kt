@@ -22,6 +22,7 @@
 package se.jguru.shared.entity.test
 
 import com.sun.xml.bind.v2.ContextFactory
+import org.junit.rules.TestWatcher
 import se.jguru.shared.algorithms.api.introspection.Introspection
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
@@ -92,4 +93,14 @@ open class MetroMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
         // All Done
         return ContextFactory.createContext(allClasses.toTypedArray(), jaxbContextProperties)
     }
+}
+
+/**
+ * jUnit Rule for running JAXB tests under Kotlin.
+ *
+ * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
+ */
+class MetroMarshallerUnmarshallerRule(val delegate: MarshallerAndUnmarshaller) : TestWatcher() {
+
+    // Internal state
 }
