@@ -22,7 +22,6 @@
 package se.jguru.shared.algorithms.api.introspection
 
 import java.util.SortedSet
-import java.util.TreeSet
 
 /**
  * Algorithms aimed at type introspection, extracting type information as required.
@@ -60,21 +59,25 @@ object Introspection {
      * @param classLoader The classloader used to harvest the type information
      * @param objects The objects from which to harvest type information.
      */
-    fun populateTypeInformation(classLoader: ClassLoader = Thread.currentThread().contextClassLoader,
-                                vararg objects: Any): SortedSet<String> =
-        getTypesFrom(classLoader, objects).map { it.name }.toSortedSet()
+    fun getTypeNamesFrom(vararg objects: Any): SortedSet<String> =
+        getTypesFrom(objects).map { it.name }.toSortedSet()
 
     /**
      * Populates the supplied typeSet with all types found within the supplied [anObject]
      */
     fun populateTypeInformationFrom(typeSet: MutableSet<Class<*>> = HashSet(), anObject: Any) {
 
+        // Check sanity
+        val immediateClass = anObject.javaClass
+
         // Add self first.
-        typeSet.add(anObject.javaClass)
+        typeSet.add(immediateClass)
 
         // Recurse if required.
         when (anObject) {
-            is Collection<*> -> anObject.filterNotNull().forEach { populateTypeInformationFrom(typeSet, it) }
+            is Collection<*> -> anObject
+                .filterNotNull()
+                .forEach { populateTypeInformationFrom(typeSet, it) }
             is Map<*, *> -> anObject.entries
                 .filter { e -> e.key != null && e.value != null }
                 .forEach { populateTypeInformationFrom(typeSet, it.value!!) }
