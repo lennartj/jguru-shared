@@ -21,7 +21,6 @@
  */
 package se.jguru.shared.entity.test
 
-import se.jguru.shared.algorithms.api.introspection.Introspection
 import java.io.IOException
 import java.io.Serializable
 import java.io.StringWriter
@@ -174,7 +173,7 @@ abstract class AbstractMarshallerAndUnmarshaller(
         return toReturn
     }
 
-    protected fun createUnmarshaller(jaxbContext: JAXBContext) : Unmarshaller {
+    protected fun createUnmarshaller(jaxbContext: JAXBContext): Unmarshaller {
 
         val toReturn = jaxbContext.createUnmarshaller()
         toReturn.setProperty(Marshaller.JAXB_ENCODING, "UTF-8")
@@ -183,12 +182,15 @@ abstract class AbstractMarshallerAndUnmarshaller(
         return toReturn
     }
 
-    protected fun doMarshalling(toMarshal: Array<out Any>, marshaller: Marshaller): String {
+    protected fun doMarshalling(marshaller: Marshaller, vararg toMarshal: Any): String {
 
         // Marshal the inbound objects
         val result = StringWriter()
         for (i in toMarshal.indices) {
 
+            println("toMarshal type: ${toMarshal::class.java}")
+            println("toMarshal[0] type: ${toMarshal[0]::class.java}")
+            
             // Handle the Marshalled output of this object.
             val tmp = StringWriter()
 

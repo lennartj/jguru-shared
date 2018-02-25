@@ -23,9 +23,8 @@ package se.jguru.shared.entity.test
 
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.TimeZone
 
 /**
@@ -34,19 +33,10 @@ import java.util.TimeZone
  *
  * @author [Lennart Jörelid](mailto:lj@jguru.se), jGuru Europe AB
  */
-class DateAndTimeZoneRule(val desiredTimeZone: TimeZone? = null,
-                          val desiredDateTime: LocalDateTime? = null) : TestWatcher() {
-
-    /**
-     * Convenience constructor assigning the [desiredTimeZone] by converting from the supplied [zoneId].
-     * Defaults to [ZoneOffset.UTC].
-     */
-    constructor(zoneId: ZoneId = ZoneOffset.UTC, desiredDateTime: LocalDateTime? = null)
-        : this(TimeZone.getTimeZone(zoneId), desiredDateTime)
+class TimeZoneRule(val desiredTimeZone: TimeZone? = null) : TestWatcher() {
 
     // Internal state
     private var originalTimeZone: TimeZone = TimeZone.getDefault()
-    private var originalDateTime: LocalDateTime = LocalDateTime.now()
 
     /**
      * Invoked when a test is about to start
@@ -55,10 +45,12 @@ class DateAndTimeZoneRule(val desiredTimeZone: TimeZone? = null,
 
         // Override the timezone, if a desired value is provided
         if (desiredTimeZone != null) {
-            TimeZone.setDefault(desiredTimeZone)
-        }
 
-        if(desiredDateTime != null) {
+            if (log.isDebugEnabled) {
+                log.debug("Setting default TimeZone: ${desiredTimeZone.displayName}")
+            }
+
+            TimeZone.setDefault(desiredTimeZone)
         }
     }
 
@@ -67,7 +59,21 @@ class DateAndTimeZoneRule(val desiredTimeZone: TimeZone? = null,
      */
     override fun finished(description: Description?) {
 
-        // Reset the timezone if
-        TimeZone.setDefault(originalTimeZone)
+        // Reset the timezone if it was originally altered
+        if (desiredTimeZone != null) {
+
+            if (log.isDebugEnabled) {
+                log.debug("Re-setting default TimeZone: ${originalTimeZone.displayName} " +
+                    "(was: ${originalTimeZone.displayName})")
+            }
+
+            TimeZone.setDefault(originalTimeZone)
+        }
+    }
+
+    companion object {
+
+        @JvmStatic
+        private val log: Logger = LoggerFactory.getLogger(TimeZoneRule::class.java.name)
     }
 }

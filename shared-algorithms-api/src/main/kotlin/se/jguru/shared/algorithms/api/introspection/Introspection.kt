@@ -27,9 +27,14 @@ import java.util.TreeSet
 /**
  * Algorithms aimed at type introspection, extracting type information as required.
  *
- * @author [Lennart Jörelid](mailto:lj@jguru.se), jGuru Europe AB
+ * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 object Introspection {
+
+    /**
+     * Standard [Comparator] for classes, comparing their respective names.
+     */
+    val CLASSNAME_COMPARATOR: Comparator<Class<*>> = Comparator({ l, r -> l.name.compareTo(r.name) })
 
     /**
      * Retrieves type information from the supplied objects.
@@ -37,9 +42,9 @@ object Introspection {
      * @param classLoader The classloader used to harvest the type information
      * @param objects The objects from which to harvest type information.
      */
-    fun getTypesFrom(vararg objects: Any): SortedSet<Class<*>> {
+    fun getTypesFrom(vararg objects: Any): Set<Class<*>> {
 
-        val toReturn = TreeSet<Class<*>>()
+        val toReturn = HashSet<Class<*>>()
 
         for (current in objects) {
             populateTypeInformationFrom(toReturn, current)
@@ -62,8 +67,7 @@ object Introspection {
     /**
      * Populates the supplied typeSet with all types found within the supplied [anObject]
      */
-    fun populateTypeInformationFrom(typeSet: SortedSet<Class<*>> = TreeSet({ l, r -> l.name.compareTo(r.name) }),
-                                    anObject: Any) {
+    fun populateTypeInformationFrom(typeSet: MutableSet<Class<*>> = HashSet(), anObject: Any) {
 
         // Add self first.
         typeSet.add(anObject.javaClass)

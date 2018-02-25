@@ -24,6 +24,7 @@ package se.jguru.shared.entity.test
 import org.eclipse.persistence.jaxb.MarshallerProperties
 import org.eclipse.persistence.jaxb.UnmarshallerProperties
 import org.junit.rules.TestWatcher
+import org.junit.runner.Description
 import se.jguru.shared.algorithms.api.introspection.Introspection
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
@@ -95,7 +96,7 @@ open class EclipseLinkMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshal
         }
 
         // All Done.
-        return doMarshalling(toMarshal, marshaller)
+        return doMarshalling(marshaller, toMarshal)
     }
 
     /**
@@ -121,4 +122,17 @@ open class EclipseLinkMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshal
 class EclipseLinkMarshallerUnmarshallerRule(val delegate: MarshallerAndUnmarshaller) : TestWatcher() {
 
     // Internal state
+
+    override fun starting(description: Description?) {
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory")
+        super.starting(description)
+    }
+
+    override fun finished(description: Description?) {
+        super.finished(description)
+    }
+
+    override fun failed(e: Throwable?, description: Description?) {
+        super.failed(e, description)
+    }
 }

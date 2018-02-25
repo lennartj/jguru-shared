@@ -77,7 +77,7 @@ open class MetroMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
         }
 
         // All Done.
-        return doMarshalling(toMarshal, marshaller)
+        return doMarshalling(marshaller, toMarshal)
     }
 
     /**
