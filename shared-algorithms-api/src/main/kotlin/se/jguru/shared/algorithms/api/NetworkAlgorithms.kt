@@ -195,6 +195,7 @@ object NetworkAlgorithms {
      * @return A SortedSet containing the NetworkInterfaces on the executing computer.
      * @throws IllegalStateException if the [NetworkInterface.getNetworkInterfaces] method fails.
      */
+    @JvmOverloads
     @JvmStatic
     @NotNull
     @Throws(IllegalStateException::class)
@@ -221,6 +222,7 @@ object NetworkAlgorithms {
      * @param addressMapper A Function applied to all [InetAddress] objects filtered by the addressFilter.
      * @return A SortedSet containing all String representations of the local [NetworkInterface]s found.
      */
+    @JvmOverloads
     @JvmStatic
     @NotNull
     fun getAddressesFromAllNetworkInterfaces(

@@ -33,7 +33,7 @@ import java.util.TimeZone
  *
  * @author [Lennart Jörelid](mailto:lj@jguru.se), jGuru Europe AB
  */
-class TimeZoneRule(val desiredTimeZone: TimeZone? = null) : TestWatcher() {
+class TimeZoneRule @JvmOverloads constructor(val desiredTimeZone: TimeZone? = null) : TestWatcher() {
 
     // Internal state
     private var originalTimeZone: TimeZone = TimeZone.getDefault()

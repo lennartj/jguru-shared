@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
  * @see DateTimeFormatter.ISO_ZONED_DATE_TIME
  */
 @XmlTransient
-class ZonedDateTimeAdapter : XmlAdapter<String, ZonedDateTime>() {
+class ZonedDateTimeAdapter (val formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME)
+    : XmlAdapter<String, ZonedDateTime>() {
 
     /**
      * {@inheritDoc}
@@ -42,7 +43,7 @@ class ZonedDateTimeAdapter : XmlAdapter<String, ZonedDateTime>() {
     @Throws(Exception::class)
     override fun unmarshal(transportForm: String?): ZonedDateTime? = when (transportForm) {
         null -> null
-        else -> ZonedDateTime.parse(transportForm, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+        else -> ZonedDateTime.parse(transportForm, formatter)
     }
 
     /**
@@ -51,6 +52,6 @@ class ZonedDateTimeAdapter : XmlAdapter<String, ZonedDateTime>() {
     @Throws(Exception::class)
     override fun marshal(dateTime: ZonedDateTime?): String? = when (dateTime) {
         null -> null
-        else -> DateTimeFormatter.ISO_ZONED_DATE_TIME.format(dateTime)
+        else -> formatter.format(dateTime)
     }
 }

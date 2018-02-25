@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
-class LocalDateTimeAdapter : XmlAdapter<String, LocalDateTime>() {
+class LocalDateTimeAdapter(val formatter : DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    : XmlAdapter<String, LocalDateTime>() {
 
     /**
      * {@inheritDoc}
@@ -41,7 +42,7 @@ class LocalDateTimeAdapter : XmlAdapter<String, LocalDateTime>() {
     @Throws(Exception::class)
     override fun unmarshal(transportForm: String?): LocalDateTime? = when (transportForm) {
         null -> null
-        else -> LocalDateTime.parse(transportForm, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        else -> LocalDateTime.parse(transportForm, formatter)
     }
 
     /**
@@ -50,7 +51,7 @@ class LocalDateTimeAdapter : XmlAdapter<String, LocalDateTime>() {
     @Throws(Exception::class)
     override fun marshal(objectForm: LocalDateTime?): String? = when (objectForm) {
         null -> null
-        else -> DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(objectForm)
+        else -> formatter.format(objectForm)
     }
 }
 
