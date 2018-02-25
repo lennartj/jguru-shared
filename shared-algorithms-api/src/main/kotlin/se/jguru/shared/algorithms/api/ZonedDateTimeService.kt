@@ -63,6 +63,7 @@ interface ZonedDateTimeService : LocalDateTimeService {
          * @param zoneOffset The [ZoneOffset] used to define the timezone. Defaults to [ZoneOffset.UTC] unless
          * explicitly given.
          */
+        @JvmOverloads
         fun create(timestamp: LocalDateTime = LocalDateTime.now(), zoneOffset: ZoneOffset = ZoneOffset.UTC)
             : ZonedDateTime = ZonedDateTime.ofLocal(timestamp, zoneOffset, zoneOffset)
     }
