@@ -1,8 +1,7 @@
-package se.jguru.shared.algorithms.api
+package se.jguru.shared.algorithms.api.introspection
 
 import org.junit.Assert
 import org.junit.Test
-import se.jguru.shared.algorithms.api.introspection.Introspection
 import java.lang.StringBuilder
 
 /**

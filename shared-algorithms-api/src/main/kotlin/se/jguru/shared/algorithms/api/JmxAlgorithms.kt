@@ -31,7 +31,6 @@ import javax.management.ObjectInstance
 import javax.management.ObjectName
 import javax.management.QueryExp
 
-
 /**
  * Collection of algorithms that simplify working with JMX, typically MXBeans, to enhance and harmonize monitoring
  * and application-level statistics.
