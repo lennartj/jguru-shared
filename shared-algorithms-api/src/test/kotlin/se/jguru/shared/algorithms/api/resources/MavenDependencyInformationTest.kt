@@ -1,6 +1,5 @@
-package se.jguru.shared.algorithms.api.introspection
+package se.jguru.shared.algorithms.api.resources
 
-import com.sun.org.apache.regexp.internal.RESyntaxException
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

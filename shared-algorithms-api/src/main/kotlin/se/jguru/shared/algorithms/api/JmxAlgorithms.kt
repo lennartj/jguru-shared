@@ -101,7 +101,7 @@ object JmxAlgorithms {
      * method to be compliant.
      * @param <I>                  The MXBean object to register, which must implement the supplied JMX type.
      * @return The JMX ObjectInstance to register.
-    </I></T> */
+     */
     @JvmStatic
     @JvmOverloads
     @Throws(IllegalArgumentException::class)

@@ -1,4 +1,4 @@
-package se.jguru.shared.algorithms.api.introspection
+package se.jguru.shared.algorithms.api.resources
 
 import org.junit.Assert
 import org.junit.Test

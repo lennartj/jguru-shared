@@ -19,7 +19,7 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.algorithms.api.introspection
+package se.jguru.shared.algorithms.api.resources
 
 import org.slf4j.LoggerFactory
 import java.net.URL
