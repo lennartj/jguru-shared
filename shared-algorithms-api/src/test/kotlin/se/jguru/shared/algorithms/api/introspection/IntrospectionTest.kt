@@ -36,7 +36,6 @@ class IntrospectionTest {
     fun validateTypeNamesCorrectlyExtracted() {
 
         // Assemble
-        // , java.lang.Integer, java.lang.String, java.lang.StringBuilder
         val expected = mutableListOf("[Ljava.lang.Object;",
             "java.lang.Integer",
             "java.lang.String",
