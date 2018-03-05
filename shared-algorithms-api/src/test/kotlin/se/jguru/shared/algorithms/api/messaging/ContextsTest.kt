@@ -5,11 +5,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.springframework.jndi.JndiTemplate
 import org.springframework.mock.jndi.SimpleNamingContextBuilder
 import java.util.Hashtable
 import javax.naming.Context
-import javax.naming.InitialContext
 import javax.naming.spi.InitialContextFactory
 
 
