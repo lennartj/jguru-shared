@@ -53,8 +53,8 @@ class NetworkAlgorithmsTest {
                 }
         }
 
-        foundLocalIPv4Addresses = !allLocalIPv4Addresses!!.isEmpty()
-        foundLocalIPv6Addresses = !allLocalIPv6Addresses!!.isEmpty()
+        foundLocalIPv4Addresses = allLocalIPv4Addresses!!.isNotEmpty()
+        foundLocalIPv6Addresses = allLocalIPv6Addresses!!.isNotEmpty()
     }
 
     @Test
