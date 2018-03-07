@@ -21,7 +21,10 @@
  */
 package se.jguru.shared.algorithms.api.introspection
 
+import java.security.CodeSource
+import java.security.ProtectionDomain
 import java.util.SortedSet
+
 
 /**
  * Algorithms aimed at type introspection, extracting type information as required.
@@ -83,5 +86,66 @@ object Introspection {
                 .forEach { populateTypeInformationFrom(typeSet, it.value!!) }
             is Array<*> -> anObject.filterNotNull().forEach { populateTypeInformationFrom(typeSet, it) }
         }
+    }
+
+    /**
+     * Retrieves the [CodeSource] for the given [Class].
+     *
+     * @return The [CodeSource] of for the [ProtectionDomain] of the supplied [Class], or `null` for
+     * system-loaded classes.
+     * @throws SecurityException if a [SecurityManager] exists and its [SecurityManager.checkPermission] method
+     * doesn't allow getting the ProtectionDomain.
+     */
+    @Throws(SecurityException::class)
+    fun getCodeSourceFor(aClass: Class<*>): CodeSource? = aClass.protectionDomain.codeSource
+
+    /**
+     * Retrieves a string relating a diagnostic message regarding the CodeSource Location of the supplied Class.
+     *
+     * @param aClass The class for which to retrieve a diagnostic message containing the CodeSource's Location, if
+     * that could be extracted from the supplied aClass.
+     * @return a string relating a diagnostic message regarding the CodeSource Location of the supplied Class.
+     */
+    fun getCodeSourcePrintoutFor(aClass: Class<*>): String {
+
+        val builder = StringBuilder()
+
+        // #1) Fetch the ProtectionDomain
+        //
+        val protectionDomain = aClass.protectionDomain
+
+        when (protectionDomain) {
+
+            null -> builder.append("Null ProtectionDomain for [${aClass.name}]. No CodeSource info can be retrieved.")
+            else -> try {
+
+                // #2) Fetch the ClassLoader and CodeSource of the retrieved ProtectionDomain.
+                //
+                val classLoader = protectionDomain.classLoader
+                val codeSource = protectionDomain.codeSource
+
+                // #3) Ensure we have output results even if the
+                //
+                val classLoaderType = when (classLoader) {
+                    null -> "SystemClassLoader (<null> result for protectionDomain.getClassLoader())"
+                    else -> classLoader.javaClass.name
+                }
+
+                val codeSourceLocation = when (codeSource) {
+                    null -> "<null> CodeSource"
+                    else -> codeSource.location.toString() + " --- " + codeSource.toString()
+                }
+
+                builder.append("Class ${aClass.name} is loaded by [$classLoaderType] from [$codeSourceLocation]")
+
+            } catch (e: Throwable) {
+
+                builder.append("Could not acquire ClassLoader or CodeSource from class ["
+                    + aClass.name + "]. This is weird.")
+            }
+        }
+
+        // All Done.
+        return builder.toString()
     }
 }

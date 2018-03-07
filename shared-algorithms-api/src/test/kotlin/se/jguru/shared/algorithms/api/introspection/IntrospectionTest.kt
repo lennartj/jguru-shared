@@ -2,6 +2,7 @@ package se.jguru.shared.algorithms.api.introspection
 
 import org.junit.Assert
 import org.junit.Test
+import se.jguru.shared.algorithms.api.Validate
 import java.lang.StringBuilder
 
 /**
@@ -40,7 +41,7 @@ class IntrospectionTest {
             "java.lang.Integer",
             "java.lang.String",
             "java.lang.StringBuilder")
-        
+
         // Act
         val typesFound = Introspection.getTypeNamesFrom("FooBar!", 42, StringBuilder())
 
@@ -51,5 +52,38 @@ class IntrospectionTest {
             .forEachIndexed { index, currentClassName ->
                 Assert.assertEquals(expected[index], currentClassName)
             }
+    }
+
+    @Test
+    fun validateNullCodeSourceForSystemClass() {
+
+        // Act & Assert
+        // println("String .protectionDomain: ${String::class.java.protectionDomain}")
+        Assert.assertNull(Introspection.getCodeSourceFor(String::class.java))
+    }
+
+    @Test
+    fun validateNonNullCodeSourceForNonSystemClass() {
+
+        // Act & Assert
+        Assert.assertNotNull(Introspection.getCodeSourceFor(Validate::class.java))
+    }
+
+    @Test
+    fun validateCodeSourcePrintoutForNonSystemClass() {
+
+        // Assemble
+        val nonSystemClass : Class<*> = Validate::class.java
+        val systemClass : Class<*> = String::class.java
+
+        // Act
+        val nonSystemResult = Introspection.getCodeSourcePrintoutFor(nonSystemClass)
+        val systemResult = Introspection.getCodeSourcePrintoutFor(systemClass)
+        // println("Got: $result")
+        // println("Got: $systemResult")
+
+        // Assert
+        Assert.assertTrue(nonSystemResult.isNotEmpty())
+        Assert.assertTrue(systemResult.isNotEmpty())
     }
 }
