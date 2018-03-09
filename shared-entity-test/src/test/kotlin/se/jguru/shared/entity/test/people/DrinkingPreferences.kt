@@ -13,7 +13,12 @@ import javax.xml.bind.annotation.XmlType
 @XmlType(namespace = Beverage.NAMESPACE)
 class DrinkingPreferences(
     @XmlElement(nillable = false, required = true)
-    people: List<Person> = mutableListOf()) : Serializable {
+    var people: List<Person> = mutableListOf()) : Serializable {
+
+    /**
+     * JAXB-friendly constructor
+     */
+    constructor() : this(mutableListOf())
 
     companion object {
 

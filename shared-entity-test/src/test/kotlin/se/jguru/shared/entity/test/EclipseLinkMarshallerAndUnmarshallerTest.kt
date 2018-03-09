@@ -1,6 +1,5 @@
 package se.jguru.shared.entity.test
 
-import org.eclipse.persistence.jaxb.JAXBContextFactory
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before

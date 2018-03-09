@@ -75,7 +75,7 @@ open class EclipseLinkMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshal
                                     vararg toMarshal: Any): String {
 
         // Find the type information, by shallow extraction
-        val typesToMarshal = Introspection.getTypesFrom(loader, toMarshal)
+        val typesToMarshal = Introspection.getTypesFrom(toMarshal)
 
         // Get the Marshaller
         val initialMarshaller = createMarshaller(getJaxbContext(typesToMarshal))
@@ -107,7 +107,11 @@ open class EclipseLinkMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshal
         // Join with previously given types
         val allClasses = mutableListOf<Class<*>>()
         allClasses.addAll(typeInformation)
-        allClasses.addAll(classes)
+        classes.stream()
+            .filter { it != null }
+            .filter { !it.isArray }
+            .filter { it != Object::class.java }
+            .forEach { allClasses.add(it) }
 
         // All Done
         return org.eclipse.persistence.jaxb.JAXBContext.newInstance(allClasses.toTypedArray(), jaxbContextProperties)

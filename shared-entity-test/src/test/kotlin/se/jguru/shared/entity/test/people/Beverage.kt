@@ -11,7 +11,12 @@ import javax.xml.bind.annotation.XmlType
  */
 @XmlType(namespace = Beverage.NAMESPACE, propOrder = ["name"])
 @XmlAccessorType(XmlAccessType.FIELD)
-class Beverage(val name: String) {
+class Beverage(var name: String) {
+
+    /**
+     * JAXB-friendly constructor
+     */
+    constructor() : this("unknown")
 
     companion object {
 

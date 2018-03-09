@@ -63,7 +63,7 @@ class TimeZoneRule @JvmOverloads constructor(val desiredTimeZone: TimeZone? = nu
         if (desiredTimeZone != null) {
 
             if (log.isDebugEnabled) {
-                log.debug("Re-setting default TimeZone: ${originalTimeZone.displayName} " +
+                log.debug("Restoring default TimeZone: ${originalTimeZone.displayName} " +
                     "(was: ${originalTimeZone.displayName})")
             }
 

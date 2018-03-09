@@ -91,7 +91,7 @@
     <!-- +=============================================== -->
     <!-- | Section 3:  Build settings                     -->
     <!-- +=============================================== -->
-    <build>
+    <!-- build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <plugins>
             <plugin>
@@ -119,7 +119,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build -->
 
     <!-- +=============================================== -->
     <!-- | Section 4:  External systems                   -->

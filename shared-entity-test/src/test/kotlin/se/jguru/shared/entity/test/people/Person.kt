@@ -17,13 +17,15 @@ import javax.xml.bind.annotation.XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 class Person(
     @XmlElement(nillable = false, required = true)
-    val name: String,
+    var name: String,
 
     @XmlAttribute(required = true)
-    val age: Int,
+    var age: Int,
 
     @XmlElement(required = true)
-    val beverage: Beverage) : Serializable {
+    var beverage: Beverage) : Serializable {
+
+    constructor() : this("none", -1, Beverage("none"))
 
     override fun equals(other: Any?): Boolean {
 
