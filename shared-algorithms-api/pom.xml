@@ -10,13 +10,14 @@
     <parent>
         <groupId>se.jguru.codestyle.poms</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.9.1</version>
         <relativePath/>
     </parent>
 
     <groupId>se.jguru.shared.algorithms.api</groupId>
     <artifactId>jguru-shared-algorithms-api</artifactId>
     <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: Algorithms API (${project.packaging}, version ${project.version})</description>
@@ -48,8 +49,8 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
-       
         <!--
             External dependencies.
         -->

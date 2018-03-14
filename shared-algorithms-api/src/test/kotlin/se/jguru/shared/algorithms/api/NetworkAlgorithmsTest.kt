@@ -22,6 +22,7 @@ class NetworkAlgorithmsTest {
     private var allLocalIPv6Addresses: SortedSet<InetAddress>? = null
     private var foundLocalNetworkInterfaces: Boolean = false
     private var foundLocalIPv4Addresses: Boolean = false
+    private var foundPublicIPv4Addresses: Boolean = false
     private var foundLocalIPv6Addresses: Boolean = false
 
     @Before
@@ -55,36 +56,37 @@ class NetworkAlgorithmsTest {
 
         foundLocalIPv4Addresses = allLocalIPv4Addresses!!.isNotEmpty()
         foundLocalIPv6Addresses = allLocalIPv6Addresses!!.isNotEmpty()
+        foundPublicIPv4Addresses = allLocalIPv4Addresses!!.filter { !it.isLoopbackAddress }.any()
     }
 
     @Test
-    fun validateNonLoopbackIpV4Filter() {
+    fun validatePublicIpV4Filter() {
 
-        if (foundLocalIPv4Addresses) {
+        if (foundPublicIPv4Addresses) {
 
             // Assemble
             val networkIFs = NetworkAlgorithms
                 .getAllNetworkInterfaces(NetworkAlgorithms.NETWORK_INTERFACE_COMPARATOR)
 
             // Act
-            val ipV4Addresses = java.util.TreeSet<Inet4Address>(NetworkAlgorithms.INETADDRESS_COMPARATOR)
+            val publicIpV4Addresses = java.util.TreeSet<Inet4Address>(NetworkAlgorithms.INETADDRESS_COMPARATOR)
             networkIFs.stream()
                 .map { NetworkAlgorithms.getInetAddresses(it) }
                 .forEach { ifs ->
                     ifs.stream()
                         .filter(NetworkAlgorithms.PUBLIC_IPV4_FILTER)
                         .map { ip -> ip as Inet4Address }
-                        .forEach { ipV4Addresses.add(it) }
+                        .forEach { publicIpV4Addresses.add(it) }
                 }
 
             val sortedIFs = java.util.TreeSet<String>()
-            ipV4Addresses.stream()
+            publicIpV4Addresses.stream()
                 .map(NetworkAlgorithms.GET_ALL_ADRESSES)
                 .forEach { sortedIFs.addAll(it) }
 
             // Assert
             Assert.assertFalse(sortedIFs.isEmpty())
-            validateAdresses(ipV4Addresses, false, false)
+            validateAdresses(publicIpV4Addresses, false, false)
         }
     }
 
@@ -113,7 +115,7 @@ class NetworkAlgorithmsTest {
             val sortedIFs = java.util.TreeSet<String>()
             ipV4Addresses.stream()
                 .map(NetworkAlgorithms.GET_ALL_ADRESSES)
-                .forEach(Consumer<Set<String>> { sortedIFs.addAll(it) })
+                .forEach { sortedIFs.addAll(it) }
 
             // Assert
             Assert.assertFalse(sortedIFs.isEmpty())

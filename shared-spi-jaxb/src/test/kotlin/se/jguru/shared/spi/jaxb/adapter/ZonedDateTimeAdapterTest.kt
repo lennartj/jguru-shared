@@ -2,7 +2,7 @@ package se.jguru.shared.spi.jaxb.adapter
 
 import org.junit.Assert
 import org.junit.Test
-import se.mithlond.services.shared.spi.algorithms.TimeFormat
+import se.jguru.shared.algorithms.api.WellKnownTimeZones
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.Month
@@ -15,9 +15,9 @@ class ZoneDateTimeAdapterTest {
 
     private val transportForm = "2015-04-25T15:30:00+02:00[Europe/Stockholm]"
     private val objectForm = ZonedDateTime.of(
-            LocalDate.of(2015, Month.APRIL, 25),
-            LocalTime.of(15, 30, 0),
-            TimeFormat.SWEDISH_TIMEZONE)
+        LocalDate.of(2015, Month.APRIL, 25),
+        LocalTime.of(15, 30, 0),
+        WellKnownTimeZones.SWEDISH.getZoneId())
     private val unitUnderTest = ZonedDateTimeAdapter()
 
     @Test

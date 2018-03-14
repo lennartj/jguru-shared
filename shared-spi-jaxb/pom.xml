@@ -10,12 +10,13 @@
     <parent>
         <groupId>se.jguru.codestyle.poms</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.9.1</version>
         <relativePath/>
     </parent>
 
     <groupId>se.jguru.shared.spi.jaxb</groupId>
     <artifactId>jguru-shared-spi-jaxb</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
@@ -37,9 +38,9 @@
             Internal dependencies.
         -->
         <dependency>
-            <groupId>se.mithlond.services.shared.spi.algorithms</groupId>
-            <artifactId>mithlond-services-shared-spi-algorithms</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <groupId>se.jguru.shared.algorithms.api</groupId>
+            <artifactId>jguru-shared-algorithms-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <!--
             External dependencies.
