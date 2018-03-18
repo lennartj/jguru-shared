@@ -17,7 +17,7 @@
     <groupId>se.jguru.shared.entity.test</groupId>
     <artifactId>jguru-shared-entity-test</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: Entity test utils (${project.packaging}, version ${project.version})</description>
@@ -63,7 +63,12 @@
             <artifactId>jguru-shared-algorithms-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
-        
+        <dependency>
+            <groupId>se.jguru.shared.spi.jaxb</groupId>
+            <artifactId>jguru-shared-spi-jaxb</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
         <!--
             External dependencies.
         -->
@@ -86,10 +91,12 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -101,7 +108,7 @@
             <artifactId>cdi-unit</artifactId>
             <scope>compile</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
@@ -119,7 +126,7 @@
     <!-- | Section 3:  Build settings                     -->
     <!-- +=============================================== -->
     <build>
-        <sourceDirectory>src/main/kotlin</sourceDirectory>
+
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>

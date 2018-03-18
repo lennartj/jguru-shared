@@ -67,4 +67,19 @@ class PropertyResourcesTest {
         Assert.assertEquals(artifactIdValue, parsed["artifactId"])
         Assert.assertEquals(version, parsed["version"])
     }
+
+    @Test
+    fun validateReadingResourceFilesFully() {
+
+        // Assemble
+        val expected = "This is a resource with non-ascii characters.\n" +
+            "åäöÅÄÖ."
+
+        // Act
+        val result = PropertyResources.readFully(resourcePath = "testdata/resources/simpleResource.txt")
+        // println("Got:\n" + result)
+
+        // Assert
+        Assert.assertEquals(expected, result)
+    }
 }

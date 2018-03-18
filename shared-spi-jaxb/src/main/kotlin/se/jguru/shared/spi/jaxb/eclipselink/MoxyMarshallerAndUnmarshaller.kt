@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-entity-test
+ * Nazgul Project: jguru-shared-spi-jaxb
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,13 +19,12 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.entity.test
+package se.jguru.shared.spi.jaxb.eclipselink
 
-import com.sun.xml.bind.v2.ContextFactory
-import org.junit.rules.TestWatcher
+import org.eclipse.persistence.jaxb.MarshallerProperties
+import org.eclipse.persistence.jaxb.UnmarshallerProperties
 import se.jguru.shared.algorithms.api.introspection.Introspection
 import se.jguru.shared.algorithms.api.xml.AbstractMarshallerAndUnmarshaller
-import se.jguru.shared.algorithms.api.xml.MarshallerAndUnmarshaller
 import se.jguru.shared.algorithms.api.xml.MarshallingFormat
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
@@ -33,13 +32,28 @@ import javax.xml.bind.JAXBException
 import javax.xml.transform.stream.StreamSource
 
 /**
- * [AbstractMarshallerAndUnmarshaller] implementation using the standard ("Metro") implementation.
+ * [AbstractMarshallerAndUnmarshaller] implementation using the EclipseLink Moxy implementation.
  *
+ * @param typeInformation a [MutableList] containing classes which should be made available to the [JAXBContext]
+ * synthesized for marshalling and unmarshalling operations.
+ * @param jaxbContextProperties A Map relating property names (as Strings) to their respective values (as Objects).
+ * Valid key/value combinations are implementation-specific; please refer to the actual implementation documentation.
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
+ * @see <a href="http://www.eclipse.org/eclipselink">EclipseLink</a>
+ * @see <a href="http://www.eclipse.org/eclipselink/#moxy">Moxy</a>
  */
-open class MetroMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
-    mutableListOf(),
-    listOf(MarshallingFormat.XML)) {
+open class MoxyMarshallerAndUnmarshaller @JvmOverloads constructor(
+
+    // Types added to the JAXBContext
+    typeInformation: MutableList<Class<*>> = mutableListOf(),
+
+    // Configuration properties submitted to the JAXBContext
+    jaxbContextProperties: MutableMap<String, Any> = mutableMapOf())
+
+    : AbstractMarshallerAndUnmarshaller(
+    typeInformation,
+    listOf(MarshallingFormat.XML, MarshallingFormat.JSON),
+    jaxbContextProperties) {
 
     override fun <T> performUnmarshalling(loader: ClassLoader,
                                           format: MarshallingFormat,
@@ -51,7 +65,15 @@ open class MetroMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
 
         val unmarshaller = when (format) {
             MarshallingFormat.XML -> initialUnmarshaller
-            MarshallingFormat.JSON -> throw IllegalArgumentException("Cannot handle JSON MarshallingFormat.")
+            MarshallingFormat.JSON -> {
+
+                // Configure the emitted JSON
+                initialUnmarshaller.setProperty(UnmarshallerProperties.JSON_WRAPPER_AS_ARRAY_NAME, true)
+                initialUnmarshaller.setProperty(UnmarshallerProperties.MEDIA_TYPE, "application/json")
+
+                // All Done.
+                initialUnmarshaller
+            }
         }
 
         try {
@@ -68,15 +90,25 @@ open class MetroMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
                                     toMarshal: Array<Any>): String {
 
         // Find the type information, by shallow extraction
-        val typesToMarshal = Introspection.getTypesFrom(loader, toMarshal)
+        val typesToMarshal = Introspection.getTypesFrom(toMarshal)
 
         // Get the Marshaller
         val initialMarshaller = createMarshaller(getJaxbContext(typesToMarshal))
+        initialMarshaller.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, namespacePrefixResolver.toMap())
 
         // Decorate the Marshaller as required
         val marshaller = when (format) {
             MarshallingFormat.XML -> initialMarshaller
-            else -> throw IllegalArgumentException("Cannot handle JSON MarshallingFormat.")
+            MarshallingFormat.JSON -> {
+
+                // Configure the emitted JSON
+                initialMarshaller.setProperty(MarshallerProperties.JSON_WRAPPER_AS_ARRAY_NAME, true)
+                initialMarshaller.setProperty(MarshallerProperties.MEDIA_TYPE, "application/json")
+                initialMarshaller.setProperty(MarshallerProperties.JSON_MARSHAL_EMPTY_COLLECTIONS, false)
+
+                // All Done.
+                initialMarshaller
+            }
         }
 
         // All Done.
@@ -91,19 +123,13 @@ open class MetroMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
         // Join with previously given types
         val allClasses = mutableListOf<Class<*>>()
         allClasses.addAll(typeInformation)
-        allClasses.addAll(classes)
+        classes.stream()
+            .filter { it != null }
+            .filter { !it.isArray }
+            .filter { it != Object::class.java }
+            .forEach { allClasses.add(it) }
 
         // All Done
-        return ContextFactory.createContext(allClasses.toTypedArray(), jaxbContextProperties)
+        return org.eclipse.persistence.jaxb.JAXBContext.newInstance(allClasses.toTypedArray(), jaxbContextProperties)
     }
-}
-
-/**
- * jUnit Rule for running JAXB tests under Kotlin.
- *
- * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
- */
-class MetroMarshallerUnmarshallerRule(val delegate: MarshallerAndUnmarshaller) : TestWatcher() {
-
-    // Internal state
 }

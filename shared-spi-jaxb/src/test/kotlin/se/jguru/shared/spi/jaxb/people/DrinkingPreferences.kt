@@ -1,4 +1,4 @@
-package se.jguru.shared.entity.test.people
+package se.jguru.shared.spi.jaxb.people
 
 import java.io.Serializable
 import javax.xml.bind.annotation.XmlElement

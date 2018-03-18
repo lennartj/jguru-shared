@@ -22,6 +22,7 @@
 package se.jguru.shared.algorithms.api.resources
 
 import org.slf4j.LoggerFactory
+import java.io.InputStream
 import java.net.URL
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
@@ -71,6 +72,36 @@ object PropertyResources {
 
         // All Done.
         return toReturn
+    }
+
+    /**
+     * Utility method to read all (string formatted) data from the given classpath-relative
+     * resource file and return the data as a String.
+     *
+     * @param resourcePath The resource path where the resource/file is found.
+     * @param classLoader The [ClassLoader] used to read the property file
+     * @param charset The charset expected within resource file. Defaults to [StandardCharsets.UTF_8]
+     * @param useFunction The converter function transforming the [InputStream]
+     * from the [resourcePath] URL to a String.
+     * @return A [String] containing the key/value pairs read from the property file found.
+     * @throws ResourceNotFoundException if the supplied [classLoader] could not load the resource
+     * from the supplied [resourcePath]
+     */
+    @JvmStatic
+    @JvmOverloads
+    @Throws(IllegalArgumentException::class)
+    fun readFully(resourcePath: String,
+                  classLoader: ClassLoader = Thread.currentThread().contextClassLoader,
+                  charset: Charset = StandardCharsets.UTF_8,
+                  useFunction: (_: InputStream) -> String =
+                  { it.bufferedReader(charset).use { it.readText() } }): String {
+
+        // Open an InputStream to the URL at the given resourcePath.
+        val resourceURL = classLoader.getResource(resourcePath)
+            ?: throw ResourceNotFoundException("No resource found at path [$resourcePath]")
+
+        // Open the stream, wrap it into an InputStreamReader and pass it to the handler method.
+        return resourceURL.openStream().use { useFunction(it) }
     }
 
     /**

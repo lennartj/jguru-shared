@@ -26,6 +26,9 @@ import org.eclipse.persistence.jaxb.UnmarshallerProperties
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import se.jguru.shared.algorithms.api.introspection.Introspection
+import se.jguru.shared.algorithms.api.xml.AbstractMarshallerAndUnmarshaller
+import se.jguru.shared.algorithms.api.xml.MarshallerAndUnmarshaller
+import se.jguru.shared.algorithms.api.xml.MarshallingFormat
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.JAXBException
@@ -72,13 +75,14 @@ open class EclipseLinkMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshal
 
     override fun performMarshalling(loader: ClassLoader,
                                     format: MarshallingFormat,
-                                    vararg toMarshal: Any): String {
+                                    toMarshal: Array<Any>): String {
 
         // Find the type information, by shallow extraction
         val typesToMarshal = Introspection.getTypesFrom(toMarshal)
 
         // Get the Marshaller
         val initialMarshaller = createMarshaller(getJaxbContext(typesToMarshal))
+        initialMarshaller.setProperty(MarshallerProperties.NAMESPACE_PREFIX_MAPPER, namespacePrefixResolver.toMap())
 
         // Decorate the Marshaller as required
         val marshaller = when (format) {

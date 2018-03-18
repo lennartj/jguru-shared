@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-entity-test
+ * Nazgul Project: jguru-shared-spi-jaxb
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,13 +19,11 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.entity.test
+package se.jguru.shared.spi.jaxb.reference
 
-import com.sun.xml.bind.v2.ContextFactory
-import org.junit.rules.TestWatcher
+import com.sun.xml.internal.bind.v2.ContextFactory
 import se.jguru.shared.algorithms.api.introspection.Introspection
 import se.jguru.shared.algorithms.api.xml.AbstractMarshallerAndUnmarshaller
-import se.jguru.shared.algorithms.api.xml.MarshallerAndUnmarshaller
 import se.jguru.shared.algorithms.api.xml.MarshallingFormat
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
@@ -33,11 +31,17 @@ import javax.xml.bind.JAXBException
 import javax.xml.transform.stream.StreamSource
 
 /**
- * [AbstractMarshallerAndUnmarshaller] implementation using the standard ("Metro") implementation.
+ *[AbstractMarshallerAndUnmarshaller] implementation using the EclipseLink Moxy implementation.
  *
+ * @param typeInformation a [MutableList] containing classes which should be made available to the [JAXBContext]
+ * synthesized for marshalling and unmarshalling operations.
+ * @param jaxbContextProperties A Map relating property names (as Strings) to their respective values (as Objects).
+ * Valid key/value combinations are implementation-specific; please refer to the actual implementation documentation.
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
+ * @see <a href="http://www.eclipse.org/eclipselink">EclipseLink</a>
+ * @see <a href="http://www.eclipse.org/eclipselink/#moxy">Moxy</a>
  */
-open class MetroMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
+open class ReferenceImplementationMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
     mutableListOf(),
     listOf(MarshallingFormat.XML)) {
 
@@ -96,14 +100,4 @@ open class MetroMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
         // All Done
         return ContextFactory.createContext(allClasses.toTypedArray(), jaxbContextProperties)
     }
-}
-
-/**
- * jUnit Rule for running JAXB tests under Kotlin.
- *
- * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
- */
-class MetroMarshallerUnmarshallerRule(val delegate: MarshallerAndUnmarshaller) : TestWatcher() {
-
-    // Internal state
 }

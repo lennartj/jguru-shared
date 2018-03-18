@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-entity-test
+ * Nazgul Project: jguru-shared-algorithms-api
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,10 +19,9 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.entity.test
+package se.jguru.shared.algorithms.api.xml
 
 import java.io.IOException
-import java.io.Serializable
 import java.io.StringWriter
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.JAXBException
@@ -33,73 +32,32 @@ import javax.xml.transform.Result
 import javax.xml.transform.stream.StreamResult
 
 /**
- * Definition for frequently used formats for JAXB Marshalling and Unmarshalling.
- */
-enum class MarshallingFormat {
-
-    /**
-     * XML-formatted string results.
-     */
-    XML,
-
-    /**
-     * JSON-formatted string results.
-     */
-    JSON
-}
-
-/**
- * Specification for how to execute marshalling and unmarshalling operations.
- * While this is normally done using JAXB, the [MarshallerAndUnmarshaller] can be
- * implemented using several different technologies.
+ * Abstract [MarshallerAndUnmarshaller] implementation sporting some sanity checking WRT expected [MarshallingFormat]
+ *
+ * @param typeInformation a [MutableList] containing classes which should be made available to the [JAXBContext]
+ * synthesized for marshalling and unmarshalling operations.
+ * @param supportedFormats A List containing all [MarshallingFormat]s supported by this
+ * [AbstractMarshallerAndUnmarshaller]
+ * @param jaxbContextProperties A Map relating property names (as Strings) to their respective values (as Objects).
+ * Valid key/value combinations are implementation-specific; please refer to the actual implementation documentation.
+ * @param namespacePrefixResolver The [NamespacePrefixResolver] used to map XML namespaces to Prefix strings.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-interface MarshallerAndUnmarshaller : Serializable {
+abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
 
-    /**
-     * Specification for how to marshal (a set of) objects, to the [MarshallingFormat] indicated.
-     *
-     * @param loader The [ClassLoader] used to harvest types as required for the marshalling.
-     * @param format The desired output [MarshallingFormat]
-     * @param toMarshal The object(s) to marshal.
-     * @return The marshalled transport form of the supplied [toMarshal] objects.
-     */
-    @Throws(IllegalArgumentException::class)
-    fun marshal(loader: ClassLoader = Thread.currentThread().contextClassLoader,
-                format: MarshallingFormat = MarshallingFormat.XML,
-                vararg toMarshal: Any): String
-
-    /**
-     * Specification for how to unmarshal a previously marshalled (set of) objects.
-     *
-     * @param loader The [ClassLoader] used to harvest types as required for the unmarshalling.
-     * @param format The expected input [MarshallingFormat]
-     * @param resultType The type of object which should be resurrected from the supplied [toUnmarshal] string
-     * @return The fully unmarshalled object.
-     */
-    @Throws(IllegalArgumentException::class)
-    fun <T> unmarshal(loader: ClassLoader = Thread.currentThread().contextClassLoader,
-                      format: MarshallingFormat = MarshallingFormat.XML,
-                      resultType: Class<T>,
-                      toUnmarshal: String): T
-
-    /**
-     * Adds the supplied type information classes to this [MarshallerAndUnmarshaller] in order to perform marshalling
-     * or unmarshalling operations. Typically, classes required within the [JAXBContext] should be added here.
-     *
-     * @param typeInformation a (set of) Classes required for proper operation.
-     */
-    fun add(vararg typeInformation: Class<in Any>)
-}
-
-/**
- * Abstract [MarshallerAndUnmarshaller] implementation sporting some sanity checking WRT expected [MarshallingFormat]
- */
-abstract class AbstractMarshallerAndUnmarshaller(
+    // Types added to the JAXBContext
     val typeInformation: MutableList<Class<*>> = mutableListOf(),
+
+    // Formats supported by this AbstractMarshallerAndUnmarshaller
     val supportedFormats: List<MarshallingFormat> = listOf(MarshallingFormat.XML),
-    val jaxbContextProperties: MutableMap<String, Any> = mutableMapOf()) : MarshallerAndUnmarshaller {
+
+    // Configuration properties submitted to the JAXBContext
+    val jaxbContextProperties: MutableMap<String, Any> = mutableMapOf(),
+
+    // The NamespacePrefixResolver used to map URIs to Prefixes
+    override val namespacePrefixResolver: NamespacePrefixResolver = SimpleNamespacePrefixResolver())
+    : MarshallerAndUnmarshaller {
 
     override fun add(vararg typeInformation: Class<in Any>) {
         typeInformation.forEach { this.typeInformation.add(it) }
@@ -117,7 +75,7 @@ abstract class AbstractMarshallerAndUnmarshaller(
         }
 
         // Delegate
-        return performMarshalling(loader, format, toMarshal)
+        return performMarshalling(loader, format, toMarshal as Array<Any>)
     }
 
     override fun <T> unmarshal(loader: ClassLoader,
@@ -140,7 +98,13 @@ abstract class AbstractMarshallerAndUnmarshaller(
 
 
     /**
-     * Implement this method to perform actual unmarshalling using the underlying technology.
+     * Implement this method to perform unmarshalling using the actual implementation.
+     *
+     * @param loader The [ClassLoader] used to load classes required to unmarshal the supplied [toUnmarshal] String.
+     * Defaults to `Thread.currentThread().contextClassLoader`
+     * @param format The [MarshallingFormat] to unmarshal to. Defaults to [MarshallingFormat.XML].
+     * @param resultType The type of result expected
+     * @param toUnmarshal The string to unmarshal into an object of type T.
      */
     protected abstract fun <T> performUnmarshalling(loader: ClassLoader = Thread.currentThread().contextClassLoader,
                                                     format: MarshallingFormat = MarshallingFormat.XML,
@@ -148,11 +112,16 @@ abstract class AbstractMarshallerAndUnmarshaller(
                                                     toUnmarshal: String): T
 
     /**
-     * Implement this method to perform actual marshalling using the underlying technology.
+     * Implement this method to perform marshalling using the actual implementation.
+     *
+     * @param loader The [ClassLoader] used to load classes required to marshal the supplied [toMarshal] Objects.
+     * Defaults to `Thread.currentThread().contextClassLoader`
+     * @param format The [MarshallingFormat] to marshal to. Defaults to [MarshallingFormat.XML].
+     * @param toMarshal An Array of Objects (assumed to be JAXB-annotated) to marshal into a String.
      */
     protected abstract fun performMarshalling(loader: ClassLoader = Thread.currentThread().contextClassLoader,
                                               format: MarshallingFormat = MarshallingFormat.XML,
-                                              vararg toMarshal: Any): String
+                                              toMarshal: Array<Any>): String
 
     /**
      * Convenience method to create a Marshaller from the supplied JAXBContext, and set 2 standard
@@ -188,9 +157,6 @@ abstract class AbstractMarshallerAndUnmarshaller(
         val result = StringWriter()
         for (i in toMarshal.indices) {
 
-            println("toMarshal type: ${toMarshal::class.java}")
-            println("toMarshal[0] type: ${toMarshal[0]::class.java}")
-            
             // Handle the Marshalled output of this object.
             val tmp = StringWriter()
 

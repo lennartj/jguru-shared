@@ -93,6 +93,13 @@ interface NamespacePrefixResolver {
      */
     fun getXmlPrefix(@NotNull xmlNamespaceUri: String): String?
 
+    /**
+     * Retrieves a [Map] relating String NamespaceURIs (as keys) to String Prefixes (as values).
+     *
+     * @return A map relating String NamespaceURIs to String Prefixes.
+     */
+    fun toMap(): Map<String, String>
+
     companion object {
 
         /**
@@ -142,4 +149,6 @@ open class SimpleNamespacePrefixResolver(protected val namespaceUri2PrefixMap: S
 
     override fun toString(): String = "SimpleNamespacePrefixResolver with [${namespaceUri2PrefixMap.size}] entries: " +
         namespaceUri2PrefixMap.entries.map { e -> "\n [${e.key}]: ${e.value}" }
+
+    override fun toMap(): Map<String, String> = Collections.unmodifiableMap(namespaceUri2PrefixMap)
 }

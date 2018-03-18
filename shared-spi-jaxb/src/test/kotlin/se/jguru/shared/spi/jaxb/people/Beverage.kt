@@ -1,4 +1,4 @@
-package se.jguru.shared.entity.test.people
+package se.jguru.shared.spi.jaxb.people
 
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType

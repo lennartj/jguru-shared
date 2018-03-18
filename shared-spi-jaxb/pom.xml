@@ -28,11 +28,47 @@
         -->
         <path.in.reactor>shared-spi-jaxb</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
+
+        <!-- Version constants -->
+        <metro.version>2.3.0</metro.version>
+        <eclipselink.version>2.7.1</eclipselink.version>
+        <xmlunit.version>2.5.1</xmlunit.version>
     </properties>
 
     <!-- +=============================================== -->
     <!-- | Section 2:  Dependency (management) settings   -->
     <!-- +=============================================== -->
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>org.eclipse.persistence.moxy</artifactId>
+                <version>${eclipselink.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${metro.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.xmlunit</groupId>
+                <artifactId>xmlunit-core</artifactId>
+                <version>${xmlunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.xmlunit</groupId>
+                <artifactId>xmlunit-matchers</artifactId>
+                <version>${xmlunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!--
             Internal dependencies.
@@ -42,6 +78,7 @@
             <artifactId>jguru-shared-algorithms-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        
         <!--
             External dependencies.
         -->
@@ -61,6 +98,24 @@
         </dependency>
 
         <!--
+            JAXB implementations
+
+            Provided scope used to permit accessing project determine
+            which implementation should be used (without importing both onto
+            ClassPath or ModulePath).
+        -->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--
             Test-scope dependencies.
          -->
         <dependency>
@@ -73,6 +128,17 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-matchers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 
     <!-- +=============================================== -->

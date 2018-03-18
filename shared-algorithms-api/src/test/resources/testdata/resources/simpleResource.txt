@@ -1,0 +1,2 @@
+This is a resource with non-ascii characters.
+åäöÅÄÖ.
