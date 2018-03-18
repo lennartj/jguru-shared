@@ -1,37 +1,34 @@
-package se.jguru.shared.spi.jaxb.eclipselink
+package se.jguru.shared.spi.jaxb.reference
 
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.xmlunit.builder.Input
-import org.xmlunit.matchers.CompareMatcher.isSimilarTo
+import org.xmlunit.builder.DiffBuilder
+import org.xmlunit.diff.DefaultNodeMatcher
+import org.xmlunit.diff.ElementSelectors
 import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.spi.jaxb.people.Beverage
 import se.jguru.shared.spi.jaxb.people.DrinkingPreferences
 import javax.xml.bind.JAXBContext
-import org.xmlunit.diff.ElementSelectors
-import org.xmlunit.diff.DefaultNodeMatcher
-import org.xmlunit.builder.DiffBuilder
-import org.xmlunit.diff.Diff
 
 /**
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-class EclipseLinkMarshallerAndUnmarshallerTest {
+class ReferenceMarshallerAndUnmarshallerTest {
 
     // Shared state
     var originalContextFactory: String? = null
-    lateinit var unitUnderTest: MoxyMarshallerAndUnmarshaller
+    lateinit var unitUnderTest: ReferenceImplementationMarshallerAndUnmarshaller
 
     @Before
     fun setupSharedState() {
 
         originalContextFactory = System.getProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
-        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory")
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "com.sun.xml.internal.bind.v2.ContextFactory")
 
-        unitUnderTest = MoxyMarshallerAndUnmarshaller()
+        unitUnderTest = ReferenceImplementationMarshallerAndUnmarshaller()
         unitUnderTest.namespacePrefixResolver.put(Beverage.NAMESPACE, "bev")
     }
 

@@ -151,7 +151,7 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
         return toReturn
     }
 
-    protected fun doMarshalling(marshaller: Marshaller, vararg toMarshal: Any): String {
+    protected fun doMarshalling(marshaller: Marshaller, toMarshal: Array<Any>): String {
 
         // Marshal the inbound objects
         val result = StringWriter()

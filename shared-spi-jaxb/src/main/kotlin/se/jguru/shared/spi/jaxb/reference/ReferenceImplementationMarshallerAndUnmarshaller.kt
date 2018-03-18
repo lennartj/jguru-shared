@@ -21,10 +21,13 @@
  */
 package se.jguru.shared.spi.jaxb.reference
 
-import com.sun.xml.internal.bind.v2.ContextFactory
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper
+import com.sun.xml.bind.v2.ContextFactory
 import se.jguru.shared.algorithms.api.introspection.Introspection
 import se.jguru.shared.algorithms.api.xml.AbstractMarshallerAndUnmarshaller
 import se.jguru.shared.algorithms.api.xml.MarshallingFormat
+import se.jguru.shared.algorithms.api.xml.NamespacePrefixResolver
+import se.jguru.shared.algorithms.api.xml.SimpleNamespacePrefixResolver
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.JAXBException
@@ -76,6 +79,8 @@ open class ReferenceImplementationMarshallerAndUnmarshaller : AbstractMarshaller
 
         // Get the Marshaller
         val initialMarshaller = createMarshaller(getJaxbContext(typesToMarshal))
+        initialMarshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper",
+            NamespacePrefixMapperWrapper(namespacePrefixResolver))
 
         // Decorate the Marshaller as required
         val marshaller = when (format) {
@@ -95,9 +100,25 @@ open class ReferenceImplementationMarshallerAndUnmarshaller : AbstractMarshaller
         // Join with previously given types
         val allClasses = mutableListOf<Class<*>>()
         allClasses.addAll(typeInformation)
-        allClasses.addAll(classes)
+        classes.stream()
+            .filter { it != null }
+            .filter { !it.isArray }
+            .filter { it != Object::class.java }
+            .forEach { allClasses.add(it) }
 
         // All Done
         return ContextFactory.createContext(allClasses.toTypedArray(), jaxbContextProperties)
+    }
+}
+
+class NamespacePrefixMapperWrapper(val resolver: NamespacePrefixResolver = SimpleNamespacePrefixResolver())
+    : NamespacePrefixMapper() {
+
+    override fun getPreferredPrefix(namespaceUri: String?, suggestion: String?, requirePrefix: Boolean): String? {
+        return if (namespaceUri == null) {
+            null
+        } else {
+            resolver.getXmlPrefix(namespaceUri)
+        }
     }
 }
