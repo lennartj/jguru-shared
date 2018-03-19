@@ -145,7 +145,6 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
     protected fun createUnmarshaller(jaxbContext: JAXBContext): Unmarshaller {
 
         val toReturn = jaxbContext.createUnmarshaller()
-        toReturn.setProperty(Marshaller.JAXB_ENCODING, "UTF-8")
 
         // All Done.
         return toReturn

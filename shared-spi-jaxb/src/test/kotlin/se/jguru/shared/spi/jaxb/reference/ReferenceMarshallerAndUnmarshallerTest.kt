@@ -64,4 +64,20 @@ class ReferenceMarshallerAndUnmarshallerTest {
             .build()
         Assert.assertFalse(myDiffIdentical.hasDifferences());
     }
+
+    @Test
+    fun validateUnmarshallingFromXML() {
+
+        // Assemble
+        val resourcePath = "testdata/people/drinkingPreferences.xml"
+        val expected = DrinkingPreferences.createPrefs()
+        val data = PropertyResources.readFully(resourcePath = resourcePath)
+
+        // Act
+        val result = unitUnderTest.unmarshal(resultType = DrinkingPreferences::class.java, toUnmarshal = data)
+
+        // Assert
+        Assert.assertNotNull(result)
+        Assert.assertEquals(0, expected.compareTo(result))
+    }
 }

@@ -13,12 +13,24 @@ import javax.xml.bind.annotation.XmlType
 @XmlType(namespace = Beverage.NAMESPACE)
 class DrinkingPreferences(
     @XmlElement(nillable = false, required = true)
-    var people: List<Person> = mutableListOf()) : Serializable {
+    var people: List<Person> = mutableListOf()) : Serializable, Comparable<DrinkingPreferences> {
 
     /**
      * JAXB-friendly constructor
      */
     constructor() : this(mutableListOf())
+
+    override fun compareTo(that: DrinkingPreferences): Int {
+
+        var toReturn : Int = this.people.size - that.people.size
+
+        if(toReturn == 0) {
+
+        }
+
+        // All Done.
+        return toReturn
+    }
 
     companion object {
 

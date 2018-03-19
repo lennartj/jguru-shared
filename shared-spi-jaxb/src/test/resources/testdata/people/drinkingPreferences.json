@@ -1,0 +1,34 @@
+{
+    "bev.drinkingPreferences": {
+        "people": [
+            {
+                "age": 254,
+                "name": "Lennart",
+                "beverage": {
+                    "name": "Avenyn Ale"
+                }
+            },
+            {
+                "age": 32,
+                "name": "Malin",
+                "beverage": {
+                    "name": "Idjit"
+                }
+            },
+            {
+                "age": 52,
+                "name": "Lasse",
+                "beverage": {
+                    "name": "Ostronporter"
+                }
+            },
+            {
+                "age": 42,
+                "name": "Anders",
+                "beverage": {
+                    "name": "Avenyn Ale"
+                }
+            }
+        ]
+    }
+}

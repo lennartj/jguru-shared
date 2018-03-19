@@ -4,16 +4,16 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.xmlunit.builder.Input
-import org.xmlunit.matchers.CompareMatcher.isSimilarTo
+import org.skyscreamer.jsonassert.JSONAssert
+import org.xmlunit.builder.DiffBuilder
+import org.xmlunit.diff.DefaultNodeMatcher
+import org.xmlunit.diff.Diff
+import org.xmlunit.diff.ElementSelectors
 import se.jguru.shared.algorithms.api.resources.PropertyResources
+import se.jguru.shared.algorithms.api.xml.MarshallingFormat
 import se.jguru.shared.spi.jaxb.people.Beverage
 import se.jguru.shared.spi.jaxb.people.DrinkingPreferences
 import javax.xml.bind.JAXBContext
-import org.xmlunit.diff.ElementSelectors
-import org.xmlunit.diff.DefaultNodeMatcher
-import org.xmlunit.builder.DiffBuilder
-import org.xmlunit.diff.Diff
 
 /**
  *
@@ -59,12 +59,65 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
         // Assert
         Assert.assertNotNull(result)
 
-        val myDiffIdentical = DiffBuilder.compare(expected)
+        val normalizedDiff: Diff = DiffBuilder.compare(expected)
             .withTest(result)
             .normalizeWhitespace()
             .withNodeMatcher(DefaultNodeMatcher(ElementSelectors.byName))
             .checkForIdentical()
             .build()
-        Assert.assertFalse(myDiffIdentical.hasDifferences());
+        Assert.assertFalse(normalizedDiff.hasDifferences());
+    }
+
+    @Test
+    fun validateUnmarshallingFromXML() {
+
+        // Assemble
+        val resourcePath = "testdata/people/drinkingPreferences.xml"
+        val expected = DrinkingPreferences.createPrefs()
+        val data = PropertyResources.readFully(resourcePath = resourcePath)
+
+        // Act
+        val result = unitUnderTest.unmarshal(resultType = DrinkingPreferences::class.java, toUnmarshal = data)
+
+        // Assert
+        Assert.assertNotNull(result)
+        Assert.assertEquals(0, expected.compareTo(result))
+    }
+
+    @Test
+    fun validateMarshallingToJSON() {
+
+        // Assemble
+        val resourcePath = "testdata/people/drinkingPreferences.json"
+        val prefs = DrinkingPreferences.createPrefs()
+
+        val expected = PropertyResources.readFully(resourcePath = resourcePath)
+
+        // Act
+        val result = unitUnderTest.marshal(toMarshal = prefs, format = MarshallingFormat.JSON)
+        // println("got: $result")
+
+        // Assert
+        Assert.assertNotNull(result)
+        JSONAssert.assertEquals(expected, result, true)
+    }
+
+    @Test
+    fun validateUnmarshallingFromJSON() {
+
+        // Assemble
+        val resourcePath = "testdata/people/drinkingPreferences.json"
+        val expected = DrinkingPreferences.createPrefs()
+        val data = PropertyResources.readFully(resourcePath = resourcePath)
+
+        // Act
+        val result = unitUnderTest.unmarshal(
+            resultType = DrinkingPreferences::class.java,
+            toUnmarshal = data,
+            format = MarshallingFormat.JSON)
+
+        // Assert
+        Assert.assertNotNull(result)
+        Assert.assertEquals(0, expected.compareTo(result))
     }
 }

@@ -22,9 +22,25 @@ class Person(
     var age: Int,
 
     @XmlElement(required = true)
-    var beverage: Beverage) : Serializable {
+    var beverage: Beverage) : Serializable, Comparable<Person> {
 
     constructor() : this("none", -1, Beverage("none"))
+
+    override fun compareTo(other: Person): Int {
+
+        var toReturn : Int = this.name.compareTo(other.name)
+
+        if(toReturn == 0) {
+            toReturn = this.age - other.age
+        }
+
+        if(toReturn == 0) {
+            toReturn = this.beverage.compareTo(other.beverage)
+        }
+
+        // All Done.
+        return toReturn
+    }
 
     override fun equals(other: Any?): Boolean {
 

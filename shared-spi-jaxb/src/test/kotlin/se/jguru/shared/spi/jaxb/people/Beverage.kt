@@ -11,12 +11,16 @@ import javax.xml.bind.annotation.XmlType
  */
 @XmlType(namespace = Beverage.NAMESPACE, propOrder = ["name"])
 @XmlAccessorType(XmlAccessType.FIELD)
-class Beverage(var name: String) {
+class Beverage(var name: String) : Comparable<Beverage> {
 
     /**
      * JAXB-friendly constructor
      */
     constructor() : this("unknown")
+
+    override fun compareTo(other: Beverage): Int {
+        return this.name.compareTo(other.name)
+    }
 
     companion object {
 
