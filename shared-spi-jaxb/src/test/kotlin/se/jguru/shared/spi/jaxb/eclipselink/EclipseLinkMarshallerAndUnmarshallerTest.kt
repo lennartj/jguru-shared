@@ -111,7 +111,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
         val data = PropertyResources.readFully(resourcePath = resourcePath)
 
         // Act
-        val result = unitUnderTest.unmarshal(
+            val result = unitUnderTest.unmarshal(
             resultType = DrinkingPreferences::class.java,
             toUnmarshal = data,
             format = MarshallingFormat.JSON)

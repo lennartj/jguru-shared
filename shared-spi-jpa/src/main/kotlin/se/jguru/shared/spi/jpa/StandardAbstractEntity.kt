@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-spi-jaxb
+ * Nazgul Project: jguru-shared-spi-jpa
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,25 +19,22 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.spi.jaxb
+package se.jguru.shared.spi.jpa
 
-import javax.xml.bind.annotation.XmlTransient
+import javax.persistence.Access
+import javax.persistence.AccessType
+import javax.persistence.MappedSuperclass
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
 
 /**
- * Utility type holding a suite of reusable patterns, constants and algorithms.
+ * Annotation providing some simple and well-defined standards for [MappedSuperclass]
+ * specifications and helpers.
  *
- * @author [Lennart Jörelid](mailto:lj@jguru.se), jGuru Europe AB
+ * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
+ * @see StandardEntity
  */
-@XmlTransient
-object JaxbPatterns {
-
-    /**
-     * The XML namespace used by shared model objects.
-     */
-    const val NAMESPACE_SHARED = "http://xmlns.jguru.se/xml/ns/shared"
-
-    /**
-     * The XML namespace used by shared transport model objects.
-     */
-    const val NAMESPACE_SHARED_TRANSPORT = "http://xmlns.jguru.se/xml/ns/transport"
-}
+@MappedSuperclass
+@Access(AccessType.FIELD)
+@XmlAccessorType(XmlAccessType.FIELD)
+annotation class StandardAbstractEntity
