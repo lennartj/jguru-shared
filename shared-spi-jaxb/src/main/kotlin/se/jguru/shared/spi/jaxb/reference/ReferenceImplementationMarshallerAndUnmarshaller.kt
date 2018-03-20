@@ -40,12 +40,15 @@ import javax.xml.transform.stream.StreamSource
  * synthesized for marshalling and unmarshalling operations.
  * @param jaxbContextProperties A Map relating property names (as Strings) to their respective values (as Objects).
  * Valid key/value combinations are implementation-specific; please refer to the actual implementation documentation.
+ *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
+ *
  * @see <a href="http://www.eclipse.org/eclipselink">EclipseLink</a>
  * @see <a href="http://www.eclipse.org/eclipselink/#moxy">Moxy</a>
  */
-open class ReferenceImplementationMarshallerAndUnmarshaller : AbstractMarshallerAndUnmarshaller(
-    mutableListOf(),
+open class ReferenceImplementationMarshallerAndUnmarshaller @JvmOverloads constructor(
+    typeInformation: MutableList<Class<*>> = mutableListOf()) : AbstractMarshallerAndUnmarshaller(
+    typeInformation,
     listOf(MarshallingFormat.XML)) {
 
     override fun <T> performUnmarshalling(loader: ClassLoader,
@@ -111,6 +114,17 @@ open class ReferenceImplementationMarshallerAndUnmarshaller : AbstractMarshaller
     }
 }
 
+/**
+ * [NamespacePrefixMapper] implementation which delegates all relevant calls to a [NamespacePrefixResolver].
+ * The wrapping is required for the JAXB ReferenceImplementation, which requires a [NamespacePrefixMapper] instance
+ * to relate XML Namespace URIs to their corresponding prefixes.
+ *
+ * @param resolver The [NamespacePrefixResolver] which will actually perform the NS resolving. Defaults to
+ *
+ * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
+ *
+ * @see [NamespacePrefixResolver]
+ */
 class NamespacePrefixMapperWrapper(val resolver: NamespacePrefixResolver = SimpleNamespacePrefixResolver())
     : NamespacePrefixMapper() {
 

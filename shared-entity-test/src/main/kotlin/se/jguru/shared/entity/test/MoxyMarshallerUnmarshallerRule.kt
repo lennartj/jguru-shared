@@ -21,33 +21,14 @@
  */
 package se.jguru.shared.entity.test
 
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
 import se.jguru.shared.spi.jaxb.eclipselink.MoxyMarshallerAndUnmarshaller
-import javax.xml.bind.JAXBContext
 
 /**
  * jUnit Rule for running JAXB tests using the [MoxyMarshallerAndUnmarshaller] under Kotlin.
+ * For most operations, simply use the [delegate] member.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-class MoxyMarshallerUnmarshallerRule(val delegate: MoxyMarshallerAndUnmarshaller = MoxyMarshallerAndUnmarshaller())
-    : TestWatcher() {
-
-    // Internal state
-    lateinit var originalContextFactory : String
-
-    // Internal state
-    override fun starting(description: Description?) {
-        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory")
-        super.starting(description)
-    }
-
-    override fun finished(description: Description?) {
-        super.finished(description)
-    }
-
-    override fun failed(e: Throwable?, description: Description?) {
-        super.failed(e, description)
-    }
-}
+open class MoxyMarshallerUnmarshallerRule : AbstractMarshallerAndUnmarshallerRule(
+    MoxyMarshallerAndUnmarshaller(),
+    "org.eclipse.persistence.jaxb.JAXBContextFactory")

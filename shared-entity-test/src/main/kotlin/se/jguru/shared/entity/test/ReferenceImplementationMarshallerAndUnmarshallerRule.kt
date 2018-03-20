@@ -21,15 +21,13 @@
  */
 package se.jguru.shared.entity.test
 
-import org.junit.rules.TestWatcher
-import se.jguru.shared.algorithms.api.xml.MarshallerAndUnmarshaller
+import se.jguru.shared.spi.jaxb.reference.ReferenceImplementationMarshallerAndUnmarshaller
 
 /**
  * jUnit Rule for running JAXB tests under Kotlin.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-class MetroMarshallerUnmarshallerRule(val delegate: MarshallerAndUnmarshaller) : TestWatcher() {
-
-    // Internal state
-}
+class ReferenceImplementationMarshallerAndUnmarshallerRule : AbstractMarshallerAndUnmarshallerRule(
+    ReferenceImplementationMarshallerAndUnmarshaller(),
+    "com.sun.xml.bind.v2.ContextFactory")
