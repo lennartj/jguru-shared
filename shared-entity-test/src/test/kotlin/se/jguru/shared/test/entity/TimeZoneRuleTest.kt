@@ -1,9 +1,10 @@
-package se.jguru.shared.entity.test
+package se.jguru.shared.test.entity
 
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import se.jguru.shared.test.entity.TimeZoneRule
 import java.util.TimeZone
 
 /**

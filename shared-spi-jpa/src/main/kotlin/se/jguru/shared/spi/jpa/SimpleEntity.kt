@@ -74,7 +74,7 @@ abstract class SimpleEntity @JvmOverloads constructor(
     @PrePersist
     protected open fun validateInternalStateBeforePersisting() = validateInternalState()
 
-    /**
+    /*
      * Standard JAXB listener method, automagically invoked immediately before this object is Marshalled.
      *
      * @param marshaller The active Marshaller.

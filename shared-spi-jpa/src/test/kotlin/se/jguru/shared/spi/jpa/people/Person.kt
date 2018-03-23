@@ -3,6 +3,8 @@ package se.jguru.shared.spi.jpa.people
 import se.jguru.shared.spi.jpa.SimpleEntity
 import se.jguru.shared.spi.jpa.StandardEntity
 import java.io.Serializable
+import javax.persistence.Basic
+import javax.persistence.Column
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
@@ -19,13 +21,18 @@ import javax.xml.bind.annotation.XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 class Person @JvmOverloads constructor(
 
-
+    @field:Basic(optional = false)
+    @field:Column(nullable = false)
     @XmlElement(nillable = false, required = true)
     var name: String,
 
+    @field:Basic(optional = false)
+    @field:Column(nullable = false)
     @XmlAttribute(required = true)
     var age: Int,
 
+    @field:Basic(optional = false)
+    @field:Column(nullable = false)
     @XmlElement(required = true)
     var beverage: Beverage,
 

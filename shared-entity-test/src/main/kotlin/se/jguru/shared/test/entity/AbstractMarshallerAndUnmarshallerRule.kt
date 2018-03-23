@@ -19,7 +19,7 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.entity.test
+package se.jguru.shared.test.entity
 
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description

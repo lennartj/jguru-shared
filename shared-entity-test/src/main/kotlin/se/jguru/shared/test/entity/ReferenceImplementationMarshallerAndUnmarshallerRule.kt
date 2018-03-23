@@ -19,16 +19,15 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.entity.test
+package se.jguru.shared.test.entity
 
-import se.jguru.shared.spi.jaxb.eclipselink.MoxyMarshallerAndUnmarshaller
+import se.jguru.shared.spi.jaxb.reference.ReferenceImplementationMarshallerAndUnmarshaller
 
 /**
- * jUnit Rule for running JAXB tests using the [MoxyMarshallerAndUnmarshaller] under Kotlin.
- * For most operations, simply use the [delegate] member.
+ * jUnit Rule for running JAXB tests under Kotlin.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-open class MoxyMarshallerUnmarshallerRule : AbstractMarshallerAndUnmarshallerRule(
-    MoxyMarshallerAndUnmarshaller(),
-    "org.eclipse.persistence.jaxb.JAXBContextFactory")
+class ReferenceImplementationMarshallerAndUnmarshallerRule : AbstractMarshallerAndUnmarshallerRule(
+    ReferenceImplementationMarshallerAndUnmarshaller(),
+    "com.sun.xml.bind.v2.ContextFactory")

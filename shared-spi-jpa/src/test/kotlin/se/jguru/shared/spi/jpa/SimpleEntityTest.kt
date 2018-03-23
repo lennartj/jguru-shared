@@ -2,7 +2,9 @@ package se.jguru.shared.spi.jpa
 
 import org.junit.Before
 import org.junit.Rule
-import se.jguru.shared.entity.test.MoxyMarshallerUnmarshallerRule
+import org.junit.Test
+import se.jguru.shared.spi.jpa.people.DrinkingPreferences
+import se.jguru.shared.test.entity.MoxyMarshallerUnmarshallerRule
 
 /**
  *
@@ -10,11 +12,24 @@ import se.jguru.shared.entity.test.MoxyMarshallerUnmarshallerRule
  */
 class SimpleEntityTest {
 
-    @Rule
-    val jaxbRule = MoxyMarshallerUnmarshallerRule()
+    @Rule fun jaxbRule() = MoxyMarshallerUnmarshallerRule()
+
+    // Shared state
+    lateinit var drinkingPrefs : DrinkingPreferences
 
     @Before
     fun setupSharedState() {
 
+        
+    }
+
+    @Test
+    fun validatePersistingEntity() {
+
+        // Assemble
+
+        // Act
+
+        // Assert
     }
 }

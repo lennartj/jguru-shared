@@ -1,5 +1,6 @@
 package se.jguru.shared.spi.jaxb.people
 
+import org.junit.Assert
 import java.io.Serializable
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -22,10 +23,10 @@ class DrinkingPreferences(
 
     override fun compareTo(that: DrinkingPreferences): Int {
 
-        var toReturn : Int = this.people.size - that.people.size
+        var toReturn: Int = this.people.size - that.people.size
 
-        if(toReturn == 0) {
-
+        if (toReturn == 0) {
+            people.forEachIndexed { index, aPerson -> Assert.assertEquals(aPerson, that.people[index])}
         }
 
         // All Done.
