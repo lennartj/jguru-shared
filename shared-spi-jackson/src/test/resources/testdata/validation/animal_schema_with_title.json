@@ -1,0 +1,19 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "The schema Title",
+    "description": "Some longwinded description",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "animalAge": {
+            "type": "integer"
+        }
+    },
+    "required": [
+        "name",
+        "animalAge"
+    ]
+}

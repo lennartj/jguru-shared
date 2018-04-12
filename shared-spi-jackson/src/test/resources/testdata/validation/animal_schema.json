@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Animal",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "animalAge": {
+            "type": "integer"
+        }
+    },
+    "required": [
+        "name",
+        "animalAge"
+    ]
+}
