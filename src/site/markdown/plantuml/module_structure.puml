@@ -1,0 +1,80 @@
+'
+' Purpose: Software Module Dependencies illustration
+'
+@startuml
+
+    skinparam component {
+
+        ' Make test-scope components be green
+        '
+        BackgroundColor<<Test>> #EEFFEE
+        BorderColor<<Test>> #007700
+        ArrowColor<<Test>> #007700
+    }
+
+    package "jGuru Shared" {
+
+        ' Components
+        '
+        component "shared-algorithms-api" as algAPI
+        component "shared-spi-jackson" as jacksonSPI
+        component "shared-entity-test" <<Test>> as entityTest
+
+        ' Relations
+        '
+        entityTest -up-|> algAPI : " Uses algorithms from ..."
+
+        ' Notes
+        '
+        note right of algAPI  {
+            Contains general-use algorithms
+        }
+        note right of entityTest {
+            Contains unit-test utils for entities
+        }
+    }
+
+    package "Your Closed-source or OSS Repo" {
+
+        frame "Organisation Component" {
+
+        ' Components
+        '
+        component "organisation-model" as orgModel
+        component "organisation-api" as orgAPI
+        component "organisation-impl-jackson" as orgImpl
+
+        ' Relations
+        '
+        orgModel -up-|> jacksonSPI
+        orgModel -up-|> entityTest<<Test>>
+
+        orgAPI -up-|> orgModel
+
+        orgImpl -up-|> orgAPI
+        orgImpl -up-|> jacksonSPI
+
+        ' Notes
+        '
+        }
+
+        frame "Content Component" {
+
+        ' Components
+        '
+        component "content-model" as contentModel
+        component "content-api" as contentAPI
+        component "content-impl-jackson" as contentImpl
+
+        ' Relations
+        '
+        contentModel -up-|> jacksonSPI : " Uses ..."
+        contentModel -up-|> entityTest<<Test>> : " Uses ..."
+
+        contentAPI -up-|> contentModel : " Uses ..."
+
+        contentImpl -up-|> contentAPI
+        contentImpl -up-|> jacksonSPI
+        }
+    }
+@enduml
