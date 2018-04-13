@@ -1,36 +1,36 @@
 {
-    "people": [
-        {
-            "name": "Lennart",
-            "age": 254,
-            "beverage": {
-                "name": "Avenyn Ale",
-                "brand": "Dugges"
-            }
-        },
-        {
-            "name": "Malin",
-            "age": 32,
-            "beverage": {
-                "name": "Idjit",
-                "brand": "Dugges"
-            }
-        },
-        {
-            "name": "Lasse",
-            "age": 52,
-            "beverage": {
-                "name": "Ostronporter",
-                "brand": "Göteborgs Nya"
-            }
-        },
-        {
-            "name": "Anders",
-            "age": 42,
-            "beverage": {
-                "name": "Avenyn Ale",
-                "brand": "Dugges"
-            }
-        }
-    ]
+  "people": [
+    {
+      "name": "Lennart",
+      "age": 254,
+      "beverage": {
+        "@id": 1,
+        "name": "Avenyn Ale",
+        "brand": "Dugges"
+      }
+    },
+    {
+      "name": "Malin",
+      "age": 32,
+      "beverage": {
+        "@id": 2,
+        "name": "Idjit",
+        "brand": "Dugges"
+      }
+    },
+    {
+      "name": "Lasse",
+      "age": 52,
+      "beverage": {
+        "@id": 3,
+        "name": "Ostronporter",
+        "brand": "Göteborgs Nya"
+      }
+    },
+    {
+      "name": "Anders",
+      "age": 42,
+      "beverage": 1
+    }
+  ]
 }

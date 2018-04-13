@@ -10,12 +10,12 @@ import java.io.Serializable
 data class DrinkingPreferences(
     var people: List<Person> = mutableListOf()) : Serializable, Comparable<DrinkingPreferences> {
 
-    override fun compareTo(that: DrinkingPreferences): Int {
+    override fun compareTo(other: DrinkingPreferences): Int {
 
-        var toReturn: Int = this.people.size - that.people.size
+        val toReturn: Int = this.people.size - other.people.size
 
         if (toReturn == 0) {
-            people.forEachIndexed { index, aPerson -> Assert.assertEquals(aPerson, that.people[index]) }
+            people.forEachIndexed { index, aPerson -> Assert.assertEquals(aPerson, other.people[index]) }
         }
 
         // All Done.

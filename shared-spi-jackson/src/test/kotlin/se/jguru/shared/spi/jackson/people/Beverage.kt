@@ -1,13 +1,15 @@
 package se.jguru.shared.spi.jackson.people
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 
 /**
  * A simple model of a Beverage
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-// @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator::class, property = "@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator::class, property = "@id")
 @JsonPropertyOrder(value = ["name", "brand"])
 data class Beverage(var name: String, var brand: String) : Comparable<Beverage> {
 

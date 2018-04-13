@@ -1,8 +1,9 @@
 {
-    "name" : "Lennart",
-    "age" : 254,
-    "beverage" : {
-        "name" : "Avenyn Ale",
-        "brand" : "Dugges"
-    }
+  "name": "Lennart",
+  "age": 254,
+  "beverage": {
+    "@id": 1,
+    "name": "Avenyn Ale",
+    "brand": "Dugges"
+  }
 }

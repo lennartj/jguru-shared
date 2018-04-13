@@ -8,7 +8,6 @@ import java.io.Serializable
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-// @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator::class, property = "@id")
 @JsonPropertyOrder(value = ["name", "age", "beverage"])
 data class Person(
 
@@ -33,24 +32,5 @@ data class Person(
 
         // All Done.
         return toReturn
-    }
-
-    override fun equals(other: Any?): Boolean {
-
-        // Check sanity
-        if (other == null || other !is Person) {
-            return false
-        }
-
-        // Delegate to internal state
-        val that = other as Person
-        return this.name == that.name && this.age == that.age
-    }
-
-    override fun hashCode(): Int {
-        var result = name.hashCode()
-        result = 31 * result + age
-        result = 31 * result + beverage.hashCode()
-        return result
     }
 }

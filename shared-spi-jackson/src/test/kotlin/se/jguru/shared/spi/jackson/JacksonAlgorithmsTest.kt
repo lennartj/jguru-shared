@@ -10,7 +10,6 @@ import se.jguru.shared.spi.jackson.people.DrinkingPreferences
 import se.jguru.shared.spi.jackson.people.Person
 import se.jguru.shared.spi.jackson.validation.Animal
 
-
 /**
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
@@ -49,7 +48,6 @@ class JacksonAlgorithmsTest {
         JSONAssert.assertEquals(expectedCompactFormat, compactFormat, true)
         JSONAssert.assertEquals(expectedPrettyFormat, humanReadableFormat, true)
         Assert.assertEquals(expectedCompactFormat, compactFormat)
-        Assert.assertEquals(normalizeSpace(expectedPrettyFormat), normalizeSpace(humanReadableFormat))
     }
 
     @Test
@@ -97,13 +95,7 @@ class JacksonAlgorithmsTest {
         val lennart = result.people.find { it.name == "Lennart" }
 
         Assert.assertEquals(anders?.beverage, lennart?.beverage)
-
-        /*
-        Assert.assertSame("AndersBeverage HashCode: ${anders?.beverage?.hashCode()}," +
-            "and LennartBeverage HashCode: ${lennart?.beverage?.hashCode()}",
-            anders?.beverage,
-            lennart?.beverage)
-        */
+        Assert.assertSame(anders?.beverage, lennart?.beverage)
     }
 
     @Test
