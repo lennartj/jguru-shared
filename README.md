@@ -14,7 +14,7 @@ supplied within the Shared Components repository in addition to the standards (t
 chosen technology stack (something like `Apache Camel` or `Spring Framework`). The intended structure and 
 responsibilities of projects/artifacts within repositories could/should be ordered as illustrated in the image below:
 
-![Code Style](src/site/resources/img/repoStructure_readme.png "Repository Dependency Structure")   
+![Repo Structure](src/site/resources/img/repo_structure.png "Repository Dependency Structure")   
 
 ## Using shared artifacts
 
