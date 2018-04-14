@@ -1,0 +1,23 @@
+@startuml
+
+title Simple carpool structure\n
+
+class Car {
+    name : String
+    registrationPlate : String
+}
+class Driver {
+    name : String
+    cars : List<Car>
+}
+class CarPool {
+    cars : List<Car>
+    drivers : List<Driver>
+}
+
+
+CarPool *-- Car : contains >
+CarPool *-- Driver : participates in <
+Driver *-left- Car : prefers >
+
+@enduml

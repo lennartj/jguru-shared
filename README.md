@@ -4,13 +4,14 @@ This repository contains technology-aware artifacts and helper components withou
 Hence, all "shared" components are intended for deployment into production, and also potential OSS access.
 Mainly, shared components include
 
-1. **Service Provider Interface**s (SPIs): Typically used to hold internally used, public specifications. 
+1. **Service Provider Interface**s (SPIs): API implementations intended for internal use, such as 
+   simplifications/wrappers for working with a particular facet of JavaEE/EE4J/Spring/whatever technology. 
 2. **Test-scope Artifacts**: Components intended to simplify test automation in other projects.
 3. **Helper Components**: Full software components which are independent of domain, such as 
    microservice underpinnings / distributions.
    
 A Shared Components repository, therefore, depends mainly on build definitions, annotations and configuration 
-supplied within the Shared Components repository in addition to the standards (typically `JavaEE` or `EE4J`) or 
+supplied within the _Codestyle_ Repository in addition to the standards (typically `JavaEE` or `EE4J`) or 
 chosen technology stack (something like `Apache Camel` or `Spring Framework`). The intended structure and 
 responsibilities of projects/artifacts within repositories could/should be ordered as illustrated in the image below:
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   #%L
-  Nazgul Project: jguru-shared-reactor
+  Nazgul Project: jguru-shared-spi-jackson
   %%
   Copyright (C) 2018 jGuru Europe AB
   %%
@@ -51,6 +51,7 @@
     <body>
         <menu name="Overview">
             <item name="Introduction" href="index.html"/>
+            <item name="Tutorial" href="tutorial.html"/>
         </menu>
 
         <menu ref="modules" inherit="bottom"/>
