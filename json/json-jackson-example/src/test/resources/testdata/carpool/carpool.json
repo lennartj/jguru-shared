@@ -1,0 +1,37 @@
+{
+    "@id": 1,
+    "drivers": [
+        {
+            "@id": 2,
+            "name": "Mickey",
+            "cars": [
+                {
+                    "@id": 3,
+                    "name": "Volvo",
+                    "registrationPlate": "ABC 123"
+                },
+                {
+                    "@id": 4,
+                    "name": "Tesla",
+                    "registrationPlate": "HIJ 789"
+                }
+            ]
+        },
+        {
+            "@id": 5,
+            "name": "Minnie",
+            "cars": [
+                4
+            ]
+        }
+    ],
+    "cars": [
+        3,
+        {
+            "@id": 6,
+            "name": "Ford",
+            "registrationPlate": "EFG 456"
+        },
+        4
+    ]
+}

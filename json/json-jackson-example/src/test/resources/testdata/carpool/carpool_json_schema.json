@@ -1,0 +1,61 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Car Pool",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "drivers": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Driver"
+            }
+        },
+        "cars": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Car"
+            }
+        }
+    },
+    "required": [
+        "drivers",
+        "cars"
+    ],
+    "definitions": {
+        "Driver": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "cars": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Car"
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "cars"
+            ]
+        },
+        "Car": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "registrationPlate": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "registrationPlate"
+            ]
+        }
+    }
+}

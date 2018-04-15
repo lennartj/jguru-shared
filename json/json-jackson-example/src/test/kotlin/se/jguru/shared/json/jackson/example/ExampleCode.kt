@@ -2,6 +2,8 @@ package se.jguru.shared.json.jackson.example
 
 import org.junit.Assert
 import org.junit.Test
+import org.skyscreamer.jsonassert.JSONAssert
+import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
 
 class ExampleCode {
@@ -9,24 +11,28 @@ class ExampleCode {
     @Test
     fun showSerializationUsage() {
 
-        // Create a Car object
+        // Create a Car object, and serialize it into a JSON formatted String
         val myCar = Car("Volvo", "ABC 123")
-
-        // Serialize myCar to a JSON formatted String
         val jsonForm: String = JacksonAlgorithms.serialize(myCar)
 
-        // Printout the JSON string.
-        println("Serialized Car object:\n\n$jsonForm")
+        // Assert
+        printActualDataAndAssertEquality(
+            "Serialization: Car",
+            jsonForm,
+            "testdata/carpool/single_car.json")
     }
 
     @Test
     fun showJsonSchemaUsage() {
 
         // Create the JSON Schema for the Car class
-        val schemaAsString: String = JacksonAlgorithms.getSchemaAsString(Car::class.java)
+        val carpoolSchema: String = JacksonAlgorithms.getSchemaAsString(CarPool::class.java)
 
-        // Printout the JSON schema.
-        println(schemaAsString)
+        // Assert
+        printActualDataAndAssertEquality(
+            "JSON Schema: CarPool",
+            carpoolSchema,
+            "testdata/carpool/carpool_json_schema.json")
     }
 
     @Test
@@ -45,6 +51,7 @@ class ExampleCode {
 
         // Ensure that the deserialized Car equals the expected one
         Assert.assertEquals(expected, deserialized)
+        Assert.assertNotSame(expected, deserialized)
     }
 
     @Test
@@ -66,7 +73,7 @@ class ExampleCode {
         // 2) Serialize the CarPool into JSON and deserialize it back again
         val jsonCarPool: String = JacksonAlgorithms.serialize(carPool)
         println("Serialized CarPool object:\n\n$jsonCarPool")
-        
+
         val deserialized: CarPool = JacksonAlgorithms.deserialize(jsonCarPool, CarPool::class.java)
 
         // Assert
@@ -79,5 +86,26 @@ class ExampleCode {
 
         Assert.assertSame("Mickey's tesla was not the same as Minnie's tesla. Referential integrity compromized.",
             mickeysTesla, minniesTesla)
+    }
+
+    //
+    // Shared functions
+    //
+
+    fun printActualDataAndAssertEquality(title : String, actual : String, resourcePathToExpectedData : String) {
+
+        //
+        // Printout the actual data.
+        //
+        println("\n[$title]\n\n$actual\n")
+
+        //
+        // Assert that the actual data is identical to the resourcePathToExpectedData
+        //
+        // a) Read expected JSON data from a file
+        // b) Assert that the expected structure matches the jsonForm
+        //
+        val expected = PropertyResources.readFully(resourcePathToExpectedData)
+        JSONAssert.assertEquals(expected, actual, true)
     }
 }

@@ -26,6 +26,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import se.jguru.shared.json.jackson.example.Car
 
+/**
+ * CarPool entity.
+ *
+ * @param drivers All Drivers who participate in this CarPool.
+ * @param cars All Cars available within this CarPool.
+ */
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator::class, property = "@id")
 @JsonPropertyOrder(value = ["drivers", "cars"])
-data class CarPool(val drivers : List<Driver>, val cars : List<Car>)
+data class CarPool(val drivers: List<Driver>, val cars: List<Car>)
