@@ -33,4 +33,4 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators
  */
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator::class, property = "@id")
 @JsonPropertyOrder(value = ["name", "registrationPlate"])
-data class Car(val name : String, val registrationPlate : String)
+data class Car(val name: String, val registrationPlate: String)
