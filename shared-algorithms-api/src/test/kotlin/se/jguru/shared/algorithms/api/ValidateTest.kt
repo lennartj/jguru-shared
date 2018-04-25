@@ -25,7 +25,7 @@ class ValidateTest {
         } catch (expected: IllegalArgumentException) {
             Assert.assertEquals(expectedMsg, expected.message)
         } catch (e: Exception) {
-            Assert.fail("Expected IllegalArgumentException, but got " + e)
+            Assert.fail("Expected IllegalArgumentException, but got $e")
         }
     }
 
@@ -42,9 +42,8 @@ class ValidateTest {
         } catch (expected: NullPointerException) {
             Assert.assertEquals(expectedMsg, expected.message)
         } catch (e: Exception) {
-            Assert.fail("Expected IllegalArgumentException, but got " + e)
+            Assert.fail("Expected IllegalArgumentException, but got $e")
         }
-
     }
 
     @Test(expected = IllegalArgumentException::class)

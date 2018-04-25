@@ -21,8 +21,6 @@
  */
 package se.jguru.shared.algorithms.api
 
-import javax.validation.constraints.NotNull
-
 /**
  * Simple argument validator, inspired by the commons-lang.
  *
@@ -61,14 +59,14 @@ object Validate {
      */
     @JvmStatic
     @Throws(NullPointerException::class, IllegalArgumentException::class)
-    fun <K, V, M : Map<in K, V>> notEmpty(aMap: M, argumentName: String): M {
+    fun <K, V, M : Map<in K, V>> notEmpty(aMap: M?, argumentName: String): M {
 
         // Check sanity
         notNull(aMap, argumentName)
 
         // All Done.
         return when {
-            aMap.isEmpty() -> throw IllegalArgumentException(getMessage("empty", argumentName))
+            aMap!!.isEmpty() -> throw IllegalArgumentException(getMessage("empty", argumentName))
             else -> aMap
         }
     }
@@ -89,13 +87,13 @@ object Validate {
      */
     @JvmStatic
     @Throws(NullPointerException::class, IllegalArgumentException::class)
-    fun <T, C : Collection<T>> notEmpty(aCollection: C, argumentName: String): C {
+    fun <T, C : Collection<T>> notEmpty(aCollection: C?, argumentName: String): C {
 
         // Check sanity
         notNull(aCollection, argumentName)
 
         return when {
-            aCollection.isEmpty() -> throw IllegalArgumentException(getMessage("empty", argumentName))
+            aCollection!!.isEmpty() -> throw IllegalArgumentException(getMessage("empty", argumentName))
             else -> aCollection
         }
     }
@@ -113,13 +111,13 @@ object Validate {
      */
     @JvmStatic
     @Throws(NullPointerException::class, IllegalArgumentException::class)
-    fun notEmpty(aString: String, argumentName: String): String {
+    fun notEmpty(aString: String?, argumentName: String): String {
 
         // Check sanity
         notNull(aString, argumentName)
 
         // All Done.
-        return when (aString.isEmpty()) {
+        return when (aString!!.isEmpty()) {
             true -> throw IllegalArgumentException(getMessage("empty", argumentName))
             else -> aString
         }
@@ -140,13 +138,13 @@ object Validate {
      */
     @JvmStatic
     @Throws(NullPointerException::class, IllegalArgumentException::class)
-    fun <T> notEmpty(anArray: Array<T>, argumentName: String): Array<T> {
+    fun <T> notEmpty(anArray: Array<T>?, argumentName: String): Array<T> {
 
         // Check sanity
         notNull(anArray, argumentName)
 
         // All Done.
-        return when (anArray.isEmpty()) {
+        return when (anArray!!.isEmpty()) {
             true -> throw IllegalArgumentException(getMessage("empty", argumentName))
             else -> anArray
         }
@@ -160,9 +158,9 @@ object Validate {
      */
     @JvmStatic
     @Throws(NullPointerException::class, IllegalArgumentException::class)
-    fun isTrue(condition: Boolean, message: String) {
+    fun isTrue(condition: Boolean?, message: String) {
 
-        if (!condition) {
+        if (condition == null || !condition) {
             throw IllegalArgumentException(message)
         }
     }
@@ -172,8 +170,7 @@ object Validate {
     //
 
     @JvmStatic
-    @NotNull
-    private fun getMessage(@NotNull exceptionDefinition: String, @NotNull argumentName: String = ""): String {
+    private fun getMessage(exceptionDefinition: String, argumentName: String = ""): String {
 
         // All Done.
         val suffix = if (argumentName.isNotEmpty()) " '$argumentName'" else argumentName
