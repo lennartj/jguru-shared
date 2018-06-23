@@ -45,6 +45,16 @@
                 <artifactId>org.eclipse.persistence.moxy</artifactId>
                 <version>${eclipselink.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>org.eclipse.persistence.jpa</artifactId>
+                <version>${eclipselink.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>org.eclipse.persistence.jpa.jpql</artifactId>
+                <version>${eclipselink.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
@@ -91,6 +101,16 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.jpql</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>
