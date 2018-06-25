@@ -45,7 +45,7 @@ abstract class MarshallerAndUnmarshaller : Serializable {
      * @return The marshalled transport form of the supplied [toMarshal] objects.
      */
     @Throws(IllegalArgumentException::class)
-    abstract fun marshal(loader: ClassLoader, format: MarshallingFormat, vararg toMarshal: Any): String
+    abstract fun marshal(loader: ClassLoader, format: MarshallingFormat, toMarshal: Array<Any>): String
 
     /**
      * Specification for how to marshal (a set of) objects, to the [MarshallingFormat] indicated.
@@ -56,7 +56,7 @@ abstract class MarshallerAndUnmarshaller : Serializable {
      * @return The marshalled transport form of the supplied [toMarshal] objects.
      */
     @Throws(IllegalArgumentException::class)
-    fun marshal(format: MarshallingFormat, vararg toMarshal: Any): String =
+    fun marshal(format: MarshallingFormat, toMarshal: Array<Any>): String =
         marshal(Thread.currentThread().contextClassLoader, format, toMarshal)
 
     /**
@@ -67,7 +67,7 @@ abstract class MarshallerAndUnmarshaller : Serializable {
      * @return The marshalled transport form of the supplied [toMarshal] objects.
      */
     @Throws(IllegalArgumentException::class)
-    fun marshal(vararg toMarshal: Any): String = marshal(
+    fun marshal(toMarshal: Array<Any>): String = marshal(
         Thread.currentThread().contextClassLoader,
         MarshallingFormat.XML,
         toMarshal)

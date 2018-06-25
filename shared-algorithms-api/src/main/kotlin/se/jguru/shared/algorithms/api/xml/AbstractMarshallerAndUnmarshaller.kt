@@ -64,7 +64,7 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
         typeInformation.forEach { this.typeInformation.add(it) }
     }
 
-    override fun marshal(loader: ClassLoader, format: MarshallingFormat, vararg toMarshal: Any): String {
+    override fun marshal(loader: ClassLoader, format: MarshallingFormat, toMarshal: Array<Any>): String {
 
         // Check sanity
         if (!supportedFormats.contains(format)) {

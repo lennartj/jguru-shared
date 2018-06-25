@@ -19,7 +19,7 @@ import javax.xml.bind.JAXBContext
 class ReferenceMarshallerAndUnmarshallerTest {
 
     // Shared state
-    var originalContextFactory: String? = null
+    private var originalContextFactory: String? = null
     lateinit var unitUnderTest: ReferenceImplementationMarshallerAndUnmarshaller
 
     @Before
@@ -51,7 +51,7 @@ class ReferenceMarshallerAndUnmarshallerTest {
         val expected = PropertyResources.readFully(resourcePath = resourcePath)
 
         // Act
-        val result = unitUnderTest.marshal(toMarshal = prefs)
+        val result = unitUnderTest.marshal(toMarshal = arrayOf(prefs))
 
         // Assert
         Assert.assertNotNull(result)

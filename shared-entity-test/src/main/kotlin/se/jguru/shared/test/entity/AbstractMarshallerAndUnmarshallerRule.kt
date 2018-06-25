@@ -23,6 +23,7 @@ package se.jguru.shared.test.entity
 
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
+import se.jguru.shared.algorithms.api.xml.AbstractMarshallerAndUnmarshaller
 import se.jguru.shared.algorithms.api.xml.MarshallerAndUnmarshaller
 import se.jguru.shared.algorithms.api.xml.NamespacePrefixResolver
 import javax.xml.bind.JAXBContext
@@ -33,8 +34,8 @@ import javax.xml.bind.JAXBContext
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-abstract class AbstractMarshallerAndUnmarshallerRule(val delegate: MarshallerAndUnmarshaller,
-                                                     private val jaxbContextFactoryClass : String) : TestWatcher() {
+abstract class AbstractMarshallerAndUnmarshallerRule(val delegate: AbstractMarshallerAndUnmarshaller,
+                                                     private val jaxbContextFactoryClass: String) : TestWatcher() {
 
     // Internal state
     private var originalContextFactory: String? = null

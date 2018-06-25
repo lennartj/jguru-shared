@@ -54,7 +54,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
         val expected = PropertyResources.readFully(resourcePath = resourcePath)
 
         // Act
-        val result = unitUnderTest.marshal(toMarshal = prefs)
+        val result = unitUnderTest.marshal(arrayOf(prefs))
 
         // Assert
         Assert.assertNotNull(result)
@@ -94,7 +94,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
         val expected = PropertyResources.readFully(resourcePath = resourcePath)
 
         // Act
-        val result = unitUnderTest.marshal(toMarshal = prefs, format = MarshallingFormat.JSON)
+        val result = unitUnderTest.marshal(toMarshal = arrayOf(prefs), format = MarshallingFormat.JSON)
         // println("got: $result")
 
         // Assert
