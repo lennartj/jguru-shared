@@ -29,14 +29,12 @@ import javax.xml.bind.JAXBContext
  * While this is normally done using JAXB, the [MarshallerAndUnmarshaller] can be
  * implemented using several different technologies.
  *
+ * @param namespacePrefixResolver The [NamespacePrefixResolver] to be used within the marshalling
+ * and unmarshalling operations.
+ *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-interface MarshallerAndUnmarshaller : Serializable {
-
-    /**
-     * The [NamespacePrefixResolver] to be used within the marshalling and unmarshalling operations.
-     */
-    val namespacePrefixResolver: NamespacePrefixResolver
+abstract class MarshallerAndUnmarshaller : Serializable {
 
     /**
      * Specification for how to marshal (a set of) objects, to the [MarshallingFormat] indicated.
@@ -47,9 +45,32 @@ interface MarshallerAndUnmarshaller : Serializable {
      * @return The marshalled transport form of the supplied [toMarshal] objects.
      */
     @Throws(IllegalArgumentException::class)
-    fun marshal(loader: ClassLoader = Thread.currentThread().contextClassLoader,
-                format: MarshallingFormat = MarshallingFormat.XML,
-                vararg toMarshal: Any): String
+    abstract fun marshal(loader: ClassLoader, format: MarshallingFormat, vararg toMarshal: Any): String
+
+    /**
+     * Specification for how to marshal (a set of) objects, to the [MarshallingFormat] indicated.
+     * Uses the current Thread context [ClassLoader].
+     *
+     * @param format The desired output [MarshallingFormat]
+     * @param toMarshal The object(s) to marshal.
+     * @return The marshalled transport form of the supplied [toMarshal] objects.
+     */
+    @Throws(IllegalArgumentException::class)
+    fun marshal(format: MarshallingFormat, vararg toMarshal: Any): String =
+        marshal(Thread.currentThread().contextClassLoader, format, toMarshal)
+
+    /**
+     * Specification for how to marshal (a set of) objects, to the [MarshallingFormat] indicated.
+     * Uses the current Thread context [ClassLoader], and [MarshallingFormat.XML].
+     *
+     * @param toMarshal The object(s) to marshal.
+     * @return The marshalled transport form of the supplied [toMarshal] objects.
+     */
+    @Throws(IllegalArgumentException::class)
+    fun marshal(vararg toMarshal: Any): String = marshal(
+        Thread.currentThread().contextClassLoader,
+        MarshallingFormat.XML,
+        toMarshal)
 
     /**
      * Specification for how to unmarshal a previously marshalled (set of) objects.
@@ -60,10 +81,33 @@ interface MarshallerAndUnmarshaller : Serializable {
      * @return The fully unmarshalled object.
      */
     @Throws(IllegalArgumentException::class)
-    fun <T> unmarshal(loader: ClassLoader = Thread.currentThread().contextClassLoader,
-                      format: MarshallingFormat = MarshallingFormat.XML,
-                      resultType: Class<T>,
-                      toUnmarshal: String): T
+    abstract fun <T> unmarshal(loader: ClassLoader,
+                               format: MarshallingFormat,
+                               resultType: Class<T>,
+                               toUnmarshal: String): T
+
+    /**
+     * Specification for how to unmarshal a previously marshalled (set of) objects.
+     * Uses the current Thread context [ClassLoader] to load type information.
+     *
+     * @param format The expected input [MarshallingFormat]
+     * @param resultType The type of object which should be resurrected from the supplied [toUnmarshal] string
+     * @return The fully unmarshalled object.
+     */
+    @Throws(IllegalArgumentException::class)
+    fun <T> unmarshal(format: MarshallingFormat, resultType: Class<T>, toUnmarshal: String): T = unmarshal(
+        Thread.currentThread().contextClassLoader, format, resultType, toUnmarshal)
+
+    /**
+     * Specification for how to unmarshal a previously marshalled (set of) objects.
+     * Uses the current Thread context [ClassLoader] to load type information, and [MarshallingFormat.XML].
+     *
+     * @param resultType The type of object which should be resurrected from the supplied [toUnmarshal] string
+     * @return The fully unmarshalled object.
+     */
+    @Throws(IllegalArgumentException::class)
+    fun <T> unmarshal(resultType: Class<T>, toUnmarshal: String): T = unmarshal(
+        Thread.currentThread().contextClassLoader, MarshallingFormat.XML, resultType, toUnmarshal)
 
     /**
      * Adds the supplied type information classes to this [MarshallerAndUnmarshaller] in order to perform marshalling
@@ -71,5 +115,5 @@ interface MarshallerAndUnmarshaller : Serializable {
      *
      * @param typeInformation a (set of) Classes required for proper operation.
      */
-    fun add(vararg typeInformation: Class<in Any>)
+    abstract fun add(vararg typeInformation: Class<in Any>)
 }

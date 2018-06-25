@@ -56,8 +56,9 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
     val jaxbContextProperties: MutableMap<String, Any> = mutableMapOf(),
 
     // The NamespacePrefixResolver used to map URIs to Prefixes
-    override val namespacePrefixResolver: NamespacePrefixResolver = SimpleNamespacePrefixResolver())
-    : MarshallerAndUnmarshaller {
+    val namespacePrefixResolver: NamespacePrefixResolver = SimpleNamespacePrefixResolver()
+
+) : MarshallerAndUnmarshaller() {
 
     override fun add(vararg typeInformation: Class<in Any>) {
         typeInformation.forEach { this.typeInformation.add(it) }
@@ -68,7 +69,7 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
         // Check sanity
         if (!supportedFormats.contains(format)) {
             throw IllegalArgumentException("Unsupported format $format. Supported formats are: " +
-                supportedFormats.map { it.name }.sorted().reduce { l, r -> l + ", " + r })
+                supportedFormats.map { it.name }.sorted().reduce { l, r -> "$l, $r" })
         }
         if (toMarshal.isEmpty()) {
             throw IllegalArgumentException("Stubbornly refusing to marshal no Objects.")
@@ -95,7 +96,6 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
         // Delegate
         return performUnmarshalling(loader, format, resultType, toUnmarshal)
     }
-
 
     /**
      * Implement this method to perform unmarshalling using the actual implementation.
@@ -142,13 +142,7 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
         return toReturn
     }
 
-    protected fun createUnmarshaller(jaxbContext: JAXBContext): Unmarshaller {
-
-        val toReturn = jaxbContext.createUnmarshaller()
-
-        // All Done.
-        return toReturn
-    }
+    protected fun createUnmarshaller(jaxbContext: JAXBContext): Unmarshaller = jaxbContext.createUnmarshaller()
 
     protected fun doMarshalling(marshaller: Marshaller, toMarshal: Array<Any>): String {
 

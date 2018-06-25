@@ -29,6 +29,11 @@ import se.jguru.shared.spi.jaxb.eclipselink.MoxyMarshallerAndUnmarshaller
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-open class MoxyMarshallerUnmarshallerRule : AbstractMarshallerAndUnmarshallerRule(
-    MoxyMarshallerAndUnmarshaller(),
-    "org.eclipse.persistence.jaxb.JAXBContextFactory")
+open class MoxyMarshallerUnmarshallerRule @JvmOverloads constructor(
+    marshallerAndUnmarshaller: MoxyMarshallerAndUnmarshaller = MoxyMarshallerAndUnmarshaller()) :
+    AbstractMarshallerAndUnmarshallerRule(
+        marshallerAndUnmarshaller,
+        "org.eclipse.persistence.jaxb.JAXBContextFactory") {
+
+    constructor(jaxbContextPath : String) : this(MoxyMarshallerAndUnmarshaller())
+}
