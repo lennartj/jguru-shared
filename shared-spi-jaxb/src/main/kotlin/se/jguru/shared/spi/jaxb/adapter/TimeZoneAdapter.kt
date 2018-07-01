@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
-class TimeZoneAdapter : XmlAdapter<String, TimeZone>() {
+open class TimeZoneAdapter : XmlAdapter<String, TimeZone>() {
 
     /**
      * {@inheritDoc}

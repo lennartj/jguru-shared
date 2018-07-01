@@ -30,11 +30,13 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
  * XML Adapter class to handle Java 8 [LocalDate] - which will convert to
  * and from Strings using the [DateTimeFormatter.ISO_LOCAL_DATE].
  *
+ * @param formatter The [DateTimeFormatter] used to render date strings.
+ *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
-class LocalDateAdapter(val formatter : DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE)
-    : XmlAdapter<String, LocalDate>() {
+open class LocalDateAdapter @JvmOverloads constructor(
+    val formatter : DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) : XmlAdapter<String, LocalDate>() {
 
     /**
      * {@inheritDoc}

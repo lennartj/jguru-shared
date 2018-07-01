@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
-class LocaleAdapter : XmlAdapter<String, Locale>() {
+open class LocaleAdapter : XmlAdapter<String, Locale>() {
 
     /**
      * {@inheritDoc}
