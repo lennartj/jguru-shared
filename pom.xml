@@ -62,6 +62,7 @@
     -->
     <modules>
         <module>json</module>
+        <module>service</module>
         <module>shared-algorithms-api</module>
         <module>shared-entity-test</module>
         <module>shared-spi-jaxb</module>
