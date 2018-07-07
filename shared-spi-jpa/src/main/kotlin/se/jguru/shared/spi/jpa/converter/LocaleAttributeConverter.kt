@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-class LocaleAttributeConverter : AttributeConverter<Locale, String> {
+open class LocaleAttributeConverter : AttributeConverter<Locale, String> {
 
     override fun convertToDatabaseColumn(attribute: Locale?): String? = when(attribute) {
         null -> null

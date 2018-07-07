@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-class LocalTimeAttributeConverter : AttributeConverter<LocalTime, Time> {
+open class LocalTimeAttributeConverter : AttributeConverter<LocalTime, Time> {
 
     override fun convertToDatabaseColumn(attribute: LocalTime?): Time? = when (attribute) {
         null -> null
