@@ -23,6 +23,8 @@ package se.jguru.shared.spi.jpa.converter
 
 import java.time.DayOfWeek
 import javax.persistence.AttributeConverter
+import javax.persistence.Converter
+import javax.xml.bind.annotation.XmlTransient
 
 /**
  * JPA AttributeConverter class to handle Java 8 [java.time.DayOfWeek] - which
@@ -30,6 +32,8 @@ import javax.persistence.AttributeConverter
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
+@XmlTransient
+@Converter(autoApply = true)
 open class DayOfWeekAttributeConverter : AttributeConverter<DayOfWeek, Int> {
 
     override fun convertToDatabaseColumn(attribute: DayOfWeek?): Int? = when(attribute) {
