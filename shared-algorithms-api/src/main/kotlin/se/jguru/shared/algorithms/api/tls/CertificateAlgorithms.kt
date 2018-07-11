@@ -40,6 +40,11 @@ import javax.naming.ldap.Rdn
 const val JKS_KEYSTORE_TYPE = "JKS"
 
 /**
+ * PKCS12 type for Java [KeyStore]s.
+ */
+const val PKCS12_KEYSTORE_TYPE = "pkcs12"
+
+/**
  * The standard system property to define the location of the truststore ("cacerts") location.
  */
 const val PROPERTY_SSL_TRUSTSTORE_PATH = "javax.net.ssl.trustStore"
