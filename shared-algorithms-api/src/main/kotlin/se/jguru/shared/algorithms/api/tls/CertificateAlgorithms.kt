@@ -193,6 +193,130 @@ object CertificateAlgorithms {
     fun getStandardJKS(): KeyStore = loadKeyStore()
 
     /**
+     * Merges all desired [KeyStore.Entry] objects from the two supplied KeyStores into a single - new - one.
+     * Optionally performs filtering and transformation on Entries found within store2.
+     *
+     * @param store1 The store used as the basis of the merge operation.
+     * @param entryAlias2PasswordMap1 A Map relating alias to (plaintext) password for Entries within store1.
+     * This is required to open Keys or encrypted Certificates within store1.
+     * @param store2 The store from which entries are copied into the result, depending on the [overwrite] parameter.
+     * @param entryAlias2PasswordMap2 A Map relating alias to (plaintext) password for Entries within store2.
+     * This is required to open Keys or encrypted Certificates within store2.
+     * @param entryFilter The filter defining which Entries from store2 should be accepted within the
+     * merged/resulting KeyStore.
+     * @param entryTransformer an optional transformer function converting each found entry within [store2] before
+     * inserting them into the merged KeyStore. This is useful when converting Self-Signed Certificates to
+     * TrustedCertificateEntries.
+     * @param storePassword The password for the emitted KeyStore.
+     * @param storeType The type of KeyStore emitted.
+     * @param overwrite Defines the strategy for overwriting existing entries.
+     *
+     * @return A KeyStore containing the merged entries from store1 and store2.
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun mergeKeyStores(store1: KeyStore = getStandardJKS(),
+                       entryAlias2PasswordMap1: Map<String, String> = emptyMap(),
+                       store2: KeyStore,
+                       entryAlias2PasswordMap2: Map<String, String> = emptyMap(),
+                       entryFilter: Predicate<KeyStore.Entry> = Predicate { true },
+                       entryTransformer: (KeyStore.Entry) -> KeyStore.Entry = { e -> e },
+                       storePassword: String = "secret",
+                       storeType: String = JKS_KEYSTORE_TYPE,
+                       overwrite: OverwriteStrategy = OverwriteStrategy.NO_OVERWRITE_IF_EXISTS): KeyStore {
+
+        // #1) Create a new, in-memory, KeyStore
+        val toReturn = createKeyStore(storePassword, storeType)
+
+        // #2) Copy all matching entities from store1
+        val entryMap1 = getEntryMapFrom(store1, entryAlias2PasswordMap1, entryFilter)
+        entryMap1.forEach { alias, entry -> toReturn.setEntry(alias, entry, null) }
+
+        // #3) Copy any matching entities from store2 ... given the overwrite policy
+        val entryMap2 = getEntryMapFrom(store2, entryAlias2PasswordMap2, entryFilter)
+        entryMap2
+            .filter {
+                when (overwrite) {
+                    OverwriteStrategy.NO_OVERWRITE_IF_EXISTS -> !entryMap1.containsKey(it.key)
+                    OverwriteStrategy.OVERWRITE_EXISTING -> true
+                    OverwriteStrategy.EXCEPTION_IF_EXISTS -> throw IllegalStateException("Entry alias ${it.key} existed " +
+                        "in both KeyStores, and overwrite was set to OverwriteStrategy.EXCEPTION_IF_EXISTS. Aborting " +
+                        "merge.")
+                }
+            }
+            .forEach { alias, entry ->
+
+                // #1) Transform the Entry
+                val modifiedEntry = entryTransformer.invoke(entry)
+
+                // #2) Create a PasswordProtection if the alias is mapped within the entryAlias2PasswordMap2
+                val passwordProtection = when (entryAlias2PasswordMap2[alias]) {
+                    null -> null
+                    else -> KeyStore.PasswordProtection(entryAlias2PasswordMap2[alias]!!.toCharArray())
+                }
+
+                // #3) TrustedCertificateEntry objects should have no PasswordProtection.
+                val effectivePasswordProtection = when (modifiedEntry) {
+                    is KeyStore.TrustedCertificateEntry -> null
+                    else -> passwordProtection
+                }
+
+                // #4) Add the Entry to the returned/merged KeyStore.
+                toReturn.setEntry(alias, modifiedEntry, effectivePasswordProtection)
+            }
+
+        // All Done.
+        return toReturn
+    }
+
+    /**
+     * Converts all self-signed Certificates found within the [selfSignedCertificateStore] to
+     * [KeyStore.TrustedCertificateEntry] objects and stashes them into a copy of the cacerts JKS.
+     * Then returns the copy.
+     *
+     * @param selfSignedCertificateStore The KeyStore containing self-signed Certificates.
+     * @param entry2PasswordMap map relating entry aliases to passwords for the PrivateKeys within the
+     * [selfSignedCertificateStore]
+     * @param entryFilter The filter defining which Entries from store2 should be accepted within the
+     * merged/resulting KeyStore.
+     * @param entryTransformer an optional transformer function converting each found entry within [store2] before
+     * inserting them into the merged KeyStore. This is useful when converting Self-Signed Certificates to
+     * TrustedCertificateEntries.
+     * @param storePassword The password for the emitted KeyStore.
+     * @param storeType The type of KeyStore emitted.
+     * @param overwrite Defines the strategy for overwriting existing entries.
+     */
+    @JvmOverloads
+    @JvmStatic
+    fun convertSelfSignedCertificatesToTrustedAndMergeWithCaCerts(
+        selfSignedCertificateStore: KeyStore,
+        entry2PasswordMap: Map<String, String> = emptyMap(),
+        entryFilter: Predicate<KeyStore.Entry> = Predicate { e ->
+            e is KeyStore.TrustedCertificateEntry
+                || e is KeyStore.PrivateKeyEntry
+        },
+        entryTransformer: (KeyStore.Entry) -> KeyStore.Entry = { e ->
+            when (e) {
+                is KeyStore.TrustedCertificateEntry -> e
+                is KeyStore.PrivateKeyEntry -> KeyStore.TrustedCertificateEntry(e.certificate)
+                else -> throw IllegalArgumentException("Cannot handle entry of type ${e::class.java.name}")
+            }
+        },
+        storePassword: String = "secret",
+        storeType: String = JKS_KEYSTORE_TYPE,
+        overwrite: OverwriteStrategy = OverwriteStrategy.NO_OVERWRITE_IF_EXISTS): KeyStore {
+
+        // Delegate
+        return mergeKeyStores(getStandardJKS(),
+            emptyMap(),
+            selfSignedCertificateStore,
+            entry2PasswordMap,
+            entryFilter,
+            entryTransformer,
+            storePassword, storeType, overwrite)
+    }
+
+    /**
      * Persists the supplied KeyStore to the given File.
      *
      * @param store The KeyStore to persist
@@ -269,7 +393,11 @@ object CertificateAlgorithms {
                 }
 
                 // Extract the entry
-                val currentEntry = store.getEntry(alias, currentProtectionParameter)
+                val currentEntry: KeyStore.Entry = try {
+                    store.getEntry(alias, currentProtectionParameter)
+                } catch (e: UnsupportedOperationException) {
+                    store.getEntry(alias, null)
+                }
 
                 // If we want the entry, map it in the return value
                 if (entryFilter.test(currentEntry)) {
