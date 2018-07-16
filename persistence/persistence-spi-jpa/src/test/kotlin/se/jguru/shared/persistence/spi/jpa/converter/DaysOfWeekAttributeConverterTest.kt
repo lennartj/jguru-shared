@@ -1,4 +1,4 @@
-package se.jguru.shared.spi.jpa.converter
+package se.jguru.shared.persistence.spi.jpa.converter
 
 import org.junit.Assert
 import org.junit.Before
@@ -55,7 +55,7 @@ class DaysOfWeekAttributeConverterTest {
         // Assemble
 
         // Act
-        val weekdays = unitUnderTest.convertToEntityAttribute("1,2,3,4,5")
+        val weekdays = unitUnderTest.convertToEntityAttribute("1,3,4,2,5")
         val nothing = unitUnderTest.convertToEntityAttribute("")
         val reallyNothing = unitUnderTest.convertToEntityAttribute(null)
 

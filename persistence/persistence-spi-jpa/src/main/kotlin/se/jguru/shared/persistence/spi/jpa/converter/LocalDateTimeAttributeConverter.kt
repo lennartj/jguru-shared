@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-spi-jpa
+ * Nazgul Project: jguru-shared-persistence-spi-jpa
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,31 +19,32 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.spi.jpa.converter
 
-import java.sql.Date
-import java.time.LocalDate
+package se.jguru.shared.persistence.spi.jpa.converter
+
+import java.sql.Timestamp
+import java.time.LocalDateTime
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
 import javax.xml.bind.annotation.XmlTransient
 
 /**
- * JPA AttributeConverter class to handle Java 8 [LocalDate] - which will
- * convert to and from [java.sql.Date]s.
+ * JPA AttributeConverter class to handle Java 8 [java.time.LocalDateTime] - which
+ * will convert to and from [java.sql.Timestamp]s.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class LocalDateAttributeConverter : AttributeConverter<LocalDate, Date> {
+open class LocalDateTimeAttributeConverter : AttributeConverter<LocalDateTime, Timestamp> {
 
-    override fun convertToDatabaseColumn(attribute: LocalDate?): Date? = when(attribute) {
+    override fun convertToDatabaseColumn(attribute: LocalDateTime?): Timestamp? = when(attribute) {
         null -> null
-        else -> Date.valueOf(attribute)
+        else -> Timestamp.valueOf(attribute)
     }
 
-    override fun convertToEntityAttribute(dbData: Date?): LocalDate? = when(dbData) {
+    override fun convertToEntityAttribute(dbData: Timestamp?): LocalDateTime? = when(dbData) {
         null -> null
-        else -> dbData.toLocalDate()
+        else -> dbData.toLocalDateTime()
     }
 }

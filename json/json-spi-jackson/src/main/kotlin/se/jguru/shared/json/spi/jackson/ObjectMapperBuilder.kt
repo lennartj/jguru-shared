@@ -32,6 +32,10 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import java.text.DateFormat
 import java.util.TimeZone
 
+/**
+ * Factory class to create an [ObjectMapper] for use with Jackson/JSON Serialization
+ * and Deserialization.
+ */
 class ObjectMapperBuilder(private val toReturn: ObjectMapper = ObjectMapper()) {
 
     /**

@@ -1,4 +1,4 @@
-package se.jguru.shared.spi.jpa.converter
+package se.jguru.shared.persistence.spi.jpa.converter
 
 import org.junit.Assert
 import org.junit.Before

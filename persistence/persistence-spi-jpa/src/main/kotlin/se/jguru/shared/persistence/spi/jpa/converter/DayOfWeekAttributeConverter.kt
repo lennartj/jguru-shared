@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-spi-jpa
+ * Nazgul Project: jguru-shared-persistence-spi-jpa
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,31 +19,31 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.spi.jpa.converter
 
-import java.sql.Time
-import java.time.LocalTime
+package se.jguru.shared.persistence.spi.jpa.converter
+
+import java.time.DayOfWeek
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
 import javax.xml.bind.annotation.XmlTransient
 
 /**
- * JPA AttributeConverter class to handle Java 8 [java.time.LocalTime] - which will
- * convert to and from [java.sql.Time]s.
+ * JPA AttributeConverter class to handle Java 8 [java.time.DayOfWeek] - which
+ * will convert to and from [Int]s.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class LocalTimeAttributeConverter : AttributeConverter<LocalTime, Time> {
+open class DayOfWeekAttributeConverter : AttributeConverter<DayOfWeek, Int> {
 
-    override fun convertToDatabaseColumn(attribute: LocalTime?): Time? = when (attribute) {
+    override fun convertToDatabaseColumn(attribute: DayOfWeek?): Int? = when (attribute) {
         null -> null
-        else -> Time.valueOf(attribute)
+        else -> attribute.value
     }
 
-    override fun convertToEntityAttribute(dbData: Time?): LocalTime? = when (dbData) {
+    override fun convertToEntityAttribute(dbData: Int?): DayOfWeek? = when (dbData) {
         null -> null
-        else -> dbData.toLocalTime()
+        else -> DayOfWeek.of(dbData)
     }
 }

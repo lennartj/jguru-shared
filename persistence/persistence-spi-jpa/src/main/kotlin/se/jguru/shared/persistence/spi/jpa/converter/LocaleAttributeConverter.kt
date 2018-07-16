@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-spi-jpa
+ * Nazgul Project: jguru-shared-persistence-spi-jpa
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,7 +19,8 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.spi.jpa.converter
+
+package se.jguru.shared.persistence.spi.jpa.converter
 
 import java.util.Locale
 import javax.persistence.AttributeConverter

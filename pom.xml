@@ -63,10 +63,11 @@
     <modules>
         <module>json</module>
         <module>service</module>
+        <module>persistence</module>
         <module>shared-algorithms-api</module>
         <module>shared-entity-test</module>
         <module>shared-spi-jaxb</module>
-        <module>shared-spi-jpa</module>
+        <!-- module>shared-spi-jpa</module -->
     </modules>
 
     <!--
