@@ -64,7 +64,7 @@ object JpaHelper {
     @JvmStatic
     @JvmOverloads
     fun extractSchema(persistenceUnitName: String,
-                      persistenceProviderInfo : PersistenceProviderInfo,
+                      persistenceProviderInfo: PersistenceProviderInfo,
                       overrideProperties: MutableMap<String, Any> = mutableMapOf()) {
 
         // Synthesize the properties

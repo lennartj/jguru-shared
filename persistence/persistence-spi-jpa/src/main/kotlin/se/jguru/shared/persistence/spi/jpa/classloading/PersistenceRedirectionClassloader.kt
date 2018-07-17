@@ -38,13 +38,13 @@ import java.util.Enumeration
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-class PersistenceRedirectionClassLoader(
+open class PersistenceRedirectionClassLoader(
 
     parent: ClassLoader,
 
     val redirectTo: String,
 
-    val caseInsensitive :Boolean = true
+    val caseInsensitive: Boolean = true
 
 ) : ClassLoader(parent) {
 

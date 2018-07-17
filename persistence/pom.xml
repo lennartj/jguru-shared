@@ -36,8 +36,8 @@
     -->
     <modules>
         <module>persistence-spi-jpa</module>
-        <!-- module>persistence-jpa-test</module>
-        <module>persistence-spi-hibernate</module>
+        <!-- module>persistence-jpa-test</module -->
+        <!-- module>persistence-spi-hibernate</module>
         <module>persistence-spi-eclipselink</module -->
     </modules>
 

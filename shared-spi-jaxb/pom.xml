@@ -31,7 +31,7 @@
 
         <!-- Version constants -->
         <metro.version>2.3.0</metro.version>
-        <eclipselink.version>2.7.1</eclipselink.version>
+        <eclipselink.version>2.7.2</eclipselink.version>
         <xmlunit.version>2.5.1</xmlunit.version>
     </properties>
 
