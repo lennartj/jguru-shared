@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory
 import java.io.Serializable
 import java.util.TreeMap
 import javax.persistence.EntityManagerFactory
-import javax.persistence.Persistence
+import javax.persistence.PersistenceException
 import javax.persistence.spi.PersistenceProvider
 import javax.persistence.spi.PersistenceProviderResolverHolder
 
@@ -54,10 +54,15 @@ interface PersistenceProviderInfo : Serializable {
     fun getPersistenceMap(): TreeMap<String, Any>
 
     /**
-     * Retrieves an [EntityManagerFactory] from this [PersistenceProviderInfo].
-     * Fetches the [getPersistenceMap] and merges in its properties into the overrideProperties supplied.
+     * Creates a JavaSE-style [EntityManagerFactory] from this [PersistenceProviderInfo], using the
+     * [PersistenceProvider.createEntityManagerFactory] method. Fetches the [getPersistenceMap] and merges in its
+     * properties into the properties supplied.
+     *
+     * @param persistenceUnitName The name of the PersistenceUnit for which an EntityManagerFactory should be created.
+     * @param properties any properties used to create the EntityManagerFactory.
+     * @return The EntityManagerFactory created from this PersistenceProviderInfo's [PersistenceProvider].
      */
-    fun getEntityManagerFactory(persistenceUnitName: String, overrideProperties: MutableMap<String, Any>?)
+    fun createEntityManagerFactory(persistenceUnitName: String, properties: MutableMap<String, Any>?)
         : EntityManagerFactory
 }
 
@@ -101,11 +106,11 @@ enum class CommonPersistenceProvidersInfo(private val providerClass: String) : P
         return toReturn
     }
 
-    override fun getEntityManagerFactory(persistenceUnitName: String, overrideProperties: MutableMap<String, Any>?)
+    override fun createEntityManagerFactory(persistenceUnitName: String, properties: MutableMap<String, Any>?)
         : EntityManagerFactory {
 
         // Synthesize the override properties
-        val props = overrideProperties ?: mutableMapOf()
+        val props = properties ?: mutableMapOf()
         props.putAll(getPersistenceMap())
 
         if (log.isDebugEnabled) {
@@ -115,8 +120,20 @@ enum class CommonPersistenceProvidersInfo(private val providerClass: String) : P
                     .reduce { acc, current -> acc + "" + current })
         }
 
-        // All Done.
-        return Persistence.createEntityManagerFactory(persistenceUnitName, props)
+        // Use the standard mechanism of the Persistence framework.
+        val providers = PersistenceProviderResolverHolder.getPersistenceProviderResolver().persistenceProviders
+        val desiredProvider = providers.firstOrNull { getProviderClassName() == it::class.java.name }
+
+        when {
+            desiredProvider != null -> return desiredProvider.createEntityManagerFactory(persistenceUnitName, props)
+            else -> {
+
+                val foundProviders = providers.map { it::class.java.name }.reduce { acc, c -> "$c,$acc" } ?: "<none>"
+                throw PersistenceException("Cannot create EntityManagerFactory for " +
+                    "PersistenceUnit [$persistenceUnitName]. Desired Persistence provider " +
+                    "[${getProviderClassName()}] not loaded. Found Providers: $foundProviders")
+            }
+        }
     }
 
     companion object {
