@@ -60,7 +60,7 @@ class ExampleCode {
         // Assemble test data:
         // 1) Create a CarPool consisting of 3 cars and 2 drivers
         //
-        val volvo = Car("Volvo", "ABC 123")
+        val volvo = Car("Volvo", "ABC 123", "SpungeBob")
         val ford = Car("Ford", "EFG 456")
         val tesla = Car("Tesla", "HIJ 789")
 
@@ -86,6 +86,10 @@ class ExampleCode {
 
         Assert.assertSame("Mickey's tesla was not the same as Minnie's tesla. Referential integrity compromized.",
             mickeysTesla, minniesTesla)
+
+        Assert.assertEquals("SpungeBob", deserialized.cars.find { it.name == "Volvo" }!!.nickname)
+        Assert.assertNull(deserialized.cars.find { it.name == "Tesla" }!!.nickname)
+        Assert.assertNull(deserialized.cars.find { it.name == "Ford" }!!.nickname)
     }
 
     //

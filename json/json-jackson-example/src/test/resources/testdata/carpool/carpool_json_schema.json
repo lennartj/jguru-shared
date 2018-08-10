@@ -50,6 +50,9 @@
                 },
                 "registrationPlate": {
                     "type": "string"
+                },
+                "nickname" : {
+                    "type" : "string"
                 }
             },
             "required": [
