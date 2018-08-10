@@ -21,6 +21,7 @@
  */
 package se.jguru.shared.json.spi.jackson
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.PrettyPrinter
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.Module
@@ -77,6 +78,21 @@ class ObjectMapperBuilder(private val toReturn: ObjectMapper = ObjectMapper()) {
     }
 
     /**
+     * Assigns the supplied Include specification to the ObjectMapper.
+     *
+     * @param includeSpec The Include definition to assign. Defaults to `JsonInclude.Include.NON_ABSENT`
+     * @return This builder, for chaining.
+     */
+    @JvmOverloads
+    fun withNullFieldInclusion(includeSpec: JsonInclude.Include = JsonInclude.Include.NON_ABSENT): ObjectMapperBuilder {
+
+        toReturn.setSerializationInclusion(includeSpec)
+
+        // All Done.
+        return this
+    }
+
+    /**
      * Assigns the supplied TimeZone to the ObjectMapper.
      *
      * @param timeZone The TimeZone to assign.
@@ -117,6 +133,7 @@ class ObjectMapperBuilder(private val toReturn: ObjectMapper = ObjectMapper()) {
         @JvmStatic
         fun getDefault(): ObjectMapper = ObjectMapperBuilder()
             .withPrettyPrinter()
+            .withNullFieldInclusion()
             .withModule(ParameterNamesModule())
             .withModule(Jdk8Module())
             .withModule(JavaTimeModule())
