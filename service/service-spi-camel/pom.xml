@@ -99,6 +99,11 @@
         <!--
             Internal dependencies.
         -->
+        <dependency>
+            <groupId>se.jguru.shared.json.spi.jackson</groupId>
+            <artifactId>jguru-shared-json-spi-jackson</artifactId>
+            <version>0.9.1-SNAPSHOT</version>
+        </dependency>
 
         <!--
             External dependencies.
@@ -138,6 +143,11 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

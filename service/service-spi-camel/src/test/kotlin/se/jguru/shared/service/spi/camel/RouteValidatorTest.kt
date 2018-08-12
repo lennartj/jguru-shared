@@ -12,18 +12,23 @@ import org.junit.Test
 
 class RouteValidatorTest {
 
+    // Shared state
+    val unitUnderTest = HasNonStandardIdValidator()
+
     @Test
     fun validateRouteValidation() {
 
         // Assemble
-        val aRoute : Route = DummyRoute("route-1")
-        val validator = HasNonStandardIdValidator()
+        val anInvalidRoute : Route = DummyRoute("route-1")
+        val aValidRoute : Route = DummyRoute("NonDefaultRouteID")
 
         // Act
-        val result = validator.isValid(aRoute)
+        val shouldBeInvalid = unitUnderTest.isValid(anInvalidRoute)
+        val shouldBeValid = unitUnderTest.isValid(aValidRoute)
 
         // Assert
-        Assert.assertFalse(result)
+        Assert.assertFalse(shouldBeInvalid)
+        Assert.assertTrue(shouldBeValid)
     }
 }
 
