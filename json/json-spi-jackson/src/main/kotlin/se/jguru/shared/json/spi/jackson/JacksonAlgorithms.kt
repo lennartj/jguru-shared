@@ -61,9 +61,9 @@ object JacksonAlgorithms {
      */
     @JvmStatic
     @JvmOverloads
-    fun <T> serialize(anObject: T,
-                      objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault(),
-                      compactOutput: Boolean = false): String {
+    fun serialize(anObject: Any,
+                  objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault(),
+                  compactOutput: Boolean = false): String {
 
         // Fetch the relevant printer
         val objectWriter = when (compactOutput) {
