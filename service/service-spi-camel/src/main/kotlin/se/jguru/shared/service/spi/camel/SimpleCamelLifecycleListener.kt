@@ -41,8 +41,8 @@ open class SimpleCamelLifecycleListener(val humanReadableDescription: String) : 
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 class RoutesValidatorListener @JvmOverloads constructor(
-        humanReadableDescription: String,
-        validators: MutableList<RouteValidator> = mutableListOf(HasNonStandardIdValidator()))
+    humanReadableDescription: String,
+    validators: MutableList<RouteValidator> = mutableListOf(HasNonStandardIdValidator()))
 
     : SimpleCamelLifecycleListener(humanReadableDescription) {
 

@@ -88,4 +88,33 @@ open class CamelFileMoverTest : CamelTestSupport() {
         val resultFileContent = context.typeConverter.convertTo(String::class.java, targetFile);
         Assert.assertEquals(sentBody, resultFileContent);
     }
+
+    @Test
+    open fun validateMovingOtherFiles() {
+
+        // Assemble
+        val sentBody = "Hello Camel World 2!"
+        val fileName = "helloOther.txt"
+
+        val notify = NotifyBuilder(context)
+            .whenDone(1)
+            .create()
+
+        val targetFile = File(fileMover.outboxResourcePath, fileName);
+
+        // Act
+        template.sendBodyAndHeader(
+            fileMover.inboxURI,
+            sentBody,
+            Exchange.FILE_NAME,
+            fileName);
+
+        // Assert
+        Assert.assertTrue(notify.matchesMockWaitTime());
+        Assert.assertTrue("Expected that the file should be moved to $targetFile",
+            targetFile.exists() && targetFile.isFile);
+
+        val resultFileContent = context.typeConverter.convertTo(String::class.java, targetFile);
+        Assert.assertEquals(sentBody, resultFileContent);
+    }
 }

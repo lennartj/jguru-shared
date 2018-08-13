@@ -1,10 +1,12 @@
 package se.jguru.shared.service.spi.camel.core.features
 
-import org.apache.camel.RoutesBuilder
 import org.apache.camel.builder.AdviceWithRouteBuilder
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.model.ProcessorDefinition
+import org.junit.Assert
+import org.junit.Test
 import se.jguru.shared.service.spi.camel.core.CamelFileMoverTest
+import se.jguru.shared.service.spi.camel.core.ROUTEID
 
 /**
  *
@@ -16,22 +18,33 @@ class CamelFileMoverAdviceTest : CamelFileMoverTest() {
     lateinit var theMockEndpoint: MockEndpoint
 
     override fun setUp() {
+
         super.setUp()
 
         theMockEndpoint = getMockEndpoint("mock:messages")
     }
 
-    override fun createRouteBuilder(): RoutesBuilder {
+    override fun doPostSetup() {
 
-        val toReturn = super.createRouteBuilder()
-
-        context.getRouteDefinition("route")
+        context.getRouteDefinition(ROUTEID)
             .adviceWith(context, object : AdviceWithRouteBuilder() {
                 override fun configure() {
                     weaveAddLast<ProcessorDefinition<*>>().to("mock:messages")
                 }
             })
+    }
 
-        return toReturn
+    @Test
+    fun validateMockEndpointReceivedAdvicedRouteMessage() {
+
+        // Assemble
+        theMockEndpoint.expectedCount = 1
+
+        // Act
+        super.validateMovingOtherFiles()
+
+        // Assert
+        Assert.assertEquals(1, this.theMockEndpoint.receivedCounter)
+        theMockEndpoint.assertIsSatisfied()
     }
 }
