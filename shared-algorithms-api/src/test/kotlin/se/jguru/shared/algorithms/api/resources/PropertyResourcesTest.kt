@@ -2,6 +2,7 @@ package se.jguru.shared.algorithms.api.resources
 
 import org.junit.Assert
 import org.junit.Test
+import java.net.URL
 
 /**
  *
@@ -81,5 +82,29 @@ class PropertyResourcesTest {
 
         // Assert
         Assert.assertEquals(expected, result)
+    }
+
+    @Test
+    fun validateUrlFiltering() {
+
+        // Assemble
+        val sharedAlgorithmsUrlFilter: (URL) -> Boolean = {
+            it.toString().contains("shared-algorithms-api", true)
+        }
+
+        // Act
+        val unfiltered = PropertyResources.getResourceURLs(MavenDependencyInformation.DEPENDENCY_RESOURCE)
+        val filtered = PropertyResources.getResourceURLs(
+            MavenDependencyInformation.DEPENDENCY_RESOURCE,
+            sharedAlgorithmsUrlFilter)
+
+        unfiltered.forEachIndexed { index, url -> println("Unfiltered [$index]: $url") }
+
+        filtered.forEachIndexed { index, url -> println("Filtered [$index]: $url") }
+
+        // Assert
+        Assert.assertTrue(filtered.size <= unfiltered.size)
+        Assert.assertEquals(1, filtered.size)
+        Assert.assertTrue(filtered.first().toString().contains("shared-algorithms-api", true))
     }
 }

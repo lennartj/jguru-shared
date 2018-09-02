@@ -104,9 +104,9 @@ class MavenDependencyInformation(val groupID: String,
             : MavenDependencyInformation {
 
             // Extract the required keys
-            val keyPrefix = groupID + "/" + artifactID
-            val versionKey = keyPrefix + "/version"
-            val scopeKey = keyPrefix + "/scope"
+            val keyPrefix = "$groupID/$artifactID"
+            val versionKey = "$keyPrefix/version"
+            val scopeKey = "$keyPrefix/scope"
 
             // Fetch the required data
             val mavenVersion = dependencyMap[versionKey]
@@ -127,7 +127,7 @@ class MavenDependencyInformation(val groupID: String,
             if (scope.size != 1) {
                 throw IllegalArgumentException("Could not interpret Maven scope for Group/Artifact " +
                     "[$groupID/$artifactID]. Found: $scopeString, Required one of: " +
-                    DependencyScope.values().map { it.mavenValue }.reduce { l, r -> l + ", " + r })
+                    DependencyScope.values().map { it.mavenValue }.reduce { l, r -> "$l, $r" })
             }
 
             // All Done.
@@ -135,7 +135,11 @@ class MavenDependencyInformation(val groupID: String,
         }
 
         /**
-         * Parses all
+         * Parses all key/value pairs within the supplied Map, expected to be read from a
+         * `dependency.properties` file, into a Set of [MavenDependencyInformation] objects.
+         *
+         * @param dependencyMap The map read from a `dependency.properties` file
+         * @return a Set of [MavenDependencyInformation] objects, parsed from he supplied Map.
          */
         @JvmStatic
         fun parse(dependencyMap: Map<String, String>): Set<MavenDependencyInformation> {

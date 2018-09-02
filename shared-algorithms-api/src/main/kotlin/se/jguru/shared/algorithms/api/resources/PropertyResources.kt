@@ -56,9 +56,10 @@ object PropertyResources {
      * @return A Set of the URLs on the supplied resourcePath which were also accepted by the supplied urlFilter.
      */
     @JvmStatic
-    fun getResourceURLs(classLoader: ClassLoader = Thread.currentThread().contextClassLoader,
+    @JvmOverloads
+    fun getResourceURLs(resourcePath: String,
                         urlFilter: (URL) -> Boolean = { true },
-                        resourcePath: String): Set<URL> {
+                        classLoader: ClassLoader = Thread.currentThread().contextClassLoader): Set<URL> {
 
         val toReturn = mutableSetOf<URL>()
 
@@ -121,6 +122,7 @@ object PropertyResources {
      * @return A SortedMap containing the key/value pairs read from the property file found.
      */
     @JvmStatic
+    @JvmOverloads
     @Throws(IllegalArgumentException::class)
     fun parseResource(
         classLoader: ClassLoader = Thread.currentThread().contextClassLoader,
@@ -135,7 +137,7 @@ object PropertyResources {
 
         // Find the (single!) matching resource URL
         //
-        val matchingURLs = getResourceURLs(classLoader, urlFilter, resourcePath)
+        val matchingURLs = getResourceURLs(resourcePath, urlFilter, classLoader)
         if (matchingURLs.size > 1) {
             throw IllegalArgumentException("Found ${matchingURLs.size} matching resource path $resourcePath. " +
                 "Expected exactly 1. " +
@@ -176,6 +178,7 @@ object PropertyResources {
      * @return a [Pair] containing the key and value from the supplied property line, or null if none could be parsed.
      */
     @JvmStatic
+    @JvmOverloads
     fun splitPropertyLine(aLine: String, separator: String = DEFAULT_SEPARATOR): Pair<String, String>? {
 
         // The line should have the structure [key][separator][value]
