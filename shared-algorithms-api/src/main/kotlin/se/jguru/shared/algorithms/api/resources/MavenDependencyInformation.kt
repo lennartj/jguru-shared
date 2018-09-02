@@ -83,6 +83,7 @@ class MavenDependencyInformation(val groupID: String,
                                  val mavenVersion: String,
                                  val scope: DependencyScope) : Serializable {
 
+
     companion object {
 
         /**
@@ -150,6 +151,24 @@ class MavenDependencyInformation(val groupID: String,
             val versionKeySuffix = "/version"
             val separator = "/"
 
+            // The local artifact defines the following entries:
+            //
+            // groupId = se.jguru.shared.algorithms.api
+            // artifactId = jguru-shared-algorithms-api
+            // version = 1.0.0-SNAPSHOT
+            val localGroupID = dependencyMap["groupId"]
+            val localArtifactID = dependencyMap["artifactId"]
+            val localMavenVersion = dependencyMap["version"]
+
+            if (localGroupID != null && localArtifactID != null && localMavenVersion != null) {
+                toReturn.add(
+                    MavenDependencyInformation(
+                        localGroupID,
+                        localArtifactID,
+                        localMavenVersion,
+                        DependencyScope.COMPILE))
+            }
+
             dependencyMap.entries
                 .filter { it.key.endsWith(versionKeySuffix) }
                 .map { entry ->
@@ -175,5 +194,12 @@ class MavenDependencyInformation(val groupID: String,
             // All Done.
             return toReturn
         }
+    }
+
+    override fun toString(): String {
+        return "MavenDependencyInformation(groupID='$groupID', " +
+            "artifactID='$artifactID', " +
+            "mavenVersion='$mavenVersion', " +
+            "scope=$scope)"
     }
 }

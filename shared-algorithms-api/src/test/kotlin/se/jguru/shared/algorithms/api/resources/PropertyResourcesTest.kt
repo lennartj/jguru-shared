@@ -98,9 +98,11 @@ class PropertyResourcesTest {
             MavenDependencyInformation.DEPENDENCY_RESOURCE,
             sharedAlgorithmsUrlFilter)
 
-        unfiltered.forEachIndexed { index, url -> println("Unfiltered [$index]: $url") }
-
-        filtered.forEachIndexed { index, url -> println("Filtered [$index]: $url") }
+        //
+        // unfiltered.forEachIndexed { index, url -> println("Unfiltered [$index]: $url") }
+        //
+        // filtered.forEachIndexed { index, url -> println("Filtered [$index]: $url") }
+        //
 
         // Assert
         Assert.assertTrue(filtered.size <= unfiltered.size)

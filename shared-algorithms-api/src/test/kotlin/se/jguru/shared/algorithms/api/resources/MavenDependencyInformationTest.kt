@@ -50,12 +50,17 @@ class MavenDependencyInformationTest {
     fun validateParsingDependencyInformation() {
 
         // Assemble
+        // se.jguru.shared.algorithms.api/jguru-shared-algorithms-api/version = 1.0.0-SNAPSHOT
+        val currentArtifact = "jguru-shared-algorithms-api"
 
         // Act
         val result = MavenDependencyInformation.parse(propertyMap)
 
         // Assert
         Assert.assertNotNull(result)
-        Assert.assertEquals(12, result.size)
+        Assert.assertEquals(13, result.size)
+
+        val ownArtifact = result.first { it.artifactID == currentArtifact }
+        Assert.assertEquals("1.0.0-SNAPSHOT", ownArtifact.mavenVersion)
     }
 }
