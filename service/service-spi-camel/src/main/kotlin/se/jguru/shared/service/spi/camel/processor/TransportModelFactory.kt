@@ -19,6 +19,7 @@
  * limitations under the License.
  * #L%
  */
+@file:JvmName("TransportModelFactory")
 package se.jguru.shared.service.spi.camel.processor
 
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -39,7 +40,7 @@ import se.jguru.shared.json.spi.jackson.ObjectMapperBuilder
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-open class TransportModelFactory(
+open class TransportModelFactory @JvmOverloads constructor(
     private val dataCreator: (inMessage: Message) -> Any,
     private val objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault(),
     private val compactOutput: Boolean = false) : Processor {

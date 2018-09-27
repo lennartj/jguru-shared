@@ -99,6 +99,11 @@
         <!--
             Internal dependencies.
         -->
+        <!-- dependency>
+            <groupId>se.jguru.shared.algorithms.api</groupId>
+            <artifactId>jguru-shared-algorithms-api</artifactId>
+            <version>0.9.1-SNAPSHOT</version>
+        </dependency -->
         <dependency>
             <groupId>se.jguru.shared.json.spi.jackson</groupId>
             <artifactId>jguru-shared-json-spi-jackson</artifactId>

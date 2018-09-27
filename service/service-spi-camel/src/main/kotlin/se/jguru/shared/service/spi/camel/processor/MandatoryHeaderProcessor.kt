@@ -38,8 +38,8 @@ const val HEADER_VERSION = "version"
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 open class MandatoryHeaderProcessor @JvmOverloads constructor(
-        val requiredHeader: String,
-        private val onInboundMessage: Boolean = true) : Processor {
+    val requiredHeader: String,
+    private val onInboundMessage: Boolean = true) : Processor {
 
     @Throws(IllegalStateException::class)
     override fun process(exchange: Exchange) {
@@ -53,7 +53,7 @@ open class MandatoryHeaderProcessor @JvmOverloads constructor(
 
             val routeID = exchange.fromRouteId ?: "<unknown>"
             val exception = IllegalStateException("Required header [$requiredHeader] not present on ${getSource()}. "
-                    + "Please check RouteBuilder configuration for route [$routeID].")
+                + "Please check RouteBuilder configuration for route [$routeID].")
 
             exchange.setException(exception);
             throw exception

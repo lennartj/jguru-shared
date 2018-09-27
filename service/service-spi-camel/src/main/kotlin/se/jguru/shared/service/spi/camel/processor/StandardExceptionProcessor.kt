@@ -19,6 +19,8 @@
  * limitations under the License.
  * #L%
  */
+@file:JvmName("StandardExceptionProcessor")
+
 package se.jguru.shared.service.spi.camel.processor
 
 import org.apache.camel.Exchange
@@ -38,7 +40,7 @@ open class StandardExceptionProcessor : Processor {
 
         // Extract the exception from the supplied Exchange
         val exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception::class.java)
-                ?: exchange.exception
+            ?: exchange.exception
 
         // Bind the exception type to the EXCEPTION_TYPE_HEADER
         exchange.setProperty(EXCEPTION_TYPE_HEADER, exception::class.java.name)
