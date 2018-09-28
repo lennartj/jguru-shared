@@ -41,9 +41,9 @@ import se.jguru.shared.json.spi.jackson.ObjectMapperBuilder
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 open class TransportModelFactory @JvmOverloads constructor(
-    private val dataCreator: (inMessage: Message) -> Any,
     private val objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault(),
-    private val compactOutput: Boolean = false) : Processor {
+    private val compactOutput: Boolean = false,
+    private val dataCreator: (inMessage: Message) -> Any) : Processor {
 
     /**
      * Process method implementation which invokes the dataCreator method,
