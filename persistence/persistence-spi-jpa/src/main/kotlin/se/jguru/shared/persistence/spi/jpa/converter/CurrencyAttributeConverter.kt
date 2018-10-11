@@ -19,32 +19,30 @@
  * limitations under the License.
  * #L%
  */
-
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import java.util.TimeZone
+import java.util.Currency
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
 import javax.xml.bind.annotation.XmlTransient
 
 /**
- * JPA AttributeConverter class to handle [java.util.TimeZone]s - which will
- * convert to and from Strings, by means of the [TimeZone.getTimeZone]
- * and [TimeZone.getID] methods.
+ * JPA AttributeConverter class to handle Java 8 [java.util.Currency] - which
+ * will convert to and from [String]s.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class TimeZoneAttributeConverter : AttributeConverter<TimeZone, String> {
+open class CurrencyAttributeConverter : AttributeConverter<Currency, String> {
 
-    override fun convertToDatabaseColumn(attribute: TimeZone?): String? = when(attribute) {
+    override fun convertToDatabaseColumn(attribute: Currency?): String? = when(attribute) {
         null -> null
-        else -> attribute.id
+        else -> attribute.currencyCode
     }
 
-    override fun convertToEntityAttribute(dbData: String?): TimeZone? = when(dbData) {
+    override fun convertToEntityAttribute(dbData: String?): Currency? = when (dbData) {
         null -> null
-        else -> TimeZone.getTimeZone(dbData)
+        else -> Currency.getInstance(dbData)
     }
 }

@@ -40,6 +40,7 @@ import javax.management.QueryExp
 object JmxAlgorithms {
 
     // Our Logger
+    @JvmStatic
     private val log = LoggerFactory.getLogger(JmxAlgorithms::class.java)
 
     /**

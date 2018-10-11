@@ -46,6 +46,7 @@ object Contexts {
      * @return The (initial) Context, or null if none could be acquired.
      * @see InitialContext
      */
+    @JvmStatic
     @Throws(IllegalArgumentException::class)
     fun getJndiContext(contextParameters: SortedMap<String, Any> = sortedMapOf()): Context {
 
@@ -86,6 +87,7 @@ object Contexts {
      *
      * @return The (initial) Context, or null if none could be acquired.
      */
+    @JvmStatic
     fun getDefaultJndiContext(): Context = getJndiContext(sortedMapOf())
 
     /**
@@ -98,6 +100,7 @@ object Contexts {
      * @param [T]              The type expected.
      * @return The object - of type T - if found within the supplied JNDI Context at the given jndiLookupString
      */
+    @JvmStatic
     fun <T> lookup(context: Context = getDefaultJndiContext(),
                    jndiLookupString: String,
                    expectedType: Class<T>): T? {
@@ -142,6 +145,7 @@ object Contexts {
      * @param value       The value to bind
      * @param <T>         The type of value to bind.
      */
+    @JvmStatic
     fun <T : Serializable> put(jndiContext: Context, key: String, value: T) {
 
         // Check sanity

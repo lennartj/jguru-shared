@@ -44,6 +44,7 @@ object Introspection {
      * @param classLoader The classloader used to harvest the type information
      * @param objects The objects from which to harvest type information.
      */
+    @JvmStatic
     fun getTypesFrom(vararg objects: Any): Set<Class<*>> {
 
         val toReturn = HashSet<Class<*>>()
@@ -62,12 +63,14 @@ object Introspection {
      * @param classLoader The classloader used to harvest the type information
      * @param objects The objects from which to harvest type information.
      */
+    @JvmStatic
     fun getTypeNamesFrom(vararg objects: Any): SortedSet<String> =
         getTypesFrom(objects).map { it.name }.toSortedSet()
 
     /**
      * Populates the supplied typeSet with all types found within the supplied [anObject]
      */
+    @JvmStatic
     fun populateTypeInformationFrom(typeSet: MutableSet<Class<*>> = HashSet(), anObject: Any) {
 
         // Check sanity
@@ -96,6 +99,7 @@ object Introspection {
      * @throws SecurityException if a [SecurityManager] exists and its [SecurityManager.checkPermission] method
      * doesn't allow getting the ProtectionDomain.
      */
+    @JvmStatic
     @Throws(SecurityException::class)
     fun getCodeSourceFor(aClass: Class<*>): CodeSource? = aClass.protectionDomain.codeSource
 
@@ -106,6 +110,7 @@ object Introspection {
      * that could be extracted from the supplied aClass.
      * @return a string relating a diagnostic message regarding the CodeSource Location of the supplied Class.
      */
+    @JvmStatic
     fun getCodeSourcePrintoutFor(aClass: Class<*>): String {
 
         val builder = StringBuilder()
