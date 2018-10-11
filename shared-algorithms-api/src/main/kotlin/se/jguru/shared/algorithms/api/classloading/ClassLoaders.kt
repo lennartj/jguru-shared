@@ -22,6 +22,7 @@
 package se.jguru.shared.algorithms.api.classloading
 
 import org.slf4j.LoggerFactory
+import se.jguru.shared.algorithms.api.introspection.RuntimeInspector
 import java.security.PrivilegedAction
 
 /**
@@ -69,10 +70,8 @@ object ClassLoaders {
     @Throws(IllegalStateException::class)
     fun getPlatformClassLoader(): ClassLoader {
 
-        System.getProperty("java.version")
-
-        val version = Runtime.Version.parse(System.getProperty("java.version"))
-        if (version.major() < 9) {
+        val version = RuntimeInspector.parse(System.getProperty("java.version"))
+        if (version.major < 9) {
             throw IllegalStateException("Platform ClassLoader is only available for Java 9+. " +
                 "(You currently run $version).")
         }
