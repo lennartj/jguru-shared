@@ -26,12 +26,16 @@ class CamelFileMoverAdviceTest : CamelFileMoverTest() {
 
     override fun doPostSetup() {
 
-        context.getRouteDefinition(ROUTEID)
-            .adviceWith(context, object : AdviceWithRouteBuilder() {
-                override fun configure() {
-                    weaveAddLast<ProcessorDefinition<*>>().to("mock:messages")
-                }
-            })
+        val adviceRouteBuilder = object : AdviceWithRouteBuilder() {
+            override fun configure() {
+                weaveAddLast<ProcessorDefinition<*>>().to("mock:messages")
+            }
+        }
+
+        // Advice
+        context
+            .getRouteDefinition(ROUTEID)
+            .adviceWith(context, adviceRouteBuilder)
     }
 
     @Test

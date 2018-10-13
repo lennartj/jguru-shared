@@ -33,6 +33,7 @@
             Build properties
         -->
         <camel.version>2.22.0</camel.version>
+        <eclipselink.version>2.7.2</eclipselink.version>
     </properties>
 
     <!-- +=============================================== -->
@@ -99,11 +100,6 @@
         <!--
             Internal dependencies.
         -->
-        <!-- dependency>
-            <groupId>se.jguru.shared.algorithms.api</groupId>
-            <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>0.9.1-SNAPSHOT</version>
-        </dependency -->
         <dependency>
             <groupId>se.jguru.shared.json.spi.jackson</groupId>
             <artifactId>jguru-shared-json-spi-jackson</artifactId>
@@ -126,6 +122,10 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
         </dependency>
 
         <dependency>
@@ -153,6 +153,12 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>${eclipselink.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

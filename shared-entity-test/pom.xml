@@ -30,7 +30,6 @@
         <reactor.name>jguru-shared</reactor.name>
 
         <!-- Version constants -->
-        <jaxb.version>2.3.0</jaxb.version>
         <eclipselink.version>2.7.2</eclipselink.version>
     </properties>
 
@@ -59,7 +58,7 @@
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-runtime</artifactId>
-                <version>${jaxb.version}</version>
+                <version>${jaxb-api.version}</version>
             </dependency>
             
         </dependencies>
@@ -95,7 +94,7 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>${jaxb.version}</version>
+            <version>${jaxb-api.version}</version>
         </dependency>
 
         <dependency>
