@@ -3,7 +3,6 @@ package se.jguru.shared.algorithms.api.introspection
 import org.junit.Assert
 import org.junit.Test
 import se.jguru.shared.algorithms.api.Validate
-import java.lang.StringBuilder
 
 /**
  *
@@ -74,8 +73,8 @@ class IntrospectionTest {
     fun validateCodeSourcePrintoutForNonSystemClass() {
 
         // Assemble
-        val nonSystemClass : Class<*> = Validate::class.java
-        val systemClass : Class<*> = String::class.java
+        val nonSystemClass: Class<*> = Validate::class.java
+        val systemClass: Class<*> = String::class.java
 
         // Act
         val nonSystemResult = Introspection.getCodeSourcePrintoutFor(nonSystemClass)
@@ -86,5 +85,23 @@ class IntrospectionTest {
         // Assert
         Assert.assertTrue(nonSystemResult.isNotEmpty())
         Assert.assertTrue(systemResult.isNotEmpty())
+    }
+
+    @Test
+    fun validateSystemPropertiesAndFiltering() {
+
+        // Assemble
+        val versionFilter : (String) -> Boolean = { aKey -> aKey.toLowerCase().contains("version")}
+
+        // Act
+        val allSystemProperties = Introspection.getSystemProperties()
+        val versionSystemProperties = Introspection.getSystemProperties(versionFilter)
+
+        // Assert
+        Assert.assertTrue(allSystemProperties.isNotEmpty()  )
+        Assert.assertTrue(versionSystemProperties.isNotEmpty())
+        Assert.assertTrue(versionSystemProperties.size < allSystemProperties.size)
+
+        versionSystemProperties.forEach { key, value -> println("[$key]: $value") }
     }
 }

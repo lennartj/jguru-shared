@@ -23,7 +23,10 @@ package se.jguru.shared.algorithms.api.introspection
 
 import java.security.CodeSource
 import java.security.ProtectionDomain
+import java.util.SortedMap
 import java.util.SortedSet
+import java.util.TreeMap
+import kotlin.streams.asStream
 
 
 /**
@@ -152,5 +155,31 @@ object Introspection {
 
         // All Done.
         return builder.toString()
+    }
+
+    /**
+     * Retrieves the System Properties, typecast as a SortedMap of strings.
+     *
+     * @param propertyKeyFilter An optional filter indicating which property keys should be included in the result.
+     * @return A SortedMap containing all System Properties.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun getSystemProperties(propertyKeyFilter: (String) -> Boolean = { true }): SortedMap<String, String> {
+
+        val toReturn = TreeMap<String, String>()
+
+        // Filter
+        val sysPropKeys = System.getProperties().propertyNames()
+            .asSequence()
+            .filter { aKey -> propertyKeyFilter.invoke(aKey as String) }
+            .map { c -> c as String }
+            .toSet()
+
+        // Collect
+        sysPropKeys.forEach { toReturn[it] = System.getProperty(it) }
+
+        // All Done.
+        return toReturn
     }
 }
