@@ -104,4 +104,50 @@ class IntrospectionTest {
 
         versionSystemProperties.forEach { key, value -> println("[$key]: $value") }
     }
+
+    @Test
+    fun validateRetrievingMutableProperties() {
+
+        // Assemble
+        val expectedNames = arrayOf("mutableString", "mutableBoolean")
+
+        // Act
+        val mutableProperties = Introspection.getMutablePropertiesFor(SemiMutableType::class)
+
+        // Assert
+        Assert.assertNotNull(mutableProperties)
+        Assert.assertEquals(2, mutableProperties.size)
+
+        mutableProperties.map { it.name }.forEach { Assert.assertTrue(expectedNames.contains(it)) }
+    }
+
+    @Test
+    fun validateUpdatingMutableProperties() {
+
+        // Assemble
+        val incoming = SemiMutableType(
+            "incomingImmutable",
+            "incomingMutable",
+            true,
+            false)
+
+        val localState = SemiMutableType(
+            "localImmutable",
+            "localMutable",
+            true,
+            true)
+
+        val expected = SemiMutableType(
+            "localImmutable",
+            "incomingMutable",
+            true,
+            false)
+
+        // Act
+        val updated = Introspection.updateProperties(SemiMutableType::class, incoming, localState)
+
+        // Assert
+        Assert.assertTrue(updated)
+        Assert.assertEquals(expected, localState)
+    }
 }

@@ -2,6 +2,7 @@ package se.jguru.shared.algorithms.api
 
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import java.net.Inet4Address
 import java.net.Inet6Address
@@ -14,6 +15,7 @@ import java.util.function.Consumer
  *
  * @author [Lennart Jörelid](mailto:lj@jguru.se), jGuru Europe AB
  */
+@Ignore("The network tests are really slow on Mac OS X")
 class NetworkAlgorithmsTest {
 
     // Shared state

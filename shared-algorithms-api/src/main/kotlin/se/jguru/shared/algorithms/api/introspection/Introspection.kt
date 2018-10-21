@@ -26,7 +26,11 @@ import java.security.ProtectionDomain
 import java.util.SortedMap
 import java.util.SortedSet
 import java.util.TreeMap
-import kotlin.streams.asStream
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.reflect.KClass
+import kotlin.reflect.KMutableProperty1
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.memberProperties
 
 
 /**
@@ -69,6 +73,79 @@ object Introspection {
     @JvmStatic
     fun getTypeNamesFrom(vararg objects: Any): SortedSet<String> =
         getTypesFrom(objects).map { it.name }.toSortedSet()
+
+    /**
+     * Updates all mutable/"var" properties within the supplied target object with the values from the source.
+     * Both are expected to be of type T.
+     *
+     * @param aClass The class defining the properties.
+     * @param source The source object.
+     * @param target The target object.
+     *
+     * @return `true` if any properties were updated, and `false` otherwise.
+     */
+    @JvmStatic
+    fun <T : Any> updateProperties(aClass: KClass<T>, source: T, target: T) : Boolean {
+
+        val toReturn = AtomicBoolean(false)
+        val varProps = getMutablePropertiesFor(aClass)
+
+        varProps
+            .map { updateProperty(source, target, it) }
+            .filter { it }
+            .forEach { _ -> toReturn.set(true) }
+
+        // All Done.
+        return toReturn.get()
+    }
+
+    /**
+     * Retrieves all mutable properties (i.e. "var"s) defined within the supplied [aClass].
+     * Each property is assumed to be a [KMutableProperty1], compliant with the JavaBean
+     * paradigm for setters and getters.
+     *
+     * @param aClass The class defining the properties.
+     *
+     * @return a List of [KMutableProperty1] representing the setters and getters of the property.
+     */
+    @JvmStatic
+    fun <T : Any> getMutablePropertiesFor(aClass: KClass<T>): List<KMutableProperty1<T, *>> =
+        aClass.memberProperties
+            .filter { it is KMutableProperty1 }
+            .map { it as KMutableProperty1<T, *> }
+            .toList()
+
+    /**
+     * Updates all mutable/"var" properties within the supplied target object with
+     * the values from the source. Both are expected to be of type T.
+     *
+     * @param source The source object.
+     * @param target The target object.
+     * @param setter The mutable property setter.
+     *
+     * @return `true` if any properties were updated, and `false` otherwise.
+     */
+    @JvmStatic
+    fun <T, P> updateProperty(source: T, target: T, setter: KMutableProperty1<T, P>) : Boolean {
+
+        val getter = setter as KProperty1<T, P>
+
+        // Find the current values
+        val existingProperty = getter.get(target)
+        val incomingProperty = getter.get(source)
+
+        if (existingProperty != incomingProperty) {
+
+            // Update the target instance
+            setter.set(target, incomingProperty)
+
+            // All done.
+            return true
+        }
+
+        // All Done
+        return false
+    }
 
     /**
      * Populates the supplied typeSet with all types found within the supplied [anObject]
