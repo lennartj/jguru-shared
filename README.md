@@ -1,3 +1,6 @@
+### Current Build Status:
+<img src="https://travis-ci.org/lennartj/jguru-codestyle.svg?branch=master" />
+
 # What are _Shared Components_?
 
 This repository contains technology-aware artifacts and helper components without any domain information.

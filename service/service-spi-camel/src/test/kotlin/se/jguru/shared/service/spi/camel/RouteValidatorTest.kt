@@ -48,9 +48,7 @@ class DummyRoute(val routeID : String) : Route {
 
     override fun getId(): String = routeID
 
-    override fun supportsSuspension(): Boolean {
-        TODO("not implemented") 
-    }
+    override fun supportsSuspension(): Boolean = true
 
     override fun getProperties(): MutableMap<String, Any> {
         TODO("not implemented") 
