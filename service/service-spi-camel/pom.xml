@@ -32,8 +32,8 @@
         <!--
             Build properties
         -->
-        <camel.version>2.22.0</camel.version>
-        <eclipselink.version>2.7.2</eclipselink.version>
+        <camel.version>2.22.1</camel.version>
+        <eclipselink.version>2.7.3</eclipselink.version>
     </properties>
 
     <!-- +=============================================== -->
@@ -45,6 +45,11 @@
                 <groupId>javax.activation</groupId>
                 <artifactId>activation</artifactId>
                 <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>2.0.1.Final</version>
             </dependency>
 
             <!--
@@ -136,6 +141,11 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cdi</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!--
             Test-scope dependencies.
@@ -158,6 +168,12 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
+            <version>${eclipselink.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
             <version>${eclipselink.version}</version>
             <scope>test</scope>
         </dependency>

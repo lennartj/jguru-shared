@@ -26,7 +26,7 @@ class ReferenceMarshallerAndUnmarshallerTest {
     fun setupSharedState() {
 
         originalContextFactory = System.getProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
-        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "com.sun.xml.internal.bind.v2.ContextFactory")
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "com.sun.xml.bind.v2.ContextFactory")
 
         unitUnderTest = ReferenceImplementationMarshallerAndUnmarshaller()
         unitUnderTest.namespacePrefixResolver.put(Beverage.NAMESPACE, "bev")

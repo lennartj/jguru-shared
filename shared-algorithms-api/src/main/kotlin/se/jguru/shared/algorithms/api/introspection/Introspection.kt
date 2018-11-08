@@ -154,7 +154,7 @@ object Introspection {
     fun populateTypeInformationFrom(typeSet: MutableSet<Class<*>> = HashSet(), anObject: Any) {
 
         // Check sanity
-        val immediateClass = anObject.javaClass
+        val immediateClass = anObject::class.java
 
         // Add self first.
         typeSet.add(immediateClass)

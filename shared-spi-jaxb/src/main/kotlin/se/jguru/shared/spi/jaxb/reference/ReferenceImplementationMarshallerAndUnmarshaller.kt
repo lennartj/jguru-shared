@@ -34,7 +34,7 @@ import javax.xml.bind.JAXBException
 import javax.xml.transform.stream.StreamSource
 
 /**
- *[AbstractMarshallerAndUnmarshaller] implementation using the EclipseLink Moxy implementation.
+ * [AbstractMarshallerAndUnmarshaller] implementation using the Reference (Metro) implementation.
  *
  * @param typeInformation a [MutableList] containing classes which should be made available to the [JAXBContext]
  * synthesized for marshalling and unmarshalling operations.

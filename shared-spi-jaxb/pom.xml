@@ -30,9 +30,10 @@
         <reactor.name>jguru-shared</reactor.name>
 
         <!-- Version constants -->
-        <metro.version>2.3.0</metro.version>
-        <eclipselink.version>2.7.2</eclipselink.version>
+        <metro.version>2.3.1</metro.version>
+        <eclipselink.version>2.7.3</eclipselink.version>
         <xmlunit.version>2.5.1</xmlunit.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
     </properties>
 
     <!-- +=============================================== -->
@@ -45,6 +46,19 @@
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>org.eclipse.persistence.moxy</artifactId>
                 <version>${eclipselink.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation-api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.json</artifactId>
+                <version>1.1.4</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>
@@ -118,6 +132,16 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
             <scope>provided</scope>
         </dependency>
 
