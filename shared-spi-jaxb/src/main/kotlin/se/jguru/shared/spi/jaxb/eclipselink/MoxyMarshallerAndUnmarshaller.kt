@@ -48,9 +48,7 @@ open class MoxyMarshallerAndUnmarshaller @JvmOverloads constructor(
     typeInformation: MutableList<Class<*>> = mutableListOf(),
 
     // Configuration properties submitted to the JAXBContext
-    jaxbContextProperties: MutableMap<String, Any> = mutableMapOf())
-
-    : AbstractMarshallerAndUnmarshaller(
+    jaxbContextProperties: MutableMap<String, Any> = mutableMapOf()) : AbstractMarshallerAndUnmarshaller(
     typeInformation,
     listOf(MarshallingFormat.XML, MarshallingFormat.JSON),
     jaxbContextProperties) {

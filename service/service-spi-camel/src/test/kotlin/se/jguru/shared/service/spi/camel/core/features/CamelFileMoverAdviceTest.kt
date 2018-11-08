@@ -26,7 +26,6 @@ class CamelFileMoverAdviceTest : CamelFileMoverTest() {
 
         // Use the MOXy JAXBContext
         // This is required for Java 11 compliance and compilability.
-        // TODO: Examine how this works in Java 8
         System.setProperty("javax.xml.bind.context.factory", "org.eclipse.persistence.jaxb.JAXBContextFactory")
 
         // Delegate & inject
