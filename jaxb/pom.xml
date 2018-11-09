@@ -38,6 +38,7 @@
         <module>jaxb-spi-adapters</module>
         <module>jaxb-spi-eclipselink</module>
         <module>jaxb-spi-metro</module>
+        <module>jaxb-eclipselink-example</module>
     </modules>
 
     <!--

@@ -112,6 +112,30 @@ open class ReferenceImplementationMarshallerAndUnmarshaller @JvmOverloads constr
         // All Done
         return ContextFactory.createContext(allClasses.toTypedArray(), jaxbContextProperties)
     }
+
+    companion object {
+
+        /**
+         * The [JAXBContextFactory] implementation class exposed by Metro.
+         */
+        @JvmStatic
+        val METRO_JAXB_FACTORY_CLASS = "com.sun.xml.bind.v2.ContextFactory"
+
+        /**
+         * # Note
+         * Note that using this method is not normally required - instead the [getJaxbContext] method
+         * will return the correct type. Simply invoke getJaxbContext.
+         *
+         * ### This function
+         * Convenience function which assigns the [JAXBContext.JAXB_CONTEXT_FACTORY] system property
+         * to the value found in [METRO_JAXB_FACTORY_CLASS].
+         *
+         * @return the (pre-)existing value for the JAXBContextFactory system property.
+         */
+        @JvmStatic
+        fun setupSystemPropertiesForMetro(): String? =
+            System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, METRO_JAXB_FACTORY_CLASS)
+    }
 }
 
 /**

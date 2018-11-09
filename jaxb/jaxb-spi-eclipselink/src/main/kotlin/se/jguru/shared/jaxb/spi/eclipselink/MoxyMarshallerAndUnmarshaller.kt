@@ -67,6 +67,8 @@ open class MoxyMarshallerAndUnmarshaller @JvmOverloads constructor(
 
                 // Configure the emitted JSON
                 initialUnmarshaller.setProperty(UnmarshallerProperties.JSON_WRAPPER_AS_ARRAY_NAME, true)
+                // initialUnmarshaller.setProperty(UnmarshallerProperties.JSON_INCLUDE_ROOT, false)
+                // initialUnmarshaller.setProperty(UnmarshallerProperties.JSON_USE_XSD_TYPES_WITH_PREFIX, false)
                 initialUnmarshaller.setProperty(UnmarshallerProperties.MEDIA_TYPE, "application/json")
 
                 // All Done.
@@ -127,7 +129,46 @@ open class MoxyMarshallerAndUnmarshaller @JvmOverloads constructor(
             .filter { it != Object::class.java }
             .forEach { allClasses.add(it) }
 
-        // All Done
-        return org.eclipse.persistence.jaxb.JAXBContext.newInstance(allClasses.toTypedArray(), jaxbContextProperties)
+        // Ensure that we actually use MOXy
+        val origFactory : String? = System.getProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
+        setupSystemPropertiesForMOXy()
+
+        try {
+
+            // All Done
+            return org.eclipse.persistence.jaxb.JAXBContext.newInstance(allClasses.toTypedArray(), jaxbContextProperties)
+            
+        } finally {
+
+            // Restore the original JaxbContextFactory.
+            when(origFactory == null) {
+                true -> System.clearProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
+                else -> System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, origFactory)
+            }
+        }
+    }
+
+    companion object {
+
+        /**
+         * The [JAXBContextFactory] implementation class exposed by MOXy.
+         */
+        @JvmStatic
+        val MOXY_JAXB_FACTORY_CLASS = "org.eclipse.persistence.jaxb.JAXBContextFactory"
+
+        /**
+         * # Note
+         * Note that using this method is not normally required - instead the [getJaxbContext] method
+         * will return the correct type. Simply invoke getJaxbContext.
+         *
+         * ### This function
+         * Convenience function which assigns the [JAXBContext.JAXB_CONTEXT_FACTORY] system property
+         * to the value found in [MOXY_JAXB_FACTORY_CLASS].
+         *
+         * @return the (pre-)existing value for the JAXBContextFactory system property.
+         */
+        @JvmStatic
+        fun setupSystemPropertiesForMOXy() : String? =
+            System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, MOXY_JAXB_FACTORY_CLASS)
     }
 }

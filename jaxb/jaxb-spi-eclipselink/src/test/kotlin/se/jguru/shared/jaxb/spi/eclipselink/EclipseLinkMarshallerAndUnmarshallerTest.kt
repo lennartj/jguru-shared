@@ -95,7 +95,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
 
         // Act
         val result = unitUnderTest.marshal(toMarshal = arrayOf(prefs), format = MarshallingFormat.JSON)
-        // println("got: $result")
+        println("got: $result")
 
         // Assert
         Assert.assertNotNull(result)

@@ -88,7 +88,7 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
         // Check sanity
         if (!supportedFormats.contains(format)) {
             throw IllegalArgumentException("Unsupported format $format. Supported formats are: " +
-                supportedFormats.map { it.name }.sorted().reduce { l, r -> l + ", " + r })
+                supportedFormats.map { it.name }.sorted().reduce { l, r -> "$l, $r" })
         }
         if (toUnmarshal.isEmpty() || toUnmarshal.isBlank()) {
             throw IllegalArgumentException("Stubbornly refusing to unmarshal empty/blank String.")
@@ -143,9 +143,9 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
         return toReturn
     }
 
-    protected fun createUnmarshaller(jaxbContext: JAXBContext): Unmarshaller = jaxbContext.createUnmarshaller()
+    protected open fun createUnmarshaller(jaxbContext: JAXBContext): Unmarshaller = jaxbContext.createUnmarshaller()
 
-    protected fun doMarshalling(marshaller: Marshaller, toMarshal: Array<Any>): String {
+    protected open fun doMarshalling(marshaller: Marshaller, toMarshal: Array<Any>): String {
 
         // Marshal the inbound objects
         val result = StringWriter()
@@ -175,8 +175,7 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
 }
 
 /**
- * Simple [SchemaOutputResolver] implementation intended mainly for JSON Schema
- * generation using [JAXBContext] implementation ("Moxy").
+ * Simple [SchemaOutputResolver] implementation intended mainly for JSON Schema generation.
  */
 class SimpleSchemaOutputResolver : SchemaOutputResolver() {
 
