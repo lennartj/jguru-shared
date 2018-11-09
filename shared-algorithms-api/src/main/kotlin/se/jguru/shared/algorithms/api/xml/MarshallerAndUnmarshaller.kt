@@ -29,9 +29,6 @@ import javax.xml.bind.JAXBContext
  * While this is normally done using JAXB, the [MarshallerAndUnmarshaller] can be
  * implemented using several different technologies.
  *
- * @param namespacePrefixResolver The [NamespacePrefixResolver] to be used within the marshalling
- * and unmarshalling operations.
- *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 abstract class MarshallerAndUnmarshaller : Serializable {

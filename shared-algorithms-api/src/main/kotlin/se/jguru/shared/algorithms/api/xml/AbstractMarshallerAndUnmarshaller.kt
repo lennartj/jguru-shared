@@ -34,12 +34,13 @@ import javax.xml.transform.stream.StreamResult
 /**
  * Abstract [MarshallerAndUnmarshaller] implementation sporting some sanity checking WRT expected [MarshallingFormat]
  *
- * @param typeInformation a [MutableList] containing classes which should be made available to the [JAXBContext]
- * synthesized for marshalling and unmarshalling operations.
- * @param supportedFormats A List containing all [MarshallingFormat]s supported by this
- * [AbstractMarshallerAndUnmarshaller]
- * @param jaxbContextProperties A Map relating property names (as Strings) to their respective values (as Objects).
- * Valid key/value combinations are implementation-specific; please refer to the actual implementation documentation.
+ * @param typeInformation a [MutableList] containing classes which should be made available to
+ * the [JAXBContext] synthesized for marshalling and unmarshalling operations.
+ * @param supportedFormats A List containing all [MarshallingFormat]s supported
+ * by this [AbstractMarshallerAndUnmarshaller]
+ * @param jaxbContextProperties A Map relating property names (as Strings) to their respective
+ * values (as Objects). Valid key/value combinations are implementation-specific; please refer to the actual
+ * implementation documentation.
  * @param namespacePrefixResolver The [NamespacePrefixResolver] used to map XML namespaces to Prefix strings.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB

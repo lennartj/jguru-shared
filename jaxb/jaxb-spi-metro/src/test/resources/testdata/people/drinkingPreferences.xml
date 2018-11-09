@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bev:drinkingPreferences xmlns:bev="http://some/good/beverage">
+    <people age="254">
+        <name>Lennart</name>
+        <beverage>
+            <name>Avenyn Ale</name>
+        </beverage>
+    </people>
+    <people age="32">
+        <name>Malin</name>
+        <beverage>
+            <name>Idjit</name>
+        </beverage>
+    </people>
+    <people age="52">
+        <name>Lasse</name>
+        <beverage>
+            <name>Ostronporter</name>
+        </beverage>
+    </people>
+    <people age="42">
+        <name>Anders</name>
+        <beverage>
+            <name>Avenyn Ale</name>
+        </beverage>
+    </people>
+</bev:drinkingPreferences>
