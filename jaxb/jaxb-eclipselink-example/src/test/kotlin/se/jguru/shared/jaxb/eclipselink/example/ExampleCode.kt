@@ -44,7 +44,11 @@ class ExampleCode {
         anders = Person("Anders", 42, ale)
 
         prefs = DrinkingPreferences(listOf(lennart, malin, lasse, anders))
+
+        // Create the MOXy MAUM and configure it slightly
         moxyMarsh = MoxyMarshallerAndUnmarshaller()
+        moxyMarsh.namespacePrefixResolver.put(Beverage.NAMESPACE, "bev")
+        moxyMarsh.namespacePrefixResolver.put("http://typical/people", "tp")
     }
 
     @After
@@ -57,8 +61,6 @@ class ExampleCode {
 
         // Assemble
         val expected = PropertyResources.readFully("testdata/drinkingPrefs.xml")
-        moxyMarsh.namespacePrefixResolver.put(Beverage.NAMESPACE, "bev")
-        moxyMarsh.namespacePrefixResolver.put("http://typical/people", "tp")
 
         // Act
         val result = moxyMarsh.marshal(arrayOf(prefs))
@@ -72,5 +74,19 @@ class ExampleCode {
             .checkForIdentical()
             .build()
         Assert.assertFalse(normalizedDiff.hasDifferences());
+    }
+
+    @Test
+    fun showUnmarshallingFromXML() {
+
+        // Assemble
+        val data = PropertyResources.readFully("testdata/drinkingPrefs.xml")
+
+        // Act
+        val resurrected = moxyMarsh.unmarshal(DrinkingPreferences::class.java, data)
+
+        // Assert
+        Assert.assertNotNull(resurrected)
+        Assert.assertEquals(0, prefs.compareTo(resurrected))
     }
 }

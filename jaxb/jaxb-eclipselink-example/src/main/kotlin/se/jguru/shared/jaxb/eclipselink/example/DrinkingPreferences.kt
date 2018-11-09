@@ -54,7 +54,7 @@ open class DrinkingPreferences(
 
         if (toReturn == 0) {
 
-            for (index in 0..this.people.size) {
+            for (index in 0..(this.people.size - 1)) {
                 toReturn = this.people[index].compareTo(other.people[index])
 
                 if (toReturn != 0) {
