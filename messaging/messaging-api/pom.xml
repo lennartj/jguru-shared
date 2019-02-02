@@ -29,6 +29,8 @@
         <path.in.reactor>messaging/messaging-api</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
         <artemis.version>2.6.4</artemis.version>
+
+        <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
     <!-- +=============================================== -->

@@ -34,6 +34,8 @@
         -->
         <jackson.version>2.9.8</jackson.version>
         <jsonSchema.version>1.0.29</jsonSchema.version>
+
+        <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
     <!-- +=============================================== -->

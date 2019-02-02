@@ -28,6 +28,8 @@
         -->
         <path.in.reactor>persistence/persistence-spi-jpa</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
+
+        <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
     <!-- +=============================================== -->

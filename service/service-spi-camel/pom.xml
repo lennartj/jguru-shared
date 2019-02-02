@@ -34,6 +34,8 @@
         -->
         <camel.version>2.22.1</camel.version>
         <eclipselink.version>2.7.3</eclipselink.version>
+
+        <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
     <!-- +=============================================== -->

@@ -32,6 +32,8 @@
         <!-- Version constants -->
         <eclipselink.version>2.7.3</eclipselink.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
+
+        <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
     <!-- +=============================================== -->
