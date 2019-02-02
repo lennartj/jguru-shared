@@ -8,7 +8,15 @@ import org.skyscreamer.jsonassert.JSONAssert
 import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.json.spi.jackson.people.DrinkingPreferences
 import se.jguru.shared.json.spi.jackson.people.Person
+import se.jguru.shared.json.spi.jackson.simplified.TimeFormats
 import se.jguru.shared.json.spi.jackson.validation.Animal
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.Month
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 
 /**
  *
@@ -19,6 +27,7 @@ class JacksonAlgorithmsTest {
     // Shared state
     lateinit var prefs: DrinkingPreferences
     lateinit var lennart: Person
+    lateinit var timeFormats: TimeFormats
 
     private fun normalizeSpace(s: String) = s.replace("\\s+".toRegex(), " ")
 
@@ -27,6 +36,13 @@ class JacksonAlgorithmsTest {
 
         prefs = DrinkingPreferences.createPrefs()
         lennart = prefs.people.first()
+
+        timeFormats = TimeFormats(
+            LocalDateTime.of(2019, Month.FEBRUARY, 1, 16, 45),
+            LocalDate.of(2019, Month.FEBRUARY, 1),
+            LocalTime.of(16, 45),
+            Duration.of(3L, ChronoUnit.DAYS).plusHours(2).plusMinutes(5)
+        )
     }
 
     @Test
@@ -149,5 +165,33 @@ class JacksonAlgorithmsTest {
 
         // Assert
         JSONAssert.assertEquals(expected, result, true)
+    }
+
+    @Test
+    fun validateTimeFormatSerialization() {
+
+        // Assemble
+        val expected = PropertyResources.readFully("testdata/simplified/timeformats.json")
+
+        // Act
+        val result = JacksonAlgorithms.serialize(timeFormats)
+        println("Got: $result")
+
+        // Assert
+        JSONAssert.assertEquals(expected, result, true)
+    }
+
+    @Test
+    fun validateTimeFormatDeserialization() {
+
+        // Assemble
+        val data = PropertyResources.readFully("testdata/simplified/timeformats.json")
+
+        // Act
+        val resurrected = JacksonAlgorithms.deserialize(data, TimeFormats::class.java)
+
+        // Assert
+        Assert.assertNotNull(resurrected)
+        Assert.assertEquals(timeFormats, resurrected)
     }
 }

@@ -26,7 +26,7 @@ import java.lang.annotation.Inherited
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
 @Inherited
-@Target(AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.EXPRESSION)
+@Target(AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER, AnnotationTarget.CONSTRUCTOR)
 annotation class Converter(
 
     /**

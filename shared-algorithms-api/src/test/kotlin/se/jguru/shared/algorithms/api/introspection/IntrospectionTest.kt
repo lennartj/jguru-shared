@@ -1,5 +1,6 @@
 package se.jguru.shared.algorithms.api.introspection
 
+import ch.qos.logback.classic.joran.JoranConfigurator
 import org.junit.Assert
 import org.junit.Test
 import se.jguru.shared.algorithms.api.Validate
@@ -150,4 +151,81 @@ class IntrospectionTest {
         Assert.assertTrue(updated)
         Assert.assertEquals(expected, localState)
     }
+
+    @Test
+    fun validateParsingSemanticVersionFromManifestFile() {
+
+        // Assemble
+        val manifest = Introspection.getManifestFrom(Introspection::class.java)
+
+        // Act
+        val semVer = Introspection.findVersionFromManifestProperty(manifest)
+
+        // Assert
+        Assert.assertNotNull(semVer)
+        Assert.assertNotNull(semVer.major)
+        Assert.assertNotNull(semVer.minor)
+        Assert.assertNotNull(semVer.micro)
+    }
+
+    @Test
+    fun validateReadingManifestFile() {
+
+        // Assemble
+
+        // Act
+        val fileBasedManifest = Introspection.getManifestFrom(Introspection::class.java)
+        val manifestMap = Introspection.extractMapOf(fileBasedManifest)
+
+        // Assert
+        Assert.assertNotNull(fileBasedManifest)
+        Assert.assertNotNull(manifestMap)
+
+        Assert.assertNotNull(manifestMap["Bundle-Version"])
+        Assert.assertEquals(fileBasedManifest.mainAttributes.size, manifestMap.size)
+
+        fileBasedManifest.mainAttributes
+            .forEach { key, value -> Assert.assertEquals("" + value, manifestMap["" + key]) }
+
+        /*
+        println("Got ${fileBasedManifest.mainAttributes.size} main " +
+                "attributes: ${fileBasedManifest.mainAttributes.entries}")
+        println("Map [${manifestMap.size} elements]:\n" +
+                manifestMap.entries
+                        .sortedBy { it.key }
+                        .map { (k, v) -> "[$k]: $v" }
+                        .reduce { total, current -> total + "\n" + current })
+                        */
+    }
+
+    @Test
+    fun validateReadingManifestFileFromMavenDependencyJar() {
+
+        // Assemble
+
+        // Act
+        val jarBasedManifest = Introspection.getManifestFrom(JoranConfigurator::class.java)
+        val manifestMap = Introspection.extractMapOf(jarBasedManifest)
+
+        // Assert
+        Assert.assertNotNull(jarBasedManifest)
+        Assert.assertNotNull(manifestMap)
+
+        Assert.assertNotNull(manifestMap["Bundle-Version"])
+        Assert.assertEquals(jarBasedManifest.mainAttributes.size, manifestMap.size)
+
+        jarBasedManifest.mainAttributes
+            .forEach { key, value -> Assert.assertEquals("" + value, manifestMap["" + key]) }
+
+        /*
+        println("Got ${jarBasedManifest.mainAttributes.size} main " +
+                "attributes: ${jarBasedManifest.mainAttributes.entries}")
+        println("Map [${manifestMap.size} elements]:\n" +
+                manifestMap.entries
+                        .sortedBy { it.key }
+                        .map { (k, v) -> "[$k]: $v" }
+                        .reduce { total, current -> total + "\n" + current })
+                        */
+    }
+
 }

@@ -10,7 +10,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
-        <version>0.9.4</version>
+        <version>0.9.5-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
@@ -32,7 +32,7 @@
         <!--
             Build-controlled dependencies.
         -->
-        <jackson.version>2.9.6</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
         <jsonSchema.version>1.0.29</jsonSchema.version>
     </properties>
 
@@ -81,23 +81,19 @@
                 <artifactId>ktjsonschema</artifactId>
                 <version>1.0.2</version>
             </dependency>
-
-            <!-- dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>5.0.4.RELEASE</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>5.0.4.RELEASE</version>
-                <scope>test</scope>
-            </dependency -->
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
+        <!--
+            Internal dependencies.
+        -->
+        <dependency>
+            <groupId>se.jguru.shared.algorithms.api</groupId>
+            <artifactId>jguru-shared-algorithms-api</artifactId>
+            <version>0.9.1-SNAPSHOT</version>
+        </dependency>
+        
         <!--
             External dependencies.
         -->
@@ -161,12 +157,6 @@
             <artifactId>jsonassert</artifactId>
             <scope>test</scope>
             <version>1.5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>se.jguru.shared.algorithms.api</groupId>
-            <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>0.9.1-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
         <!-- dependency>
             <groupId>org.springframework</groupId>

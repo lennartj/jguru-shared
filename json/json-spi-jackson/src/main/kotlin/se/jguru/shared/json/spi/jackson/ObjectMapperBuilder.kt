@@ -26,10 +26,12 @@ import com.fasterxml.jackson.core.PrettyPrinter
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
+import se.jguru.shared.json.spi.jackson.custom.SimplifiedFormatModule
 import java.text.DateFormat
 import java.util.TimeZone
 
@@ -80,13 +82,31 @@ class ObjectMapperBuilder(private val toReturn: ObjectMapper = ObjectMapper()) {
     /**
      * Assigns the supplied Include specification to the ObjectMapper.
      *
-     * @param includeSpec The Include definition to assign. Defaults to `JsonInclude.Include.NON_ABSENT`
+     * @param includeSpec The Include definition to assign. Defaults to `JsonInclude.Include.NON_NULL`
      * @return This builder, for chaining.
      */
     @JvmOverloads
-    fun withNullFieldInclusion(includeSpec: JsonInclude.Include = JsonInclude.Include.NON_ABSENT): ObjectMapperBuilder {
+    fun withNullFieldInclusion(includeSpec: JsonInclude.Include = JsonInclude.Include.NON_NULL): ObjectMapperBuilder {
 
         toReturn.setSerializationInclusion(includeSpec)
+
+        // All Done.
+        return this
+    }
+
+    /**
+     * Assigns the supplied NamingStrategy to the ObjectMapper.
+     *
+     * @param namingStrategy The PropertyNamingStrategy definition to assign.
+     * Defaults to `PropertyNamingStrategy.UpperCamelCaseStrategy`.
+     *
+     * @return This builder, for chaining.
+     */
+    @JvmOverloads
+    fun withNamingStrategy(namingStrategy: PropertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE)
+        : ObjectMapperBuilder {
+
+        toReturn.propertyNamingStrategy = namingStrategy
 
         // All Done.
         return this
@@ -134,9 +154,11 @@ class ObjectMapperBuilder(private val toReturn: ObjectMapper = ObjectMapper()) {
         fun getDefault(): ObjectMapper = ObjectMapperBuilder()
             .withPrettyPrinter()
             .withNullFieldInclusion()
+            .withNamingStrategy()
             .withModule(ParameterNamesModule())
             .withModule(Jdk8Module())
             .withModule(JavaTimeModule())
+            .withModule(SimplifiedFormatModule())
             .withModule(KotlinModule())
             .withTimeZone(TimeZone.getDefault())
             .build()

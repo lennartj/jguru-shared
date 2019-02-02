@@ -32,7 +32,8 @@ package se.jguru.shared.algorithms.api.introspection
 class RuntimeVersion @JvmOverloads constructor(
     val major: Int = 0,
     val minor: Int? = null,
-    val micro: Int? = null) : Comparable<RuntimeVersion> {
+    val micro: Int? = null,
+    val qualifier : String? = null) : Comparable<RuntimeVersion> {
 
     constructor(versionList: List<Int>) : this(versionList[0],
         if (versionList.size > 1) versionList[1] else 0,
@@ -62,6 +63,44 @@ class RuntimeVersion @JvmOverloads constructor(
 
     companion object {
 
+        /**
+         * Parses the Bundle-Version property typically found within the Manifest file, into a runtime version.
+         *
+         * @param bundleVersion The bundle version, such as `0.9.6.SNAPSHOT`
+         * @return a [RuntimeVersion] parsed from the supplied bundleVersion.
+         */
+        @JvmStatic
+        fun parseFromBundleStyleVersion(bundleVersion: String): RuntimeVersion {
+
+            // Bundle-Version: 0.9.6.SNAPSHOT
+            val tokens = bundleVersion.split('.')
+                .map { it.trim() }
+            if (tokens.isEmpty()) {
+                throw IllegalArgumentException("Expected argument on the form [major].[minor].[micro].[qualifier], " +
+                    "where only the major version is mandatory. Got: [$bundleVersion]")
+            }
+
+            val major = tokens[0].toInt()
+            val minor = when {
+                tokens.size > 1 -> toInt(tokens[1])
+                else            -> null
+            }
+            val micro = when {
+                tokens.size > 2 -> toInt(tokens[2])
+                else            -> null
+            }
+            val qualifier = when {
+                tokens.size > 3 -> tokens[3]
+                else            -> null
+            }
+
+            // All Done.
+            return RuntimeVersion(major, minor, micro, qualifier)
+        }
+
+        /**
+         * Parses a Java version, typically on the form `1.8.0_181`, to a RuntimeVersion.
+         */
         @JvmStatic
         @JvmOverloads
         @Throws(IllegalArgumentException::class)

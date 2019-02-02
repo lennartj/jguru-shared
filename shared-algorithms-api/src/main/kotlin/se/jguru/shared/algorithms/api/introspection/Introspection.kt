@@ -21,17 +21,19 @@
  */
 package se.jguru.shared.algorithms.api.introspection
 
+import java.net.URL
 import java.security.CodeSource
 import java.security.ProtectionDomain
 import java.util.SortedMap
 import java.util.SortedSet
 import java.util.TreeMap
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.jar.JarFile
+import java.util.jar.Manifest
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
-
 
 /**
  * Algorithms aimed at type introspection, extracting type information as required.
@@ -43,7 +45,17 @@ object Introspection {
     /**
      * Standard [Comparator] for classes, comparing their respective names.
      */
-    val CLASSNAME_COMPARATOR: Comparator<Class<*>> = Comparator({ l, r -> l.name.compareTo(r.name) })
+    val CLASSNAME_COMPARATOR: Comparator<Class<*>> = Comparator { l, r -> l.name.compareTo(r.name) }
+
+    /**
+     * The location of the MANIFEST.MF resource within a JAR.
+     */
+    const val MANIFEST_RESOURCE = "/META-INF/MANIFEST.MF"
+
+    /**
+     * The name of the bundle version property within a MANIFEST.MF file.
+     */
+    const val BUNDLE_VERSION = "Bundle-Version"
 
     /**
      * Retrieves type information from the supplied objects.
@@ -258,5 +270,119 @@ object Introspection {
 
         // All Done.
         return toReturn
+    }
+
+    /**
+     * Retrieves the Manifest created from the Manifest.MF file residing within the CodeSource containing the aClass.
+     *
+     * @param aClass A Class within the CodeSource for which a Manifest.MF file should be retreived.
+     * @param loader The ClassLoader used to load the `MANIFEST_RESOURCE`. Defaults to the thread context classloader.
+     *
+     * @return the Manifest object wrapping the MANIFEST.MF file.
+     */
+    @JvmStatic
+    @JvmOverloads
+    @Throws(IllegalArgumentException::class)
+    fun getManifestFrom(aClass: Class<*>, loader: ClassLoader = Thread.currentThread().contextClassLoader)
+        : Manifest {
+
+        val codeSource = getCodeSourceFor(aClass)
+
+        val manifestFileURL = when (codeSource) {
+            null -> loader.getResource(MANIFEST_RESOURCE)
+            else -> {
+
+                val codeSourceLocation = codeSource.location
+                val stringSourceURL = codeSourceLocation.toString()
+
+                // We currently only support file and jar protocols.
+                when (isJarFile(codeSourceLocation)) {
+                    false -> {
+
+                        val slashSeparator = "/target/"
+                        val targetIndex = stringSourceURL.indexOf(slashSeparator)
+                        URL(stringSourceURL.substring(0, targetIndex) + "/target/classes" + MANIFEST_RESOURCE)
+                    }
+                    true -> {
+
+                        val jarDashIndex = stringSourceURL.indexOf("!")
+
+                        // Peel off the JarFile '!' mark, if it is present within the URL
+                        val uriSource = when(jarDashIndex) {
+                            -1 -> URL(stringSourceURL)
+                            else -> URL(stringSourceURL.substring(0, jarDashIndex))
+                        }
+
+                        // This is a JarFile; use standard mechanics to get its Manifest.
+                        return JarFile(uriSource.path).manifest
+                    }
+                }
+            }
+        }
+
+        // All Done.
+        return Manifest(manifestFileURL.openStream())
+    }
+
+    /**
+     * Finds the [RuntimeVersion] as defined by the given [propName] property within the supplied Manifest.
+     *
+     * @param propName The name of the property holding the version. Defaults to [BUNDLE_VERSION].
+     * @param theManifest The [Manifest] from which to read the [RuntimeVersion].
+     *
+     * @return the [RuntimeVersion] parsed from the given propName.
+     */
+    @JvmStatic
+    fun findVersionFromManifestProperty(
+        theManifest: Manifest,
+        propName: String = BUNDLE_VERSION): RuntimeVersion {
+
+        val manifestMap = extractMapOf(theManifest)
+        val toParse = manifestMap[propName]
+            ?: throw IllegalArgumentException("Found no value within property $propName of given Manifest. " +
+                "ManifestMap: $manifestMap")
+
+        return RuntimeVersion.parseFromBundleStyleVersion(toParse)
+    }
+
+    /**
+     * Converts the main attributes supplied Manifest to a SortedMap.
+     *
+     * Frequently used with the `getManifestFromCodeSourceOf` method, to yield something like:
+     * `val theMap = Introspection.extractMapOf(Introspection.getManifestFromCodeSourceOf(SomeClass::class.java))`
+     *
+     * @param aManifest The Manifest from which to extract attributes into a Map
+     *
+     * @return a SortedMap relating Manifest attributes.
+     */
+    @JvmStatic
+    fun extractMapOf(aManifest: Manifest): SortedMap<String, String> {
+
+        val toReturn = TreeMap<String, String>()
+
+        // Copy the Main Attributes
+        aManifest.mainAttributes.entries.forEach { (k, v) -> toReturn["" + k] = "" + v }
+
+        // All Done.
+        return toReturn
+    }
+
+    /**
+     * ## As defined within the URLClassLoader documentation
+     *
+     * Any URL that ends with a '/' is assumed to refer to a directory.
+     * Otherwise, the URL is assumed to refer to a JAR file which will be opened as needed.
+     */
+    @JvmStatic
+    fun isJarFile(aURL: URL): Boolean {
+
+        val lcProtocol = aURL.protocol.toLowerCase()
+
+        if (lcProtocol != "jar" && lcProtocol != "file") {
+            throw IllegalArgumentException("Unsupported protocol [${aURL.protocol}]. " +
+                "Can only handle 'file' and 'jar' protocols.")
+        }
+
+        return lcProtocol == "jar" || (lcProtocol == "file" && !aURL.path.endsWith("/"))
     }
 }
