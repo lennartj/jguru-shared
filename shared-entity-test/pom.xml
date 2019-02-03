@@ -32,6 +32,7 @@
         <!-- Version constants -->
         <eclipselink.version>2.7.3</eclipselink.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
+        <cdi-unit.version>4.1.0</cdi-unit.version>
 
         <owasp.failOnError>true</owasp.failOnError>
     </properties>
@@ -77,6 +78,13 @@
                 <artifactId>jaxb-runtime</artifactId>
                 <version>${jaxb-api.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.jglue.cdi-unit</groupId>
+                <artifactId>cdi-unit</artifactId>
+                <version>${cdi-unit.version}</version>
+                <scope>compile</scope>
+            </dependency>
             
         </dependencies>
     </dependencyManagement>
@@ -90,8 +98,18 @@
             <version>0.9.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>se.jguru.shared.spi.jaxb</groupId>
-            <artifactId>jguru-shared-spi-jaxb</artifactId>
+            <groupId>se.jguru.shared.jaxb.spi.eclipselink</groupId>
+            <artifactId>jguru-shared-jaxb-spi-eclipselink</artifactId>
+            <version>0.9.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>se.jguru.shared.jaxb.spi.metro</groupId>
+            <artifactId>jguru-shared-jaxb-spi-metro</artifactId>
+            <version>0.9.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>se.jguru.shared.jaxb.spi.adapters</groupId>
+            <artifactId>jguru-shared-jaxb-spi-adapters</artifactId>
             <version>0.9.1-SNAPSHOT</version>
         </dependency>
 

@@ -21,7 +21,7 @@
  */
 package se.jguru.shared.test.entity
 
-import se.jguru.shared.spi.jaxb.reference.ReferenceImplementationMarshallerAndUnmarshaller
+import se.jguru.shared.jaxb.spi.metro.ReferenceImplementationMarshallerAndUnmarshaller
 
 /**
  * jUnit Rule for running JAXB tests under Kotlin.

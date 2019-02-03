@@ -21,7 +21,7 @@
  */
 package se.jguru.shared.test.entity
 
-import se.jguru.shared.spi.jaxb.eclipselink.MoxyMarshallerAndUnmarshaller
+import se.jguru.shared.jaxb.spi.eclipselink.MoxyMarshallerAndUnmarshaller
 
 /**
  * jUnit Rule for running JAXB tests using the [MoxyMarshallerAndUnmarshaller] under Kotlin.
