@@ -56,7 +56,7 @@ object Contexts {
                 log.debug("Retrieving InitialContext configured by: " + contextParameters.entries
                     .stream()
                     .map { e -> "[" + e.key + "]: " + e.value }
-                    .reduce { l, r -> l + ", " + r }
+                    .reduce { l, r -> "$l, $r" }
                     .orElse("<no parameters>"))
             }
 

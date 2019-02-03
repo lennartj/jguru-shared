@@ -27,7 +27,10 @@ import se.jguru.shared.algorithms.api.messaging.JmsCompliantMap
 import java.beans.IntrospectionException
 import java.beans.Introspector
 import java.util.Collections
+import java.util.SortedMap
+import java.util.TreeMap
 import javax.jms.JMSException
+import javax.jms.MapMessage
 import javax.jms.Message
 
 private val log: Logger = LoggerFactory.getLogger(Messages::class.java)
@@ -45,6 +48,50 @@ fun JmsCompliantMap.copyPropertiesTo(target: Message) = Messages.copyProperties(
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 object Messages {
+
+    /**
+     * Copies all properties from the supplied JmsCompliantMap to the given target Message.
+     *
+     * @param from The Map containing data which should be written to the MapMessage body.
+     * @param to A JMS outbound MapMessage (i.e. created by the JMSContext or JMS Session for sending).
+     */
+    @JvmStatic
+    fun writeToBody(from: Map<String, *>, to: MapMessage) {
+
+        from.forEach { key, value ->
+            when (value) {
+                is Boolean -> to.setBoolean(key, value)
+                is Byte -> to.setByte(key, value)
+                is ByteArray -> to.setBytes(key, value)
+                is Char -> to.setChar(key, value)
+                is Short -> to.setShort(key, value)
+                is Int -> to.setInt(key, value)
+                is Long -> to.setLong(key, value)
+                is Float -> to.setFloat(key, value)
+                is Double -> to.setDouble(key, value)
+                is String -> to.setString(key, value)
+                else -> to.setObject(key, value)
+            }
+        }
+    }
+
+    /**
+     * Attempts to extract the Map properties from the given MapMessage into a JmsCompliantMap.
+     *
+     * @param msg A JMS inbound MapMessage.
+     */
+    @JvmStatic
+    fun readFromBody(msg : MapMessage) : SortedMap<String, Any> {
+
+        val toReturn = TreeMap<String, Any>()
+
+        Collections.list(msg.mapNames).forEach {
+            val key = it as String
+            toReturn[key] = msg.getObject(key)
+        }
+
+        return toReturn
+    }
 
     /**
      * Copies all properties from the supplied JmsCompliantMap to the given target Message.

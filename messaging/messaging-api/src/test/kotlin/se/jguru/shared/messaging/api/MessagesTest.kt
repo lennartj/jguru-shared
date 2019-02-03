@@ -5,12 +5,13 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import se.jguru.shared.algorithms.api.messaging.JmsCompliantMap
+import java.util.TreeMap
 
 /**
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-class MessagingTest {
+class MessagesTest {
 
     @get:Rule
     val artemis = EmbeddedJMSResource();
@@ -47,5 +48,25 @@ class MessagingTest {
         meaningOfLife=42
         }
          */
+    }
+
+    @Test
+    fun validateExtractingPropertiesFromMapMessage() {
+
+        // Assemble
+        val props = TreeMap<String, Any>()
+        props["string"] = "bar"
+        props["long"] = 42L
+        props["char"] = 'r'
+        props["bytes"] = "foonbar".toByteArray()
+
+        // Act
+        val mapMessage = artemis.createMapMessage()
+        Messages.writeToBody(props, mapMessage)
+
+        val result = Messages.readFromBody(mapMessage)
+
+        // Assert
+        result.forEach { k, v -> Assert.assertEquals(v, props[k]) }
     }
 }
