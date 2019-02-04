@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -11,13 +10,13 @@
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
         <version>0.9.6</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <groupId>se.jguru.shared.jaxb.eclipselink.example</groupId>
     <artifactId>jguru-shared-jaxb-eclipselink-example</artifactId>
     <packaging>jar</packaging>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.9.1</version>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: JAXB Eclipselink SPI Example (${project.packaging}, version ${project.version})</description>
@@ -81,12 +80,12 @@
         <dependency>
             <groupId>se.jguru.shared.algorithms.api</groupId>
             <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>0.9.1-SNAPSHOT</version>
+            <version>0.9.1</version>
         </dependency>
         <dependency>
             <groupId>se.jguru.shared.jaxb.spi.eclipselink</groupId>
             <artifactId>jguru-shared-jaxb-spi-eclipselink</artifactId>
-            <version>0.9.1-SNAPSHOT</version>
+            <version>0.9.1</version>
         </dependency>
 
         <!--
@@ -224,6 +223,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>HEAD</tag>
+        <tag>jguru-shared-0.9.1</tag>
     </scm>
 </project>
