@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
-        <version>0.9.6</version>
+        <version>0.9.7-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -29,6 +29,7 @@
         <reactor.name>jguru-shared</reactor.name>
 
         <owasp.failOnError>true</owasp.failOnError>
+        <eclipselink.version>2.7.4</eclipselink.version>
     </properties>
 
     <!-- +=============================================== -->
@@ -92,13 +93,13 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.jpa</artifactId>
-            <version>2.7.3</version>
+            <version>${eclipselink.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.3.2.Final</version>
+            <version>5.3.7.Final</version>
             <scope>test</scope>
         </dependency>
         <dependency>

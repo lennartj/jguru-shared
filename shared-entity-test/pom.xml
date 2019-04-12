@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-parent</artifactId>
-        <version>0.9.6</version>
+        <version>0.9.7-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -29,7 +29,7 @@
         <reactor.name>jguru-shared</reactor.name>
 
         <!-- Version constants -->
-        <eclipselink.version>2.7.3</eclipselink.version>
+        <eclipselink.version>2.7.4</eclipselink.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <cdi-unit.version>4.1.0</cdi-unit.version>
 
