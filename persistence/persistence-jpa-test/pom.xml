@@ -31,7 +31,7 @@
 
         <!-- Version constants -->
         <eclipselink.version>2.7.3</eclipselink.version>
-        <hibernate.version>5.3.2.Final</hibernate.version>
+        <hibernate.version>5.4.2.Final</hibernate.version>
         <openjpa.version>3.0.0</openjpa.version>
         <datanucleus-api.version>5.1.7</datanucleus-api.version>
         <dbunit.version>2.5.4</dbunit.version>

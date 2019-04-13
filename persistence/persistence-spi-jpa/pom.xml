@@ -30,6 +30,7 @@
 
         <owasp.failOnError>true</owasp.failOnError>
         <eclipselink.version>2.7.4</eclipselink.version>
+        <hibernate.version>5.4.2.Final</hibernate.version>
     </properties>
 
     <!-- +=============================================== -->
@@ -99,7 +100,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.3.7.Final</version>
+            <version>${hibernate.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
