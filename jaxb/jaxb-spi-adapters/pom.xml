@@ -27,11 +27,7 @@
         -->
         <path.in.reactor>jaxb/jaxb-spi-adapters</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
-
-        <!-- Version constants -->
-        <xmlunit.version>2.5.1</xmlunit.version>
-        <validation-api.version>2.0.1.Final</validation-api.version>
-
+        
         <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
@@ -40,39 +36,13 @@
     <!-- +=============================================== -->
     <dependencyManagement>
         <dependencies>
-
             <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>${validation-api.version}</version>
-                <scope>provided</scope>
+                <groupId>se.jguru.shared.bom</groupId>
+                <artifactId>jguru-shared-bom</artifactId>
+                <version>0.9.2-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.glassfish</groupId>
-                <artifactId>javax.json</artifactId>
-                <version>1.1.4</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.xmlunit</groupId>
-                <artifactId>xmlunit-core</artifactId>
-                <version>${xmlunit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.xmlunit</groupId>
-                <artifactId>xmlunit-matchers</artifactId>
-                <version>${xmlunit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.skyscreamer</groupId>
-                <artifactId>jsonassert</artifactId>
-                <version>1.5.0</version>
-                <scope>test</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -101,7 +71,6 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
 
         <!--

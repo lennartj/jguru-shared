@@ -60,6 +60,7 @@
     ################################################
     -->
     <modules>
+        <module>shared-bom</module>
         <module>json</module>
         <module>messaging</module>
         <module>jaxb</module>
