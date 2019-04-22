@@ -21,6 +21,7 @@
  */
 package se.jguru.shared.persistence.spi.jpa.converter
 
+import java.io.Serializable
 import java.time.ZoneId
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
@@ -35,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class ZoneIdAttributeConverter : AttributeConverter<ZoneId, String> {
+open class ZoneIdAttributeConverter : AttributeConverter<ZoneId, String>, Serializable {
 
     override fun convertToDatabaseColumn(attribute: ZoneId?): String? = when(attribute) {
         null -> null

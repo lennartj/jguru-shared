@@ -21,6 +21,7 @@
  */
 package se.jguru.shared.persistence.spi.jpa.converter
 
+import java.io.Serializable
 import java.time.Year
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
@@ -35,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class YearAttributeConverter : AttributeConverter<Year, Int> {
+open class YearAttributeConverter : AttributeConverter<Year, Int>, Serializable {
 
     override fun convertToDatabaseColumn(attribute: Year?): Int? = when(attribute == null) {
         true -> null

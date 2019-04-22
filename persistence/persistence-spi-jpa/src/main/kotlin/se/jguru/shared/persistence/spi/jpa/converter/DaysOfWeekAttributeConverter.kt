@@ -22,6 +22,7 @@
 
 package se.jguru.shared.persistence.spi.jpa.converter
 
+import java.io.Serializable
 import java.time.DayOfWeek
 import java.util.SortedSet
 import java.util.StringTokenizer
@@ -38,7 +39,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class DaysOfWeekAttributeConverter : AttributeConverter<SortedSet<DayOfWeek>, String> {
+open class DaysOfWeekAttributeConverter : AttributeConverter<SortedSet<DayOfWeek>, String>, Serializable {
 
     override fun convertToDatabaseColumn(attribute: SortedSet<DayOfWeek>?): String? = when (attribute) {
 

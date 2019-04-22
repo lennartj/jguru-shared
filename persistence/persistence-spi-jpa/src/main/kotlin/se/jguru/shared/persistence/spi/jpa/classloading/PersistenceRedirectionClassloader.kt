@@ -23,6 +23,7 @@ package se.jguru.shared.persistence.spi.jpa.classloading
 
 import org.slf4j.LoggerFactory
 import java.io.IOException
+import java.io.Serializable
 import java.lang.NullPointerException
 import java.net.URL
 import java.util.Enumeration
@@ -46,7 +47,7 @@ open class PersistenceRedirectionClassLoader(
 
     val caseInsensitive: Boolean = true
 
-) : ClassLoader(parent) {
+) : ClassLoader(parent), Serializable {
 
     init {
 

@@ -22,6 +22,7 @@
 
 package se.jguru.shared.persistence.spi.jpa.converter
 
+import java.io.Serializable
 import java.time.DayOfWeek
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
@@ -35,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class DayOfWeekAttributeConverter : AttributeConverter<DayOfWeek, Int> {
+open class DayOfWeekAttributeConverter : AttributeConverter<DayOfWeek, Int>, Serializable {
 
     override fun convertToDatabaseColumn(attribute: DayOfWeek?): Int? = when (attribute) {
         null -> null

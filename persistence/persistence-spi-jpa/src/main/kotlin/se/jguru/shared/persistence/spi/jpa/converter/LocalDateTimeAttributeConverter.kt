@@ -22,6 +22,7 @@
 
 package se.jguru.shared.persistence.spi.jpa.converter
 
+import java.io.Serializable
 import java.sql.Timestamp
 import java.time.LocalDateTime
 import javax.persistence.AttributeConverter
@@ -36,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class LocalDateTimeAttributeConverter : AttributeConverter<LocalDateTime, Timestamp> {
+open class LocalDateTimeAttributeConverter : AttributeConverter<LocalDateTime, Timestamp>, Serializable {
 
     override fun convertToDatabaseColumn(attribute: LocalDateTime?): Timestamp? = when(attribute) {
         null -> null

@@ -22,6 +22,7 @@
 
 package se.jguru.shared.persistence.spi.jpa.converter
 
+import java.io.Serializable
 import java.util.Locale
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
@@ -36,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class LocaleAttributeConverter : AttributeConverter<Locale, String> {
+open class LocaleAttributeConverter : AttributeConverter<Locale, String>, Serializable {
 
     override fun convertToDatabaseColumn(attribute: Locale?): String? = when(attribute) {
         null -> null

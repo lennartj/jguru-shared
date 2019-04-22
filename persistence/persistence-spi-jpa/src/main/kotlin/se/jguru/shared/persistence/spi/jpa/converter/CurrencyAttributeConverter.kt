@@ -21,6 +21,7 @@
  */
 package se.jguru.shared.persistence.spi.jpa.converter
 
+import java.io.Serializable
 import java.util.Currency
 import javax.persistence.AttributeConverter
 import javax.persistence.Converter
@@ -34,7 +35,7 @@ import javax.xml.bind.annotation.XmlTransient
  */
 @XmlTransient
 @Converter(autoApply = true)
-open class CurrencyAttributeConverter : AttributeConverter<Currency, String> {
+open class CurrencyAttributeConverter : AttributeConverter<Currency, String>, Serializable {
 
     override fun convertToDatabaseColumn(attribute: Currency?): String? = when(attribute) {
         null -> null
