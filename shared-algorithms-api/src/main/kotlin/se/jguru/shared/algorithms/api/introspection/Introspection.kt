@@ -58,6 +58,11 @@ object Introspection {
     const val BUNDLE_VERSION = "Bundle-Version"
 
     /**
+     * The name of the specification version property within a MANIFEST.MF file.
+     */
+    const val SPECIFICATION_VERSION = "Specification-Version"
+
+    /**
      * Retrieves type information from the supplied objects.
      *
      * @param classLoader The classloader used to harvest the type information
@@ -97,7 +102,7 @@ object Introspection {
      * @return `true` if any properties were updated, and `false` otherwise.
      */
     @JvmStatic
-    fun <T : Any> updateProperties(aClass: KClass<T>, source: T, target: T) : Boolean {
+    fun <T : Any> updateProperties(aClass: KClass<T>, source: T, target: T): Boolean {
 
         val toReturn = AtomicBoolean(false)
         val varProps = getMutablePropertiesFor(aClass)
@@ -138,7 +143,7 @@ object Introspection {
      * @return `true` if any properties were updated, and `false` otherwise.
      */
     @JvmStatic
-    fun <T, P> updateProperty(source: T, target: T, setter: KMutableProperty1<T, P>) : Boolean {
+    fun <T, P> updateProperty(source: T, target: T, setter: KMutableProperty1<T, P>): Boolean {
 
         val getter = setter as KProperty1<T, P>
 
@@ -308,7 +313,7 @@ object Introspection {
                         val jarDashIndex = stringSourceURL.indexOf("!")
 
                         // Peel off the JarFile '!' mark, if it is present within the URL
-                        val uriSource = when(jarDashIndex) {
+                        val uriSource = when (jarDashIndex) {
                             -1 -> URL(stringSourceURL)
                             else -> URL(stringSourceURL.substring(0, jarDashIndex))
                         }
@@ -325,24 +330,48 @@ object Introspection {
     }
 
     /**
-     * Finds the [RuntimeVersion] as defined by the given [propName] property within the supplied Manifest.
+     * Finds the [RuntimeVersion] as defined by the given [propNames] property within the supplied Manifest.
      *
-     * @param propName The name of the property holding the version. Defaults to [BUNDLE_VERSION].
+     * @param propNames The name of the property holding the version.
      * @param theManifest The [Manifest] from which to read the [RuntimeVersion].
      *
-     * @return the [RuntimeVersion] parsed from the given propName.
+     * @return the [RuntimeVersion] parsed from the given propNames.
+     *
+     * @see BUNDLE_VERSION
+     * @see SPECIFICATION_VERSION
      */
     @JvmStatic
     fun findVersionFromManifestProperty(
         theManifest: Manifest,
-        propName: String = BUNDLE_VERSION): RuntimeVersion {
+        propNames: List<String> = listOf(BUNDLE_VERSION, SPECIFICATION_VERSION)): RuntimeVersion {
 
-        val manifestMap = extractMapOf(theManifest)
-        val toParse = manifestMap[propName]
-            ?: throw IllegalArgumentException("Found no value within property $propName of given Manifest. " +
-                "ManifestMap: $manifestMap")
+        return findVersionFromMap(extractMapOf(theManifest), propNames)
+    }
 
-        return RuntimeVersion.parseFromBundleStyleVersion(toParse)
+    /**
+     * Finds the [RuntimeVersion] as defined by the given [propNames] property within the supplied Map, which
+     * is typically retrieved from a MANIFEST.MF file.
+     *
+     * @param propNames The names of the properties holding the version.
+     * @param propertyMap The Map holding the Version string, from which to parse the [RuntimeVersion].
+     *
+     * @return the [RuntimeVersion] parsed from the given propNames.
+     *
+     * @see BUNDLE_VERSION
+     * @see SPECIFICATION_VERSION
+     */
+    @JvmStatic
+    fun findVersionFromMap(propertyMap: Map<String, String>,
+                           propNames: List<String> = listOf(BUNDLE_VERSION, SPECIFICATION_VERSION)): RuntimeVersion {
+
+        if(propNames.isEmpty()) {
+            throw IllegalArgumentException("Cannot handle empty 'propNames' argument.")
+        }
+
+        val toParse = propNames.map { propertyMap[it] }.firstOrNull { it != null }
+            ?: throw IllegalArgumentException("Found no value within property $propNames of given Map: $propertyMap")
+
+        return RuntimeVersion.parseVersionString(toParse)
     }
 
     /**

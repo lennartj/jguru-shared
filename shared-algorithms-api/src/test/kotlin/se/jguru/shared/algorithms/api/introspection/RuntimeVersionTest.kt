@@ -9,6 +9,7 @@ import org.junit.Test
  */
 class RuntimeVersionTest {
 
+
     @Test
     fun validateParsingJava18VersionStrings() {
 

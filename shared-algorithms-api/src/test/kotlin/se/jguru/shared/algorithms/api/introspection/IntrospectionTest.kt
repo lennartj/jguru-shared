@@ -4,6 +4,7 @@ import ch.qos.logback.classic.joran.JoranConfigurator
 import org.junit.Assert
 import org.junit.Test
 import se.jguru.shared.algorithms.api.Validate
+import java.util.TreeMap
 
 /**
  *
@@ -196,6 +197,33 @@ class IntrospectionTest {
                         .map { (k, v) -> "[$k]: $v" }
                         .reduce { total, current -> total + "\n" + current })
                         */
+    }
+
+    @Test
+    fun validateParsingVersionMap() {
+
+        // Assemble
+        val bundleStyleMap = TreeMap<String, String>()
+        val bundleMajorMinorStyleMap = TreeMap<String, String>()
+        val specificationStyleMap = TreeMap<String, String>()
+        val specificationMajorMinorStyleMap = TreeMap<String, String>()
+
+        bundleStyleMap[Introspection.BUNDLE_VERSION] = "5.4.3.SNAPSHOT"
+        bundleMajorMinorStyleMap[Introspection.BUNDLE_VERSION] = "15.14"
+        specificationStyleMap[Introspection.SPECIFICATION_VERSION] = "6.5.4-SNAPSHOT"
+        specificationMajorMinorStyleMap[Introspection.SPECIFICATION_VERSION] = "16.15"
+
+        // Act
+        val result1 = Introspection.findVersionFromMap(bundleStyleMap)
+        val result2 = Introspection.findVersionFromMap(bundleMajorMinorStyleMap)
+        val result3 = Introspection.findVersionFromMap(specificationStyleMap)
+        val result4 = Introspection.findVersionFromMap(specificationMajorMinorStyleMap)
+
+        // Assert
+        Assert.assertEquals(result1, RuntimeVersion(5, 4, 3, "SNAPSHOT"))
+        Assert.assertEquals(result2, RuntimeVersion(15, 14))
+        Assert.assertEquals(result3, RuntimeVersion(6, 5, 4, "SNAPSHOT"))
+        Assert.assertEquals(result4, RuntimeVersion(16, 15))
     }
 
     @Test

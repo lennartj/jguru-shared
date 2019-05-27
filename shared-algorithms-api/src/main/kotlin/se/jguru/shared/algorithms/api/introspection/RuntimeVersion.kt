@@ -61,19 +61,44 @@ class RuntimeVersion @JvmOverloads constructor(
         return toReturn
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RuntimeVersion
+
+        if (major != other.major) return false
+        if (minor != other.minor) return false
+        if (micro != other.micro) return false
+        if (qualifier != other.qualifier) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = major
+        result = 31 * result + (minor ?: 0)
+        result = 31 * result + (micro ?: 0)
+        result = 31 * result + (qualifier?.hashCode() ?: 0)
+        return result
+    }
+
+
     companion object {
 
         /**
-         * Parses the Bundle-Version property typically found within the Manifest file, into a runtime version.
+         * Parses the Bundle-Version or Implementation-Version property typically found within the
+         * Manifest file, into a runtime version.
          *
-         * @param bundleVersion The bundle version, such as `0.9.6.SNAPSHOT`
+         * @param bundleVersion The bundle version, such as `0.9.6.SNAPSHOT`, `1.52.1-SNAPSHOT` or the like.
          * @return a [RuntimeVersion] parsed from the supplied bundleVersion.
          */
         @JvmStatic
-        fun parseFromBundleStyleVersion(bundleVersion: String): RuntimeVersion {
+        fun parseVersionString(bundleVersion: String): RuntimeVersion {
 
             // Bundle-Version: 0.9.6.SNAPSHOT
-            val tokens = bundleVersion.split('.')
+            // Implementation-Version: 0.9.6-SNAPSHOT
+            val tokens = bundleVersion.split('.', '-')
                 .map { it.trim() }
             if (tokens.isEmpty()) {
                 throw IllegalArgumentException("Expected argument on the form [major].[minor].[micro].[qualifier], " +
@@ -139,7 +164,7 @@ class RuntimeVersion @JvmOverloads constructor(
 
                     var majorVersion: Int = firstPart
                     var minorVersion: Int? = secondPart
-                    var microVersion: Int?
+                    val microVersion: Int?
 
                     // Translate "1.7" and "1.8" into "7" and "8" respectively.
                     if (firstPart == 1) {
