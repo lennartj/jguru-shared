@@ -21,6 +21,7 @@
  */
 package se.jguru.shared.algorithms.api.introspection
 
+import java.net.JarURLConnection
 import java.net.URL
 import java.security.CodeSource
 import java.security.ProtectionDomain
@@ -28,7 +29,6 @@ import java.util.SortedMap
 import java.util.SortedSet
 import java.util.TreeMap
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.jar.JarFile
 import java.util.jar.Manifest
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty1
@@ -46,6 +46,11 @@ object Introspection {
      * Standard [Comparator] for classes, comparing their respective names.
      */
     val CLASSNAME_COMPARATOR: Comparator<Class<*>> = Comparator { l, r -> l.name.compareTo(r.name) }
+
+    /**
+     * The snippet required to be found within a URL to a JAR.
+     */
+    const val JAR_URL_SNIPPET = "!/"
 
     /**
      * The location of the MANIFEST.MF resource within a JAR.
@@ -212,11 +217,7 @@ object Introspection {
 
         val builder = StringBuilder()
 
-        // #1) Fetch the ProtectionDomain
-        //
-        val protectionDomain = aClass.protectionDomain
-
-        when (protectionDomain) {
+        when (val protectionDomain = aClass.protectionDomain) {
 
             null -> builder.append("Null ProtectionDomain for [${aClass.name}]. No CodeSource info can be retrieved.")
             else -> try {
@@ -243,7 +244,7 @@ object Introspection {
             } catch (e: Throwable) {
 
                 builder.append("Could not acquire ClassLoader or CodeSource from class ["
-                    + aClass.name + "]. This is weird.")
+                                   + aClass.name + "]. This is weird.")
             }
         }
 
@@ -264,7 +265,8 @@ object Introspection {
         val toReturn = TreeMap<String, String>()
 
         // Filter
-        val sysPropKeys = System.getProperties().propertyNames()
+        val sysPropKeys = System.getProperties()
+            .propertyNames()
             .asSequence()
             .filter { aKey -> propertyKeyFilter.invoke(aKey as String) }
             .map { c -> c as String }
@@ -280,7 +282,7 @@ object Introspection {
     /**
      * Retrieves the Manifest created from the Manifest.MF file residing within the CodeSource containing the aClass.
      *
-     * @param aClass A Class within the CodeSource for which a Manifest.MF file should be retreived.
+     * @param aClass A Class within the CodeSource for which a Manifest.MF file should be retrieved.
      * @param loader The ClassLoader used to load the `MANIFEST_RESOURCE`. Defaults to the thread context classloader.
      *
      * @return the Manifest object wrapping the MANIFEST.MF file.
@@ -288,45 +290,25 @@ object Introspection {
     @JvmStatic
     @JvmOverloads
     @Throws(IllegalArgumentException::class)
-    fun getManifestFrom(aClass: Class<*>, loader: ClassLoader = Thread.currentThread().contextClassLoader)
-        : Manifest {
+    fun getManifestFrom(aClass: Class<*>,
+                        loader: ClassLoader = Thread.currentThread().contextClassLoader) : Manifest {
 
         val codeSource = getCodeSourceFor(aClass)
-
-        val manifestFileURL = when (codeSource) {
-            null -> loader.getResource(MANIFEST_RESOURCE)
-            else -> {
-
-                val codeSourceLocation = codeSource.location
-                val stringSourceURL = codeSourceLocation.toString()
-
-                // We currently only support file and jar protocols.
-                when (isJarFile(codeSourceLocation)) {
-                    false -> {
-
-                        val slashSeparator = "/target/"
-                        val targetIndex = stringSourceURL.indexOf(slashSeparator)
-                        URL(stringSourceURL.substring(0, targetIndex) + "/target/classes" + MANIFEST_RESOURCE)
-                    }
-                    true -> {
-
-                        val jarDashIndex = stringSourceURL.indexOf("!")
-
-                        // Peel off the JarFile '!' mark, if it is present within the URL
-                        val uriSource = when (jarDashIndex) {
-                            -1 -> URL(stringSourceURL)
-                            else -> URL(stringSourceURL.substring(0, jarDashIndex))
-                        }
-
-                        // This is a JarFile; use standard mechanics to get its Manifest.
-                        return JarFile(uriSource.path).manifest
-                    }
-                }
-            }
-        }
+            ?: return Manifest(loader.getResource(MANIFEST_RESOURCE).openStream())
+        val codeSourceLocation = codeSource.location
 
         // All Done.
-        return Manifest(manifestFileURL.openStream())
+        return when (isJarFile(codeSourceLocation)) {
+            true -> (toCompliantJarURL(codeSourceLocation).openConnection() as JarURLConnection).manifest
+            else -> {
+
+                val targetIndex = codeSourceLocation.toString()
+                    .indexOf("/target/")
+
+                Manifest(URL(codeSourceLocation.toString().substring(0, targetIndex) +
+                                 "/target/classes" + MANIFEST_RESOURCE).openStream())
+            }
+        }
     }
 
     /**
@@ -341,6 +323,7 @@ object Introspection {
      * @see SPECIFICATION_VERSION
      */
     @JvmStatic
+    @JvmOverloads
     fun findVersionFromManifestProperty(
         theManifest: Manifest,
         propNames: List<String> = listOf(BUNDLE_VERSION, SPECIFICATION_VERSION)): RuntimeVersion {
@@ -361,10 +344,12 @@ object Introspection {
      * @see SPECIFICATION_VERSION
      */
     @JvmStatic
-    fun findVersionFromMap(propertyMap: Map<String, String>,
-                           propNames: List<String> = listOf(BUNDLE_VERSION, SPECIFICATION_VERSION)): RuntimeVersion {
+    @JvmOverloads
+    fun findVersionFromMap(
+        propertyMap: Map<String, String>,
+        propNames: List<String> = listOf(BUNDLE_VERSION, SPECIFICATION_VERSION)): RuntimeVersion {
 
-        if(propNames.isEmpty()) {
+        if (propNames.isEmpty()) {
             throw IllegalArgumentException("Cannot handle empty 'propNames' argument.")
         }
 
@@ -396,6 +381,7 @@ object Introspection {
         return toReturn
     }
 
+
     /**
      * ## As defined within the URLClassLoader documentation
      *
@@ -409,9 +395,38 @@ object Introspection {
 
         if (lcProtocol != "jar" && lcProtocol != "file") {
             throw IllegalArgumentException("Unsupported protocol [${aURL.protocol}]. " +
-                "Can only handle 'file' and 'jar' protocols.")
+                                               "Can only handle 'file' and 'jar' protocols.")
         }
 
-        return lcProtocol == "jar" || (lcProtocol == "file" && !aURL.path.endsWith("/"))
+        return lcProtocol == "jar"
+            || (lcProtocol == "file" && (aURL.path.contains(JAR_URL_SNIPPET) || aURL.path.endsWith(".jar")))
+    }
+
+    /**
+     * Ensures that the supplied URL is a valid JAR URL according to its specification.
+     */
+    @JvmStatic
+    fun toCompliantJarURL(aURL: URL): URL {
+
+        val jarPrefix = "jar:"
+        val extForm = aURL.toExternalForm()
+
+        val newURL = when (aURL.protocol.toLowerCase()) {
+
+            "file" -> when (extForm.contains(JAR_URL_SNIPPET)) {
+                true -> "$jarPrefix$extForm"
+                else -> "$jarPrefix$extForm$JAR_URL_SNIPPET"
+            }
+
+            "jar" -> when (extForm.contains(JAR_URL_SNIPPET)) {
+                true -> extForm
+                else -> "$extForm$JAR_URL_SNIPPET"
+            }
+
+            else -> throw IllegalArgumentException("Unsupported protocol [${aURL.protocol}]. " +
+                                                       "Can only handle 'file' and 'jar' protocols.")
+        }
+
+        return URL(newURL)
     }
 }
