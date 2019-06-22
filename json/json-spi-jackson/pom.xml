@@ -28,12 +28,6 @@
         <path.in.reactor>json/json-spi-jackson</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
 
-        <!--
-            Build-controlled dependencies.
-        -->
-        <jackson.version>2.9.8</jackson.version>
-        <jsonSchema.version>1.0.29</jsonSchema.version>
-
         <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
@@ -72,12 +66,10 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
-            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
