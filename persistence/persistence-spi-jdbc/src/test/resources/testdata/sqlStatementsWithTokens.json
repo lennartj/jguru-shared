@@ -1,0 +1,12 @@
+{
+    "systemName": "SomeOtherSystem",
+    "statements": {
+        "READ": [
+            {
+                "identifier": "readOrganisationalGroupRowData",
+                "sqlType": "READ",
+                "template": "select ##DISTINCT## og.id, og.description, og.emaillistname, og.latestimportupdate, og.legacyid, og.maxmembers, og.name, og.organisation_id, og.parent_group_id, og.abbreviation, cat.id, cat.parent_category_id from organisations.organisationalgroup og left join organisations.categories_for_group on og.id = categories_for_group.group_id left join organisations.category cat on categories_for_group.category_id = cat.id ##WHERE## order by og.parent_group_id nulls first, og.id, og.organisation_id, cat.parent_category_id nulls first, cat.id"
+            }
+        ]
+    }
+}

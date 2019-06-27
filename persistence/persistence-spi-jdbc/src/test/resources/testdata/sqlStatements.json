@@ -1,0 +1,69 @@
+{
+    "systemName": "SomeSystem",
+    "statements": {
+        "CREATE": [
+            {
+                "identifier": "statement_2",
+                "sqlType": "CREATE",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            },
+            {
+                "identifier": "statement_4",
+                "sqlType": "CREATE",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            },
+            {
+                "identifier": "statement_6",
+                "sqlType": "CREATE",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            },
+            {
+                "identifier": "statement_8",
+                "sqlType": "CREATE",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            },
+            {
+                "identifier": "statement_10",
+                "sqlType": "CREATE",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            }
+        ],
+        "READ": [
+            {
+                "identifier": "statement_1",
+                "sqlType": "READ",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            },
+            {
+                "identifier": "statement_3",
+                "sqlType": "READ",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            },
+            {
+                "identifier": "statement_5",
+                "sqlType": "READ",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            },
+            {
+                "identifier": "statement_7",
+                "sqlType": "READ",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            },
+            {
+                "identifier": "statement_9",
+                "sqlType": "READ",
+                "template": "select ##PARAMS## from bar where barling = ?",
+                "params": "foo"
+            }
+        ]
+    }
+}

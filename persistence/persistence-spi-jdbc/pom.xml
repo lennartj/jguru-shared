@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- +=============================================== -->
+    <!-- | Section 1:  Project information                -->
+    <!-- +=============================================== -->
+    <parent>
+        <groupId>se.jguru.codestyle.poms.kotlin</groupId>
+        <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
+        <version>0.9.7-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>se.jguru.shared.persistence.spi.jdbc</groupId>
+    <artifactId>jguru-shared-persistence-spi-jdbc</artifactId>
+    <version>0.9.2-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+    <url>${site.top.url}/${path.in.reactor}</url>
+    <description>jGuru Shared: Persistence JDBC SPI (${project.packaging}, version ${project.version})</description>
+
+    <properties>
+        <!--
+            Define the name and type of this reactor
+        -->
+        <path.in.reactor>persistence/persistence-spi-jdbc</path.in.reactor>
+        <reactor.name>jguru-shared</reactor.name>
+
+        <owasp.failOnError>true</owasp.failOnError>
+    </properties>
+
+    <!-- +=============================================== -->
+    <!-- | Section 2:  Dependency (management) settings   -->
+    <!-- +=============================================== -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>se.jguru.shared.bom</groupId>
+                <artifactId>jguru-shared-bom</artifactId>
+                <version>0.9.2-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!--
+            Internal dependencies.
+        -->
+        <dependency>
+            <groupId>se.jguru.shared.json.spi.jackson</groupId>
+            <artifactId>jguru-shared-json-spi-jackson</artifactId>
+            <version>0.9.2-SNAPSHOT</version>
+        </dependency>
+
+        <!--
+            External dependencies.
+        -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+
+        <!--
+            Test-scope dependencies.
+         -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--
+            DB Drivers (in Test scope)
+        -->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- +=============================================== -->
+    <!-- | Section 3:  Build settings                     -->
+    <!-- +=============================================== -->
+
+    <!-- +=============================================== -->
+    <!-- | Section 4:  External systems                   -->
+    <!-- +=============================================== -->
+    <!--
+        Define the Continuous Build server address.
+    -->
+    <ciManagement>
+        <system>TravisCI</system>
+        <url>https://travis-ci.org/lennartj/jguru-shared</url>
+    </ciManagement>
+
+    <!--
+        Define the issue management system.
+    -->
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/lennartj/jguru-shared/issues</url>
+    </issueManagement>
+
+    <!--
+        Define connections for Maven's VCS integration.
+    -->
+    <scm>
+        <connection>${scm.connection.url}</connection>
+        <developerConnection>${scm.devConnection.url}</developerConnection>
+        <url>${scm.url}</url>
+        <tag>HEAD</tag>
+    </scm>
+</project>
