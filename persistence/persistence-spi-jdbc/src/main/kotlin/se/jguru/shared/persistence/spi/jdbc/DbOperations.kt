@@ -174,12 +174,31 @@ object DbOperations {
     }
 
     /**
+     * Updates all data from the supplied DataImportResult into the database.
+     *
+     * @param dataSource The DataSource where data should be inserted.
+     * @param preparedStatementSQL The SQL for the prepared statement.
+     * @param updatedValues The list of objects to update.
+     * @param parameterFactory a factory method which should provide an array containing the arguments
+     * produced by an element to be updated within the database. The arguments should match the supplied
+     * preparedStatementSQL.
+     */
+    @JvmStatic
+    fun <T> update(dataSource: DataSource,
+                   preparedStatementSQL: String,
+                   updatedValues: List<T>,
+                   parameterFactory: (anElement: T) -> Array<Any?>): Int =
+        insert(dataSource, preparedStatementSQL, updatedValues, parameterFactory)
+
+    /**
      * Inserts all data from the supplied DataImportResult into the database.
      *
      * @param dataSource The DataSource where data should be inserted.
      * @param preparedStatementSQL The SQL for the prepared statement.
      * @param toInsert The list of objects to persist/insert.
-     * @param parameterFactory a factory method which should supply the
+     * @param parameterFactory a factory method which should provide an array containing the arguments
+     * produced by an element to be inserted into the database. The arguments should match the supplied
+     * preparedStatementSQL.
      */
     @JvmStatic
     fun <T> insert(dataSource: DataSource,
@@ -189,8 +208,7 @@ object DbOperations {
         return dataSource.connection.use {
 
             val ps = it.prepareStatement(preparedStatementSQL)
-            val numRowsInserted = AtomicInteger()
-
+            
             toInsert.forEachIndexed { _, anElement ->
 
                 // Be defensive; this should not really be required.
@@ -202,19 +220,12 @@ object DbOperations {
                     ps.setObject(paramIndex + 1, paramValue)
                 }
 
-                try {
-
-                    // Execute the insert and update the counter correspondingly
-                    val numRowsAffected = ps.executeUpdate()
-                    numRowsInserted.addAndGet(numRowsAffected)
-
-                } catch (e: Exception) {
-                    log.error("Could not insert $anElement", e)
-                }
+                // Add to the batch
+                ps.addBatch()
             }
 
             // All Done.
-            numRowsInserted.get()
+            ps.executeBatch().sum()
         }
     }
 

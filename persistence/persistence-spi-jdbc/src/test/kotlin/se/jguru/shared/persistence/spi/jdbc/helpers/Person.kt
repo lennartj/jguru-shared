@@ -6,7 +6,7 @@ class Person @JvmOverloads constructor(
     val id : Int,
     val firstName : String,
     val lastName : String,
-    val pets : MutableSet<Pet> = mutableSetOf()) : Serializable {
+    val pets : MutableSet<Pet> = mutableSetOf()) : Serializable, Comparable<Person> {
 
     override fun toString(): String {
         val petDesc = when(pets.isNullOrEmpty()) {
@@ -15,4 +15,6 @@ class Person @JvmOverloads constructor(
         }
         return "Person [$id, firstName: $firstName, lastName: $lastName, pets: $petDesc]"
     }
+
+    override fun compareTo(other: Person): Int = id - other.id
 }
