@@ -23,30 +23,13 @@ package se.jguru.shared.persistence.spi.jdbc
 
 import org.slf4j.LoggerFactory
 import java.sql.ResultSet
-import java.sql.SQLException
 import java.util.concurrent.atomic.AtomicInteger
 import javax.sql.DataSource
 
 /**
- * Converter specification for a row within a ResultSet.
- */
-interface RowDataConverter<T> {
-
-    /**
-     * Convert each row of data in the ResultSet to a domain object.
-     * Do not call `next()` on the ResultSet.
-     *
-     * @param rs the ResultSet to map (pre-initialized for the current row)
-     * @param rowNum the number of the current row within the current result extraction.
-     * @return the result object for the current row (may be `null`)
-     * @throws SQLException if a SQLException is encountered getting column values
-     */
-    @Throws(SQLException::class)
-    fun convertRowData(rs: ResultSet, rowNum: Int): T?
-}
-
-/**
  * Utility methods for working with JDBC statements and DataSources.
+ * It is recommended to create local [ResultSet] extension functions delegating
+ * their invocation to these methods, in order to simplify usage.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
@@ -54,6 +37,56 @@ object DbOperations {
 
     @JvmStatic
     private val log = LoggerFactory.getLogger(DbOperations::class.java)
+
+    /**
+     * Retrieves a nullable value from the supplied ResultSet.
+     *
+     * @param columnIndex The JDBC column index (starting with 1).
+     * @return The value, or null if the underlying SQL number was null.
+     */
+    @JvmStatic
+    fun getLongOrNull(columnIndex: Int, resultSet: ResultSet): Long? =
+        getOrNull(columnIndex, resultSet) { idx, rs -> rs.getLong(idx) }
+
+    /**
+     * Retrieves a nullable value from the supplied ResultSet.
+     *
+     * @param columnIndex The JDBC column index (starting with 1).
+     * @return The value, or null if the underlying SQL number was null.
+     */
+    @JvmStatic
+    fun getIntOrNull(columnIndex: Int, resultSet: ResultSet): Int? =
+        getOrNull(columnIndex, resultSet) { idx, rs -> rs.getInt(idx) }
+
+    /**
+     * Retrieves a nullable value from the supplied ResultSet.
+     *
+     * @param columnIndex The JDBC column index (starting with 1).
+     * @return The value, or null if the underlying SQL number was null.
+     */
+    @JvmStatic
+    fun getShortOrNull(columnIndex: Int, resultSet: ResultSet): Short? =
+        getOrNull(columnIndex, resultSet) { idx, rs -> rs.getShort(idx) }
+
+    /**
+     * Retrieves a nullable value from the supplied ResultSet.
+     *
+     * @param columnIndex The JDBC column index (starting with 1).
+     * @return The value, or null if the underlying SQL number was null.
+     */
+    @JvmStatic
+    fun getByteOrNull(columnIndex: Int, resultSet: ResultSet): Byte? =
+        getOrNull(columnIndex, resultSet) { idx, rs -> rs.getByte(idx) }
+
+    /**
+     * Retrieves a nullable value from the supplied ResultSet.
+     *
+     * @param columnIndex The JDBC column index (starting with 1).
+     * @return The value, or null if the underlying SQL number was null.
+     */
+    @JvmStatic
+    fun getBooleanOrNull(columnIndex: Int, resultSet: ResultSet): Boolean? =
+        getOrNull(columnIndex, resultSet) { idx, rs -> rs.getBoolean(idx) }
 
     /**
      * Fires the SQL statement into a connection obtained from the supplied DataSource,
@@ -69,7 +102,7 @@ object DbOperations {
     @JvmOverloads
     fun <T> readAndConvert(dataSource: DataSource,
                            sql: String,
-                           rowDataConverter: RowDataConverter<T>,
+                           rowDataConverter: (rs: ResultSet, rowNum: Int) -> T?,
                            parameters: List<Any?> = mutableListOf()): List<T> {
 
         val toReturn = mutableListOf<T>()
@@ -127,7 +160,7 @@ object DbOperations {
 
                 val index = AtomicInteger()
                 while (rs.next()) {
-                    val converted = rowDataConverter.convertRowData(rs, index.incrementAndGet())
+                    val converted = rowDataConverter.invoke(rs, index.incrementAndGet())
 
                     if (converted != null) {
                         toReturn.add(converted)
@@ -199,7 +232,7 @@ object DbOperations {
     fun <T> getOrNull(columnIndex: Int,
                       resultSet: ResultSet,
                       accessor: (columnIndex: Int, rs: ResultSet) -> T): T? {
-        
+
         val toReturn = accessor.invoke(columnIndex, resultSet)
 
         return when (resultSet.wasNull()) {
@@ -222,7 +255,7 @@ object DbOperations {
     fun <T> getOrNull(columnLabel: String,
                       resultSet: ResultSet,
                       accessor: (columnLabel: String, rs: ResultSet) -> T): T? {
-        
+
         val toReturn = accessor.invoke(columnLabel, resultSet)
 
         return when (resultSet.wasNull()) {

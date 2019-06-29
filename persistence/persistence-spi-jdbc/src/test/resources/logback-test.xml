@@ -22,5 +22,6 @@
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.eclipselink" level="WARN"/>
     <logger name="org.dbunit" level="WARN"/>
+    <logger name="com.zaxxer.hikari" level="WARN"/>
 
 </configuration>

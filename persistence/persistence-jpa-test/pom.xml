@@ -34,7 +34,6 @@
         <hibernate.version>5.4.2.Final</hibernate.version>
         <openjpa.version>3.0.0</openjpa.version>
         <datanucleus-api.version>5.1.7</datanucleus-api.version>
-        <dbunit.version>2.5.4</dbunit.version>
     </properties>
 
     <!-- +=============================================== -->
@@ -49,13 +48,9 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.dbunit</groupId>
-                <artifactId>dbunit</artifactId>
-                <version>${dbunit.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
+    
     <dependencies>
         <!--
             Internal dependencies.
@@ -149,7 +144,6 @@
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.4.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

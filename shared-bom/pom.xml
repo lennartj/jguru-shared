@@ -49,6 +49,7 @@
         <jaxb2-maven-plugin.version>2.3.1</jaxb2-maven-plugin.version>
         <metro.version>2.3.1</metro.version>
         <eclipselink.version>2.7.4</eclipselink.version>
+        <dbunit.version>2.6.0</dbunit.version>
         <xmlunit.version>2.6.2</xmlunit.version>
 
         <osgi.version>6.0.0</osgi.version>
@@ -243,6 +244,33 @@
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-core</artifactId>
                 <version>5.2.1</version>
+            </dependency>
+
+            <!--
+                Database dependencies
+            -->
+            <dependency>
+                <groupId>org.dbunit</groupId>
+                <artifactId>dbunit</artifactId>
+                <version>${dbunit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.4.199</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>2.4.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>3.3.1</version>
             </dependency>
 
             <!--
