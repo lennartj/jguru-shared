@@ -58,12 +58,14 @@ open class SqlStatement @JvmOverloads constructor(
         allSubstitutions[SqlTemplateSubstitution.PARAMS] =
             substitutionMap.getOrElse(SqlTemplateSubstitution.PARAMS) { params ?: "" }
 
-        allSubstitutions[SqlTemplateSubstitution.ARGUMENTS] = when (numParameters) {
-            0 -> ""
-            else -> substitutionMap.getOrElse(SqlTemplateSubstitution.ARGUMENTS) {
-                (0 until numParameters).map { "${getArgumentToken()}" }.reduce { acc, c -> "$acc, $c" }
+        allSubstitutions[SqlTemplateSubstitution.ARGUMENTS] =
+            substitutionMap.getOrElse(SqlTemplateSubstitution.ARGUMENTS) {
+                when (numParameters) {
+                    0 -> ""
+                    else -> (0 until numParameters).map { "${getArgumentToken()}" }.reduce { acc, c -> "$acc, $c" }
+                }
             }
-        }
+
 
         // Join in manual substitutions
         SqlTemplateSubstitution.values()
