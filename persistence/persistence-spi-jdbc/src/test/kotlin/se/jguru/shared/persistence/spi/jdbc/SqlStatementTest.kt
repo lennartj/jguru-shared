@@ -100,4 +100,23 @@ class SqlStatementTest {
         Assert.assertTrue(sql.contains("distinct"))
         Assert.assertTrue(sql.contains(whereClause))
     }
+
+    @Test
+    fun validateTokenizingArguments() {
+
+        // Assemble
+        val params = "algorithm, hashiterations, lastupdatedat, noteonupdate, salt, type, value, user_id"
+        val statement = SqlStatement("someID",
+            SqlStatementType.CREATE,
+            "insert into organisations.credentials (##PARAMS##) values (##ARGUMENTS##)",
+            params)
+
+        val expected = "insert into organisations.credentials ($params) values (?, ?, ?, ?, ?, ?, ?, ?)"
+
+        // Act
+        val result = statement.tokenize()
+
+        // Assert
+        Assert.assertEquals(expected, result)
+    }
 }
