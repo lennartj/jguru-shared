@@ -23,6 +23,8 @@ package se.jguru.shared.persistence.spi.jdbc
 
 import org.slf4j.LoggerFactory
 import java.sql.ResultSet
+import java.sql.Statement.EXECUTE_FAILED
+import java.sql.Statement.SUCCESS_NO_INFO
 import java.util.concurrent.atomic.AtomicInteger
 import javax.sql.DataSource
 
@@ -205,6 +207,7 @@ object DbOperations {
                    preparedStatementSQL: String,
                    toInsert: List<T>,
                    parameterFactory: (anElement: T) -> Array<Any?>): Int {
+        
         return dataSource.connection.use {
 
             val ps = it.prepareStatement(preparedStatementSQL)
@@ -225,7 +228,14 @@ object DbOperations {
             }
 
             // All Done.
-            ps.executeBatch().sum()
+            val toReturn = ps.executeBatch()
+                .filter { result -> result != SUCCESS_NO_INFO }
+                .filter { result -> result != EXECUTE_FAILED }
+                .sum()
+
+            ps.closeOnCompletion()
+
+            toReturn
         }
     }
 
