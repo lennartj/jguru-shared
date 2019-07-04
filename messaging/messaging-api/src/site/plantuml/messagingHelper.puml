@@ -1,0 +1,39 @@
+'
+' Purpose: MessagingHelper structure illustration
+'
+@startuml
+
+    '
+    ' Type definitions
+    '
+
+    interface MessagingHelper {
+        abstract fun createQueue(name: String): Queue
+        abstract fun createTopic(name: String): Topic
+        abstract fun sendMessage(props: JmsCompliantMap, body: Any, destination: Destination): String
+    }
+
+    note right of MessagingHelper
+      Main Messaging work specification
+      Obtain either a Session or JMSContext
+      Wrap the retrieved object and call **send(props, body, destination)**
+    end note
+
+    class JmsSessionMessagingHelper {
+        jmsSession: Session
+    }
+
+    class JmsContextMessagingHelper {
+        jmsContext: JMSContext
+    }
+
+    class JmsAlgorithms {
+    }
+
+    '
+    ' Relations
+    '
+    JmsSessionMessagingHelper -up-|> MessagingHelper
+    JmsContextMessagingHelper -up-|> MessagingHelper
+    JmsSessionMessagingHelper -left- JmsAlgorithms
+@enduml

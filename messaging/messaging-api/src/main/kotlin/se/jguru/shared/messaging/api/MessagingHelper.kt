@@ -21,7 +21,6 @@
  */
 package se.jguru.shared.messaging.api
 
-import se.jguru.shared.algorithms.api.messaging.JmsCompliantMap
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.io.Serializable
@@ -29,6 +28,7 @@ import java.util.SortedMap
 import java.util.TreeMap
 import javax.jms.Destination
 import javax.jms.JMSContext
+import javax.jms.Message
 import javax.jms.Queue
 import javax.jms.Session
 import javax.jms.Topic
@@ -53,13 +53,33 @@ abstract class MessagingHelper {
     abstract fun createTopic(name: String): Topic
 
     /**
-     * Sends a message consisting of the supplied properties.
+     * Specification of how to create a JMS Message able to harbour the supplied body.
+     *
+     * @param body The body intended for transport within the resulting message.
+     * @throws IllegalArgumentException if the implementation could not figure out how to
+     * transport the supplied body within a JMS Message.
+     */
+    @Throws(IllegalArgumentException::class)
+    protected abstract fun createMessage(body: Any?): Message
+
+    /**
+     * Main send method which uses the contained jmsContext or jmsSession to send the message.
      *
      * @param props The property map to be copied into the JMS Message as header properties.
      * @param body An optional body, which is inserted as the JMS Message payload if non-null.
      * @param destination An optional destination to which the message should be sent.
+     * @param mode The JmsDeliveryMode of the outbound Message.
+     * @param priority The JmsMessagePriority of the outbound Message.
+     * @param commitSession Attempt to perform a commit of the JMS Session if appropriate.
+     * @return The JMS Message ID.
      */
-    abstract fun sendMessage(props: JmsCompliantMap, body: Any, destination: Destination): String
+    abstract fun sendMessage(
+        props: JmsCompliantMap,
+        body: Any? = null,
+        destination: Destination,
+        mode: JmsDeliveryMode = JmsDeliveryMode.NON_PERSISTENT,
+        priority: JmsMessagePriority = JmsMessagePriority.DEFAULT,
+        commitSession: Boolean = true): String
 }
 
 /**
@@ -73,68 +93,65 @@ class JmsSessionMessagingHelper(val jmsSession: Session) : MessagingHelper() {
 
     override fun createTopic(name: String): Topic = jmsSession.createTopic(name)
 
-    override fun sendMessage(props: JmsCompliantMap, body: Any, destination: Destination): String =
-        send(props, body, destination)
+    override fun createMessage(body: Any?): Message = when (body == null) {
 
-    /**
-     * Main send method which uses the contained jmsSession to create all required properties.
-     */
-    @JvmOverloads
-    fun send(props: JmsCompliantMap,
-             body: Any? = null,
-             destination: Destination,
-             mode: JmsDeliveryMode = JmsDeliveryMode.NON_PERSISTENT,
-             priority: JmsMessagePriority = JmsMessagePriority.DEFAULT): String {
+        true -> jmsSession.createTextMessage()
+        else -> when (body) {
 
-        val toSend = when (body == null) {
-            true -> jmsSession.createTextMessage()
+            is String -> jmsSession.createTextMessage(body)
 
-            else -> when (body) {
+            is ByteArray -> {
 
-                is String -> jmsSession.createTextMessage(body)
-
-                is ByteArray -> {
-
-                    val toReturn = jmsSession.createBytesMessage()
-                    toReturn.writeBytes(body)
-                    toReturn
-                }
-
-                is InputStream -> {
-
-                    val toReturn = jmsSession.createStreamMessage()
-
-                    val tmpByteStream = ByteArrayOutputStream()
-                    body.copyTo(tmpByteStream)
-                    toReturn.writeBytes(tmpByteStream.toByteArray())
-
-                    toReturn
-                }
-
-                is Serializable -> jmsSession.createObjectMessage(body)
-
-                is Map<*, *> -> {
-
-                    val toReturn = jmsSession.createMapMessage()
-                    val properMap: SortedMap<String, Any> = TreeMap()
-
-                    body.entries
-                        .filter { it.key is String }
-                        .forEach {
-                            val key = it.key as String
-                            properMap[key] = it.value
-                        }
-
-                    // Write the map properties.
-                    Messages.writeToBody(properMap, toReturn)
-
-                    toReturn
-                }
-
-                else -> throw IllegalArgumentException("Cannot create a JMS-compliant message or " +
-                    "body of type [${body::class.java.name}]")
+                val toReturn = jmsSession.createBytesMessage()
+                toReturn.writeBytes(body)
+                toReturn
             }
+
+            is InputStream -> {
+
+                val toReturn = jmsSession.createStreamMessage()
+
+                val tmpByteStream = ByteArrayOutputStream()
+                body.copyTo(tmpByteStream)
+                toReturn.writeBytes(tmpByteStream.toByteArray())
+
+                toReturn
+            }
+
+            is Serializable -> jmsSession.createObjectMessage(body)
+
+            is Map<*, *> -> {
+
+                val toReturn = jmsSession.createMapMessage()
+                val properMap: SortedMap<String, Any> = TreeMap()
+
+                body.entries
+                    .filter { it.key is String }
+                    .forEach {
+                        val key = it.key as String
+                        properMap[key] = it.value
+                    }
+
+                // Write the map properties.
+                Messages.writeToBody(properMap, toReturn)
+
+                toReturn
+            }
+
+            else -> throw IllegalArgumentException("Cannot create a JMS-compliant message or " +
+                "body of type [${body::class.java.name}]")
         }
+    }
+
+    override fun sendMessage(
+        props: JmsCompliantMap,
+        body: Any?,
+        destination: Destination,
+        mode: JmsDeliveryMode,
+        priority: JmsMessagePriority,
+        commitSession: Boolean): String {
+
+        val toSend = createMessage(body)
 
         // Copy the properties to the Message
         props.copyPropertiesTo(toSend)
@@ -146,6 +163,11 @@ class JmsSessionMessagingHelper(val jmsSession: Session) : MessagingHelper() {
 
         // Send the message
         producer.send(toSend)
+
+        // Commit the JMS Session if asked to.
+        if (jmsSession.transacted && commitSession) {
+            jmsSession.commit()
+        }
 
         // ... and return the MessageID
         return toSend.jmsMessageID
@@ -163,68 +185,65 @@ class JmsContextMessagingHelper(val jmsContext: JMSContext) : MessagingHelper() 
 
     override fun createTopic(name: String): Topic = jmsContext.createTopic(name)
 
-    override fun sendMessage(props: JmsCompliantMap, body: Any, destination: Destination): String =
-        send(props, body, destination)
+    override fun createMessage(body: Any?): Message = when (body == null) {
 
-    /**
-     * Main send method which uses the contained jmsContext to create all required properties.
-     */
-    @JvmOverloads
-    fun send(props: JmsCompliantMap,
-             body: Any? = null,
-             destination: Destination,
-             mode: JmsDeliveryMode = JmsDeliveryMode.NON_PERSISTENT,
-             priority: JmsMessagePriority = JmsMessagePriority.DEFAULT): String {
+        true -> jmsContext.createTextMessage()
+        else -> when (body) {
 
-        val toSend = when (body == null) {
-            true -> jmsContext.createTextMessage()
+            is String -> jmsContext.createTextMessage(body)
 
-            else -> when (body) {
+            is ByteArray -> {
 
-                is String -> jmsContext.createTextMessage(body)
-
-                is ByteArray -> {
-
-                    val toReturn = jmsContext.createBytesMessage()
-                    toReturn.writeBytes(body)
-                    toReturn
-                }
-
-                is InputStream -> {
-
-                    val toReturn = jmsContext.createStreamMessage()
-
-                    val tmpByteStream = ByteArrayOutputStream()
-                    body.copyTo(tmpByteStream)
-                    toReturn.writeBytes(tmpByteStream.toByteArray())
-
-                    toReturn
-                }
-
-                is Serializable -> jmsContext.createObjectMessage(body)
-
-                is Map<*, *> -> {
-
-                    val toReturn = jmsContext.createMapMessage()
-                    val properMap: SortedMap<String, Any> = TreeMap()
-
-                    body.entries
-                        .filter { it.key is String }
-                        .forEach {
-                            val key = it.key as String
-                            properMap[key] = it.value
-                        }
-
-                    // Write the map properties.
-                    Messages.writeToBody(properMap, toReturn)
-
-                    toReturn
-                }
-
-                else -> throw IllegalArgumentException("Cannot create a JMS-compliant message or " +
-                    "body of type [${body::class.java.name}]")
+                val toReturn = jmsContext.createBytesMessage()
+                toReturn.writeBytes(body)
+                toReturn
             }
+
+            is InputStream -> {
+
+                val toReturn = jmsContext.createStreamMessage()
+
+                val tmpByteStream = ByteArrayOutputStream()
+                body.copyTo(tmpByteStream)
+                toReturn.writeBytes(tmpByteStream.toByteArray())
+
+                toReturn
+            }
+
+            is Serializable -> jmsContext.createObjectMessage(body)
+
+            is Map<*, *> -> {
+
+                val toReturn = jmsContext.createMapMessage()
+                val properMap: SortedMap<String, Any> = TreeMap()
+
+                body.entries
+                    .filter { it.key is String }
+                    .forEach {
+                        val key = it.key as String
+                        properMap[key] = it.value
+                    }
+
+                // Write the map properties.
+                Messages.writeToBody(properMap, toReturn)
+
+                toReturn
+            }
+
+            else -> throw IllegalArgumentException("Cannot create a JMS-compliant message or " +
+                "body of type [${body::class.java.name}]")
         }
+    }
+
+    override fun sendMessage(
+        props: JmsCompliantMap,
+        body: Any?,
+        destination: Destination,
+        mode: JmsDeliveryMode,
+        priority: JmsMessagePriority,
+        commitSession: Boolean): String {
+
+        val toSend = createMessage(body)
 
         // Copy the properties to the Message
         props.copyPropertiesTo(toSend)
@@ -236,6 +255,11 @@ class JmsContextMessagingHelper(val jmsContext: JMSContext) : MessagingHelper() 
 
         // Send the message
         producer.send(destination, toSend)
+
+        // Commit the JMS Session if asked to.
+        if (jmsContext.transacted && commitSession) {
+            jmsContext.commit()
+        }
 
         // ... and return the MessageID
         return toSend.jmsMessageID

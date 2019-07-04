@@ -23,7 +23,6 @@ package se.jguru.shared.messaging.api
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import se.jguru.shared.algorithms.api.messaging.JmsCompliantMap
 import java.beans.IntrospectionException
 import java.beans.Introspector
 import java.util.Collections

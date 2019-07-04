@@ -4,7 +4,6 @@ import org.apache.activemq.artemis.junit.EmbeddedJMSResource
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
-import se.jguru.shared.algorithms.api.messaging.JmsCompliantMap
 import java.util.TreeMap
 
 /**

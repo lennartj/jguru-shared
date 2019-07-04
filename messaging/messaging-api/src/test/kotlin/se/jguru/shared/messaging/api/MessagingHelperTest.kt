@@ -6,7 +6,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import se.jguru.shared.algorithms.api.messaging.JmsCompliantMap
 
 /**
  *
@@ -16,7 +15,7 @@ class MessagingHelperTest {
 
     @get:Rule
     val artemis = EmbeddedJMSResource();
-    lateinit var client : ArtemisTestClient
+    lateinit var client: ArtemisTestClient
 
     @Before
     fun setupSharedState() {
@@ -61,7 +60,7 @@ class MessagingHelperTest {
         val queue = unitUnderTest.createQueue(queueName)
 
         // Act
-        val messageID = unitUnderTest.send(props, "this is a string body", queue)
+        val messageID = unitUnderTest.sendMessage(props, "this is a string body", queue)
 
         // Assert
         Assert.assertNotNull(messageID)

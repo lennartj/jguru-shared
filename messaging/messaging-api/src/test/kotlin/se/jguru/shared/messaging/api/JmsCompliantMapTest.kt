@@ -1,4 +1,4 @@
-package se.jguru.shared.algorithms.api.messaging
+package se.jguru.shared.messaging.api
 
 import org.junit.Assert
 import org.junit.Test
