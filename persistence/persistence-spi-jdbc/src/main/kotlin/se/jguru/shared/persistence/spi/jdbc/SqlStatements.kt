@@ -42,7 +42,7 @@ open class SqlStatements @JvmOverloads constructor(
      * @param statement The SqlStatement to add.
      */
     fun addStatement(statement: SqlStatement) {
-        val statementList = statements.getOrPut(statement.sqlType, { ArrayList() })
+        val statementList = statements.getOrPut(statement.sqlType) { ArrayList() }
         statementList.add(statement)
     }
 

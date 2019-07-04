@@ -15,7 +15,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms</groupId>
         <artifactId>jguru-codestyle-poms-reactor</artifactId>
-        <version>0.9.7-SNAPSHOT</version>
+        <version>0.9.7</version>
         <relativePath />
     </parent>
 
@@ -67,7 +67,7 @@
         <module>service</module>
         <module>persistence</module>
         <module>shared-algorithms-api</module>
-        <module>shared-entity-test</module>
+        <!-- module>shared-entity-test</module -->
     </modules>
 
     <!--
