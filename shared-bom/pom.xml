@@ -53,7 +53,7 @@
         <xmlunit.version>2.6.2</xmlunit.version>
 
         <osgi.version>6.0.0</osgi.version>
-        <artemis.version>2.6.4</artemis.version>
+        <artemis.version>2.9.0</artemis.version>
         <camel.version>2.24.0</camel.version>
         
         <slf4j.version>1.7.25</slf4j.version>
@@ -318,7 +318,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.7</version>
+                <version>3.8.1</version>
             </dependency>
 
             <!--
@@ -372,12 +372,34 @@
                 <version>${spring.version}</version>
                 <scope>test</scope>
             </dependency>
-            
+
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>artemis-jms-client</artifactId>
+                <version>${artemis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>artemis-jms-server</artifactId>
+                <version>${artemis.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
                 <artifactId>artemis-junit</artifactId>
                 <version>${artemis.version}</version>
                 <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!--

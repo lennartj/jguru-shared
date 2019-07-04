@@ -1,0 +1,54 @@
+'
+' Purpose: MessagingHelper structure illustration
+'
+@startuml
+
+    '
+    ' Type definitions
+    '
+    abstract class AbstractJmsTest {
+        startJmsBroker()
+        stopJmsBroker()
+        createConnection(): Connection
+        createSession(connection: Connection, transacted: Boolean = useTransactions): Session
+        ----
+        protected open fun afterStartJmsBroker()
+        protected open fun beforeStopJmsBroker()
+        abstract fun setupServices()
+        abstract fun tearDownServices()
+    }
+
+    abstract class AbstractRequestResponseJmsTest {
+      SERVER_SIDE_INBOUND_REQUEST = "service.inbound.request"
+      SERVER_SIDE_OUTBOUND_RESPONSE = "service.outbound.response"
+      CLIENT_SIDE_OUTBOUND_REQUEST = SERVER_SIDE_INBOUND_REQUEST
+      CLIENT_SIDE_INBOUND_RESPONSE = SERVER_SIDE_OUTBOUND_RESPONSE
+    }
+
+    package artemis {
+
+      abstract class AbstractArtemisTest {
+      }
+
+      abstract class AbstractArtemisRequestResponseTest {
+      }
+    }
+
+    note right of AbstractJmsTest
+      Main JMS Test skeleton
+      Override methods-under-the-line for simple JMS tests
+    end note
+
+    note right of AbstractRequestResponseJmsTest
+      Main Request/Response JMS Test skeleton
+      Defines a pair of standard Queues
+      Extend for realistic JMS tests
+    end note
+
+    '
+    ' Relations
+    '
+    AbstractRequestResponseJmsTest -up-|> AbstractJmsTest
+    AbstractArtemisTest -up-|> AbstractJmsTest
+    AbstractArtemisRequestResponseTest -up-|> AbstractRequestResponseJmsTest
+@enduml

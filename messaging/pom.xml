@@ -35,6 +35,7 @@
     ################################################
     -->
     <modules>
+        <module>messaging-jms-test</module>
         <module>messaging-api</module>
     </modules>
 

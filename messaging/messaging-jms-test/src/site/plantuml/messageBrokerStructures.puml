@@ -1,0 +1,37 @@
+'
+' Purpose: MessageBroker structure illustration
+'
+@startuml
+
+    '
+    ' Type definitions
+    '
+    interface MessageBroker {
+      val name: String
+      startBroker()
+      stopBroker()
+      getMessageServerURI(): String
+      getConnectionFactory(configuration: String): ConnectionFactory
+    }
+
+    note right of MessageBroker
+      Main MessageBroker specification
+      Implement once per Broker type
+    end note
+
+    class ArtemisMessageBroker {
+      jmsServer: EmbeddedJMS
+      isStarted: Boolean
+      brokerName: String
+      registry: BindingRegistry
+    }
+
+    class AnotherMessageBrokerImpl {
+    }
+
+    '
+    ' Relations
+    '
+    ArtemisMessageBroker -up-|> MessageBroker
+    AnotherMessageBrokerImpl -up-|> MessageBroker
+@enduml
