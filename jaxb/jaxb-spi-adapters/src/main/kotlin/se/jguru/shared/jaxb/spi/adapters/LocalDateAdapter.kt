@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
  */
 @XmlTransient
 open class LocalDateAdapter @JvmOverloads constructor(
-    val formatter : DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE) : XmlAdapter<String, LocalDate>() {
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+) : XmlAdapter<String, LocalDate>() {
 
     /**
      * {@inheritDoc}

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-jaxb-spi-adapters
+ * Nazgul Project: jguru-shared-jaxb-spi-shared
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,31 +19,36 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.jaxb.spi.adapters
+package se.jguru.shared.jaxb.spi.shared.adapters
 
-import java.time.format.DateTimeFormatter
-import java.util.Currency
+import java.util.TimeZone
 import javax.xml.bind.annotation.XmlTransient
 import javax.xml.bind.annotation.adapters.XmlAdapter
 
 /**
- * XML Adapter class to handle Java 8 [Currency] - which will convert to
- * and from Strings using the [Currency.currencyCode].
- *
- * @param formatter The [DateTimeFormatter] used to render date strings.
+ * XML Adapter class to handle Java 8 [TimeZone] - which will convert to
+ * and from Strings using the [TimeZone.getTimeZone].
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
-open class CurrencyAdapter : XmlAdapter<String, Currency>() {
+open class TimeZoneAdapter : XmlAdapter<String, TimeZone>() {
 
-    override fun marshal(instance: Currency?): String? = when (instance == null) {
-        true -> null
-        else -> instance.currencyCode
+    /**
+     * {@inheritDoc}
+     */
+    @Throws(Exception::class)
+    override fun unmarshal(transportForm: String?): TimeZone? = when (transportForm) {
+        null -> null
+        else -> TimeZone.getTimeZone(transportForm)
     }
 
-    override fun unmarshal(transportForm: String?): Currency? = when (transportForm == null) {
-        true -> null
-        else -> Currency.getInstance(transportForm)
+    /**
+     * {@inheritDoc}
+     */
+    @Throws(Exception::class)
+    override fun marshal(objectForm: TimeZone?): String? = when (objectForm) {
+        null -> null
+        else -> objectForm.id
     }
 }

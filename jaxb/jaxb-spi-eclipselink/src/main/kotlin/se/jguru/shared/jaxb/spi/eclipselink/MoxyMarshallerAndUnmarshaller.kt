@@ -24,8 +24,8 @@ package se.jguru.shared.jaxb.spi.eclipselink
 import org.eclipse.persistence.jaxb.MarshallerProperties
 import org.eclipse.persistence.jaxb.UnmarshallerProperties
 import se.jguru.shared.algorithms.api.introspection.Introspection
-import se.jguru.shared.algorithms.api.xml.AbstractMarshallerAndUnmarshaller
 import se.jguru.shared.algorithms.api.xml.MarshallingFormat
+import se.jguru.shared.jaxb.spi.shared.AbstractMarshallerAndUnmarshaller
 import java.io.StringReader
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.JAXBException

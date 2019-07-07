@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-jaxb-spi-adapters
+ * Nazgul Project: jguru-shared-jaxb-spi-shared
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,35 +19,25 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.jaxb.spi.adapters
+package se.jguru.shared.jaxb.spi.shared
 
-import java.util.Locale
 import javax.xml.bind.annotation.XmlTransient
-import javax.xml.bind.annotation.adapters.XmlAdapter
 
 /**
- * XML Adapter class to handle [Locale] objects.
+ * Utility type holding a suite of reusable patterns, constants and algorithms.
  *
- * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
+ * @author [Lennart Jörelid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
-open class LocaleAdapter : XmlAdapter<String, Locale>() {
+object JaxbPatterns {
 
     /**
-     * {@inheritDoc}
+     * The XML namespace used by shared model objects.
      */
-    @Throws(Exception::class)
-    override fun unmarshal(transportForm: String?): Locale? = when (transportForm) {
-        null -> null
-        else -> Locale.forLanguageTag(transportForm)
-    }
+    const val NAMESPACE_SHARED = "http://xmlns.jguru.se/xml/ns/shared"
 
     /**
-     * {@inheritDoc}
+     * The XML namespace used by shared transport model objects.
      */
-    @Throws(Exception::class)
-    override fun marshal(objectForm: Locale?): String? = when (objectForm) {
-        null -> null
-        else -> objectForm.toLanguageTag()
-    }
+    const val NAMESPACE_SHARED_TRANSPORT = "http://xmlns.jguru.se/xml/ns/transport"
 }

@@ -117,8 +117,9 @@ interface NamespacePrefixResolver {
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-open class SimpleNamespacePrefixResolver(protected val namespaceUri2PrefixMap: SortedMap<String, String>)
-    : NamespacePrefixResolver {
+open class SimpleNamespacePrefixResolver(
+    protected open val namespaceUri2PrefixMap: SortedMap<String, String>
+) : NamespacePrefixResolver {
 
     /**
      * Default constructor which uses an empty [TreeMap] to store the namespaceURIs and their corresponding prefixes.

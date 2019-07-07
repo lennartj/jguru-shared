@@ -45,12 +45,13 @@
         <aspectj.runtime.version>1.8.13</aspectj.runtime.version>
         <aspectj-maven-plugin.version>1.11</aspectj-maven-plugin.version>
 
-        <jaxb-api.version>2.3.1</jaxb-api.version>
+
+        <jakarta-xml-api.version>2.3.2</jakarta-xml-api.version>
         <jaxb2-maven-plugin.version>2.3.1</jaxb2-maven-plugin.version>
-        <metro.version>2.3.1</metro.version>
+        <metro.version>2.3.2</metro.version>
         <eclipselink.version>2.7.4</eclipselink.version>
         <dbunit.version>2.6.0</dbunit.version>
-        <xmlunit.version>2.6.2</xmlunit.version>
+        <xmlunit.version>2.6.3</xmlunit.version>
 
         <osgi.version>6.0.0</osgi.version>
         <artemis.version>2.9.0</artemis.version>
@@ -197,22 +198,23 @@
                 <artifactId>javaee-api</artifactId>
                 <version>${javaee-api.version}</version>
                 <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.sun.mail</groupId>
+                        <artifactId>javax.mail</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>${jaxb-api.version}</version>
+                <groupId>jakarta.xml.bind</groupId>
+                <artifactId>jakarta.xml.bind-api</artifactId>
+                <version>${jakarta-xml-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>${validation-api.version}</version>
                 <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>javax.activation</groupId>
-                <artifactId>activation</artifactId>
-                <version>1.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>

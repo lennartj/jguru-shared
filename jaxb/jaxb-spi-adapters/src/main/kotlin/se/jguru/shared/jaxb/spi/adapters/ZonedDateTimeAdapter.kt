@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
  */
 @XmlTransient
 open class ZonedDateTimeAdapter @JvmOverloads constructor(
-    val formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME) : XmlAdapter<String, ZonedDateTime>() {
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME
+) : XmlAdapter<String, ZonedDateTime>() {
 
     /**
      * {@inheritDoc}

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-jaxb-spi-adapters
+ * Nazgul Project: jguru-shared-jaxb-spi-shared
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,31 +19,42 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.jaxb.spi.adapters
+package se.jguru.shared.jaxb.spi.shared.adapters
 
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Currency
 import javax.xml.bind.annotation.XmlTransient
 import javax.xml.bind.annotation.adapters.XmlAdapter
 
 /**
- * XML Adapter class to handle Java 8 [Currency] - which will convert to
- * and from Strings using the [Currency.currencyCode].
+ * XML Adapter class to handle Java 8 [ZonedDateTime] - which will convert to
+ * and from Strings using the [DateTimeFormatter.ISO_ZONED_DATE_TIME].
  *
  * @param formatter The [DateTimeFormatter] used to render date strings.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
+ * @see DateTimeFormatter.ISO_ZONED_DATE_TIME
  */
 @XmlTransient
-open class CurrencyAdapter : XmlAdapter<String, Currency>() {
+open class ZonedDateTimeAdapter @JvmOverloads constructor(
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_ZONED_DATE_TIME
+) : XmlAdapter<String, ZonedDateTime>() {
 
-    override fun marshal(instance: Currency?): String? = when (instance == null) {
-        true -> null
-        else -> instance.currencyCode
+    /**
+     * {@inheritDoc}
+     */
+    @Throws(Exception::class)
+    override fun unmarshal(transportForm: String?): ZonedDateTime? = when (transportForm) {
+        null -> null
+        else -> ZonedDateTime.parse(transportForm, formatter)
     }
 
-    override fun unmarshal(transportForm: String?): Currency? = when (transportForm == null) {
-        true -> null
-        else -> Currency.getInstance(transportForm)
+    /**
+     * {@inheritDoc}
+     */
+    @Throws(Exception::class)
+    override fun marshal(dateTime: ZonedDateTime?): String? = when (dateTime) {
+        null -> null
+        else -> formatter.format(dateTime)
     }
 }

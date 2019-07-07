@@ -22,15 +22,12 @@
 package se.jguru.shared.jaxb.spi.adapters
 
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import javax.xml.bind.annotation.XmlTransient
 import javax.xml.bind.annotation.adapters.XmlAdapter
 
 /**
  * XML Adapter class to handle Java 8 [ZoneId] - which will convert to
  * and from Strings using the [ZoneId.getId].
- *
- * @param formatter The [DateTimeFormatter] used to render date strings.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
@@ -39,7 +36,7 @@ open class ZoneIdAdapter : XmlAdapter<String, ZoneId>() {
 
     override fun marshal(instance: ZoneId?): String? = when (instance == null) {
         true -> null
-        else -> instance!!.id
+        else -> instance.id
     }
 
     override fun unmarshal(transportForm: String?): ZoneId? = when (transportForm == null) {

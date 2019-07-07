@@ -21,7 +21,7 @@
  */
 package se.jguru.shared.jaxb.spi.adapters
 
-import java.util.*
+import java.util.TimeZone
 import javax.xml.bind.annotation.XmlTransient
 import javax.xml.bind.annotation.adapters.XmlAdapter
 

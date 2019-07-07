@@ -30,8 +30,6 @@ import javax.xml.bind.annotation.adapters.XmlAdapter
  * XML Adapter class to handle Java 8 [DayOfWeek] - which will convert to
  * and from Ints using the [DayOfWeek.getValue].
  *
- * @param formatter The [DateTimeFormatter] used to render date strings.
- *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
@@ -39,11 +37,11 @@ open class DayOfWeekAdapter() : XmlAdapter<Int, DayOfWeek>() {
 
     override fun marshal(instance: DayOfWeek?): Int? = when (instance == null) {
         true -> null
-        else -> instance!!.value
+        else -> instance.value
     }
 
     override fun unmarshal(transportForm: Int?): DayOfWeek? = when (transportForm == null) {
         true -> null
-        else -> DayOfWeek.of(transportForm!!)
+        else -> DayOfWeek.of(transportForm)
     }
 }

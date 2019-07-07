@@ -22,7 +22,6 @@
 package se.jguru.shared.algorithms.api.xml
 
 import java.io.Serializable
-import javax.xml.bind.JAXBContext
 
 /**
  * Specification for how to execute marshalling and unmarshalling operations.
@@ -108,7 +107,7 @@ abstract class MarshallerAndUnmarshaller : Serializable {
 
     /**
      * Adds the supplied type information classes to this [MarshallerAndUnmarshaller] in order to perform marshalling
-     * or unmarshalling operations. Typically, classes required within the [JAXBContext] should be added here.
+     * or unmarshalling operations. Typically, classes required within the JAXBContext should be added here.
      *
      * @param typeInformation a (set of) Classes required for proper operation.
      */

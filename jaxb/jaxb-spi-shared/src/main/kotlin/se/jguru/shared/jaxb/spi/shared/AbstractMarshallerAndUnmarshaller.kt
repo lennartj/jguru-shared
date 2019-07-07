@@ -1,8 +1,8 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-algorithms-api
+ * Nazgul Project: jguru-shared-jaxb-spi-shared
  * %%
- * Copyright (C) 2018 jGuru Europe AB
+ * Copyright (C) 2018 - 2019 jGuru Europe AB
  * %%
  * Licensed under the jGuru Europe AB license (the "License"), based
  * on Apache License, Version 2.0; you may not use this file except
@@ -19,8 +19,12 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.algorithms.api.xml
+package se.jguru.shared.jaxb.spi.shared
 
+import se.jguru.shared.algorithms.api.xml.MarshallerAndUnmarshaller
+import se.jguru.shared.algorithms.api.xml.MarshallingFormat
+import se.jguru.shared.algorithms.api.xml.NamespacePrefixResolver
+import se.jguru.shared.algorithms.api.xml.SimpleNamespacePrefixResolver
 import java.io.IOException
 import java.io.StringWriter
 import javax.xml.bind.JAXBContext

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-jaxb-spi-adapters
+ * Nazgul Project: jguru-shared-jaxb-spi-shared
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,31 +19,42 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.jaxb.spi.adapters
+package se.jguru.shared.jaxb.spi.shared.adapters
 
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Currency
 import javax.xml.bind.annotation.XmlTransient
 import javax.xml.bind.annotation.adapters.XmlAdapter
 
 /**
- * XML Adapter class to handle Java 8 [Currency] - which will convert to
- * and from Strings using the [Currency.currencyCode].
+ * XML Adapter class to handle Java 8 [LocalDateTime] - which will convert to
+ * and from Strings using the [DateTimeFormatter.ISO_LOCAL_DATE_TIME].
  *
  * @param formatter The [DateTimeFormatter] used to render date strings.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 @XmlTransient
-open class CurrencyAdapter : XmlAdapter<String, Currency>() {
+open class LocalDateTimeAdapter @JvmOverloads constructor(
+    private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+) : XmlAdapter<String, LocalDateTime>() {
 
-    override fun marshal(instance: Currency?): String? = when (instance == null) {
-        true -> null
-        else -> instance.currencyCode
+    /**
+     * {@inheritDoc}
+     */
+    @Throws(Exception::class)
+    override fun unmarshal(transportForm: String?): LocalDateTime? = when (transportForm) {
+        null -> null
+        else -> LocalDateTime.parse(transportForm, formatter)
     }
 
-    override fun unmarshal(transportForm: String?): Currency? = when (transportForm == null) {
-        true -> null
-        else -> Currency.getInstance(transportForm)
+    /**
+     * {@inheritDoc}
+     */
+    @Throws(Exception::class)
+    override fun marshal(objectForm: LocalDateTime?): String? = when (objectForm) {
+        null -> null
+        else -> formatter.format(objectForm)
     }
 }
+

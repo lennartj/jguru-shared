@@ -1,4 +1,4 @@
-package se.jguru.shared.jaxb.spi.adapters
+package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.junit.Assert
 import org.junit.Test

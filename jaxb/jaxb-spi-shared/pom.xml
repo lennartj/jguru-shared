@@ -13,21 +13,21 @@
         <relativePath />
     </parent>
 
-    <groupId>se.jguru.shared.jaxb.spi.adapters</groupId>
-    <artifactId>jguru-shared-jaxb-spi-adapters</artifactId>
+    <groupId>se.jguru.shared.jaxb.spi.shared</groupId>
+    <artifactId>jguru-shared-jaxb-spi-shared</artifactId>
     <version>0.9.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
-    <description>jGuru Shared: JAXB Adapters SPI (${project.packaging}, version ${project.version})</description>
+    <description>jGuru Shared: JAXB Shared SPI (${project.packaging}, version ${project.version})</description>
 
     <properties>
         <!--
             Define the name and type of this reactor
         -->
-        <path.in.reactor>jaxb/jaxb-spi-adapters</path.in.reactor>
+        <path.in.reactor>jaxb/jaxb-spi-shared</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
-        
+
         <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
@@ -55,19 +55,14 @@
             <artifactId>jguru-shared-algorithms-api</artifactId>
             <version>0.9.3-SNAPSHOT</version>
         </dependency>
-
         <!--
             External dependencies.
         -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-        </dependency>
-        <!-- dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
-        </dependency -->
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -98,11 +93,6 @@
         <dependency>
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-matchers</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.skyscreamer</groupId>
-            <artifactId>jsonassert</artifactId>
             <scope>test</scope>
         </dependency>
 

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Nazgul Project: jguru-shared-jaxb-spi-adapters
+ * Nazgul Project: jguru-shared-jaxb-spi-shared
  * %%
  * Copyright (C) 2018 jGuru Europe AB
  * %%
@@ -19,7 +19,7 @@
  * limitations under the License.
  * #L%
  */
-package se.jguru.shared.jaxb.spi.adapters
+package se.jguru.shared.jaxb.spi.shared.adapters
 
 import java.time.format.DateTimeFormatter
 import java.util.Currency

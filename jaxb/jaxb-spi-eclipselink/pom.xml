@@ -57,8 +57,8 @@
             <version>0.9.3-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>se.jguru.shared.jaxb.spi.adapters</groupId>
-            <artifactId>jguru-shared-jaxb-spi-adapters</artifactId>
+            <groupId>se.jguru.shared.jaxb.spi.shared</groupId>
+            <artifactId>jguru-shared-jaxb-spi-shared</artifactId>
             <version>0.9.3-SNAPSHOT</version>
         </dependency>
 
@@ -66,8 +66,8 @@
             External dependencies.
         -->
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
