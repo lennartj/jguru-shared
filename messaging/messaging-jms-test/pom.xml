@@ -66,6 +66,12 @@
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.mail</groupId>
+                    <artifactId>javax.mail</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
@@ -93,13 +99,13 @@
             Test-scope dependencies.
          -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>artemis-junit</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

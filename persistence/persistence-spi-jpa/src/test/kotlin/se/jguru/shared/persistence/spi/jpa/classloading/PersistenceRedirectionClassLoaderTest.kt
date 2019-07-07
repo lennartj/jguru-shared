@@ -1,13 +1,12 @@
 package se.jguru.shared.persistence.spi.jpa.classloading
 
-import ch.qos.logback.classic.LoggerContext
-import ch.qos.logback.classic.joran.JoranConfigurator
+import org.apache.logging.log4j.LogManager
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.slf4j.LoggerFactory
 import java.util.Collections
+
 
 private const val thePackage = "testdata/classloading/"
 private const val REDIRECTED = "${thePackage}redirectedPersistence.xml"
@@ -104,15 +103,11 @@ class PersistenceRedirectionClassLoaderTest {
     fun validateRedirectionOnlyHappensForPersistenceXmlWithQuietLogging() {
 
         // Assemble
-        val context = LoggerFactory.getILoggerFactory() as LoggerContext
-        val configurator = JoranConfigurator()
-        configurator.context = context
+        val loggerContext = LogManager.getContext(false) as org.apache.logging.log4j.core.LoggerContext
+        val quietLogConfig = javaClass.classLoader.getResource("log4j2-test-quiet.xml")
 
-        // Call context.reset() to clear any previous configuration, e.g. default configuration.
-        // For multi-step configuration, omit calling context.reset().
-        context.reset()
-        val quietLogbackConfig = javaClass.classLoader.getResource("logback-test-quiet.xml")
-        configurator.doConfigure(quietLogbackConfig!!)
+        // this will force a reconfiguration
+        loggerContext.configLocation = quietLogConfig.toURI()
 
         val unitUnderTest = PersistenceRedirectionClassLoader(
             originalClassLoader, REDIRECTED)

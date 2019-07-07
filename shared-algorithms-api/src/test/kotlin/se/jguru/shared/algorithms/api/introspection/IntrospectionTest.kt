@@ -1,6 +1,6 @@
 package se.jguru.shared.algorithms.api.introspection
 
-import ch.qos.logback.classic.joran.JoranConfigurator
+import org.apache.logging.log4j.core.Core
 import org.junit.Assert
 import org.junit.Test
 import se.jguru.shared.algorithms.api.Validate
@@ -232,7 +232,7 @@ class IntrospectionTest {
         // Assemble
 
         // Act
-        val jarBasedManifest = Introspection.getManifestFrom(JoranConfigurator::class.java)
+        val jarBasedManifest = Introspection.getManifestFrom(Core::class.java)
         val manifestMap = Introspection.extractMapOf(jarBasedManifest)
 
         // Assert

@@ -67,6 +67,12 @@
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.mail</groupId>
+                    <artifactId>javax.mail</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -77,13 +83,13 @@
             Test-scope dependencies.
          -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
