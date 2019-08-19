@@ -68,7 +68,7 @@ object JpaHelper {
                       overrideProperties: MutableMap<String, Any> = mutableMapOf()) {
 
         // Synthesize the properties
-        val props = TreeMap<String, Any>(overrideProperties)
+        val props = TreeMap(overrideProperties)
         props.putAll(persistenceProviderInfo.getPersistenceMap())
 
         // All Done.
