@@ -46,7 +46,7 @@ class ExampleCode {
             "  \"registrationPlate\" : \"ABC 123\"\n" +
             "}"
 
-        // Serialize myCar to a JSON formatted String
+        // Deserialize myCar from a JSON formatted String
         val deserialized: Car = JacksonAlgorithms.deserialize(jsonData, Car::class.java)
 
         // Ensure that the deserialized Car equals the expected one

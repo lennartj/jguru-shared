@@ -12,4 +12,18 @@ The SPI contains algorithms to simplify the following operations:
 3. **Generating JSON Schema**: Extract the JSON schema for a class.
 4. **Building ObjectMappers**: The Entrypoint to the Jackson framework, in a simple-to-use builder pattern.
 
-The typical use of the Jackson SPI is illustrated in the `json-jackson-example` project. 
+### Example / typical use
+
+The typical use of the Jackson SPI is illustrated in the `json-jackson-example` project.
+However, stereotypical use of the two main operations (serialization and deserialization) are found below:
+
+#### Serializing an object to a JSON string
+
+    // Create a Car object, and serialize it into a JSON formatted String
+    val myCar = Car("Volvo", "ABC 123")
+    val jsonForm: String = JacksonAlgorithms.serialize(myCar)  
+    
+#### Deserializing an object from a JSON string
+
+    // Deserialize myCar from a JSON formatted String 
+    val deserialized: Car = JacksonAlgorithms.deserialize(jsonForm, Car::class.java)      
