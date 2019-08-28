@@ -3,6 +3,7 @@ package se.jguru.shared.service.spi.camel.core.features
 import org.apache.camel.builder.AdviceWithRouteBuilder
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.model.ProcessorDefinition
+import org.apache.camel.reifier.RouteReifier
 import org.junit.After
 import org.junit.Assert
 import org.junit.Test
@@ -45,7 +46,11 @@ class CamelFileMoverAdviceTest : CamelFileMoverTest() {
 
         // Advice the existing route
         val theRouteToAdvice = context.getRouteDefinition(ROUTEID)
-        theRouteToAdvice.adviceWith(context, adviceRouteBuilder)
+        RouteReifier.adviceWith(theRouteToAdvice, context, adviceRouteBuilder)
+
+        //
+        // Camel 2.x way:
+        // theRouteToAdvice.adviceWith(context, adviceRouteBuilder)
 
         // Launch
         context.start()

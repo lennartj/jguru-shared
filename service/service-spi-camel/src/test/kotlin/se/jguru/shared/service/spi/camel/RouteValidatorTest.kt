@@ -1,5 +1,6 @@
 package se.jguru.shared.service.spi.camel
 
+import org.apache.camel.CamelContext
 import org.apache.camel.Consumer
 import org.apache.camel.Endpoint
 import org.apache.camel.Navigate
@@ -92,5 +93,13 @@ class DummyRoute(val routeID : String) : Route {
 
     override fun getEndpoint(): Endpoint {
         TODO("not implemented") 
+    }
+
+    override fun getCamelContext(): CamelContext {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getProcessor(): Processor {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

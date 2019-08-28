@@ -54,9 +54,9 @@
 
         <osgi.version>6.0.0</osgi.version>
         <artemis.version>2.9.0</artemis.version>
-        <camel.version>2.24.1</camel.version>
+        <camel.version>3.0.0-M4</camel.version>
         
-        <slf4j.version>1.7.25</slf4j.version>
+        <slf4j.version>1.7.26</slf4j.version>
         <log4j2.version>2.12.1</log4j2.version>
         <logback.version>1.2.3</logback.version>
 
@@ -124,6 +124,12 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-core</artifactId>
                 <version>${camel.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
@@ -156,6 +162,12 @@
                 <artifactId>camel-test</artifactId>
                 <scope>test</scope>
                 <version>${camel.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>

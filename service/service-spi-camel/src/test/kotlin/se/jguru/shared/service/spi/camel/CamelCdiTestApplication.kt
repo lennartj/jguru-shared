@@ -5,8 +5,9 @@ import org.apache.camel.ProducerTemplate
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.cdi.ContextName
 import org.apache.camel.cdi.Uri
-import org.apache.camel.management.event.CamelContextStartedEvent
-import org.apache.camel.management.event.CamelContextStoppingEvent
+import org.apache.camel.impl.event.CamelContextStartedEvent
+import org.apache.camel.impl.event.CamelContextStoppingEvent
+import org.apache.camel.spi.CamelEvent
 import javax.enterprise.event.Observes
 import javax.inject.Inject
 import javax.inject.Named
