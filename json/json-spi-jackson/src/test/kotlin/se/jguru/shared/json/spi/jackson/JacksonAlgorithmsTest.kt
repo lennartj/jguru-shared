@@ -15,6 +15,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.Month
+import java.time.MonthDay
+import java.time.Period
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalUnit
 
@@ -41,8 +43,9 @@ class JacksonAlgorithmsTest {
             LocalDateTime.of(2019, Month.FEBRUARY, 1, 16, 45),
             LocalDate.of(2019, Month.FEBRUARY, 1),
             LocalTime.of(16, 45),
-            Duration.of(3L, ChronoUnit.DAYS).plusHours(2).plusMinutes(5)
-        )
+            Duration.of(3L, ChronoUnit.DAYS).plusHours(2).plusMinutes(5),
+            MonthDay.of(Month.MARCH, 21),
+            Period.ofYears(2).plusMonths(1).plusDays(6))
     }
 
     @Test
@@ -175,7 +178,7 @@ class JacksonAlgorithmsTest {
 
         // Act
         val result = JacksonAlgorithms.serialize(timeFormats)
-        println("Got: $result")
+        // println("Got: $result")
 
         // Assert
         JSONAssert.assertEquals(expected, result, true)

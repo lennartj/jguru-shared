@@ -28,6 +28,8 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.MonthDay
+import java.time.Period
 
 /**
  * Module containing Jackson serializers and deserializers, intended to simplify
@@ -44,12 +46,16 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
         addSerializer(LocalDate::class.java, LocalDateSerializer())
         addSerializer(LocalTime::class.java, LocalTimeSerializer())
         addSerializer(Duration::class.java, DurationSerializer())
+        addSerializer(Period::class.java, PeriodSerializer())
+        addSerializer(MonthDay::class.java, MonthDaySerializer())
 
         // Add Deserializers
         addDeserializer(LocalDateTime::class.java, LocalDateTimeDeserializer())
         addDeserializer(LocalDate::class.java, LocalDateDeserializer())
         addDeserializer(LocalTime::class.java, LocalTimeDeserializer())
         addDeserializer(Duration::class.java, DurationDeserializer())
+        addDeserializer(Period::class.java, PeriodDeserializer())
+        addDeserializer(MonthDay::class.java, MonthDayDeserializer())
     }
 
     companion object {

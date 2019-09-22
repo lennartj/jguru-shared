@@ -28,6 +28,8 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.MonthDay
+import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
 
@@ -111,6 +113,54 @@ open class LocalTimeSerializer(
 open class DurationSerializer : StdSerializer<Duration>(Duration::class.java) {
 
     override fun serialize(value: Duration?, gen: JsonGenerator, serializers: SerializerProvider) {
+
+        when (value == null) {
+            true -> gen.writeNull()
+            else -> gen.writeString(value.toString())
+        }
+    }
+}
+
+/**
+ * Serializes a MonthDay to an standards-compliant string.
+ *
+ * ### Examples:
+ *
+ * ```
+ *    "--01-09" -- parses as "Month.JANUARI, 9"
+ *    "--09-10" -- parses as "Month.SEPTEMBER, 10"
+ * ```
+ *
+ * @see MonthDay.toString
+ */
+open class MonthDaySerializer : StdSerializer<MonthDay>(MonthDay::class.java) {
+
+    override fun serialize(value: MonthDay?, gen: JsonGenerator, serializers: SerializerProvider) {
+
+        when (value == null) {
+            true -> gen.writeNull()
+            else -> gen.writeString(value.toString())
+        }
+    }
+}
+
+/**
+ * Serializes a MonthDay to an standards-compliant string.
+ *
+ * ### Examples:
+ *
+ * ```
+ *    "P1D" -- parses as "1 day"
+ *    "P7D" -- parses as "7 days (or 1 week)"
+ *    "P1M7D" -- parses as "1 month and 7 days (or 1 month and 1 week)"
+ *    "P1Y1M1D" -- parses as "1 year, 1 month and 1 day"
+ * ```
+ *
+ * @see Period.toString
+ */
+open class PeriodSerializer : StdSerializer<Period>(Period::class.java) {
+
+    override fun serialize(value: Period?, gen: JsonGenerator, serializers: SerializerProvider) {
 
         when (value == null) {
             true -> gen.writeNull()

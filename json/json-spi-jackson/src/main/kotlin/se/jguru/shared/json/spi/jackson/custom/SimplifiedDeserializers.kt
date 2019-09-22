@@ -31,6 +31,8 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.MonthDay
+import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.TemporalAccessor
@@ -176,6 +178,78 @@ open class DurationDeserializer() : StdDeserializer<Duration>(Duration::class.ja
             } catch (e: DateTimeException) {
                 AbstractDateTimeFormatterDeserializer.rethrowDateTimeTypeException<Any, Duration>(
                     handledType() as Class<Duration>, context, e, string)
+            }
+        }
+
+        // Nopes.
+        throw context.wrongTokenException(parser, handledType(), JsonToken.VALUE_STRING, "Expected string.")
+    }
+}
+
+/**
+ * Deserializes a MonthDay from a string on the format {@code --MM-dd}.
+ *
+ * ### Examples:
+ *
+ * ```
+ *    "--01-09" -- parses as "Month.JANUARI, 9"
+ *    "--09-10" -- parses as "Month.SEPTEMBER, 10"
+ * ```
+ *
+ * @see MonthDay.parse
+ */
+open class MonthDayDeserializer() : StdDeserializer<MonthDay>(MonthDay::class.java) {
+
+    override fun deserialize(parser: JsonParser, context: DeserializationContext): MonthDay? {
+
+        if (parser.hasToken(JsonToken.VALUE_STRING)) {
+            val string = parser.text.trim { it <= ' ' }
+
+            try {
+                return when (string.isEmpty()) {
+                    true -> null
+                    else -> MonthDay.parse(string)
+                }
+            } catch (e: DateTimeException) {
+                AbstractDateTimeFormatterDeserializer.rethrowDateTimeTypeException<Any, MonthDay>(
+                    handledType() as Class<MonthDay>, context, e, string)
+            }
+        }
+
+        // Nopes.
+        throw context.wrongTokenException(parser, handledType(), JsonToken.VALUE_STRING, "Expected string.")
+    }
+}
+
+/**
+ * Deserializes a Period from a string as retrieved when serializing a Period toString.
+ *
+ * ### Examples:
+ *
+ * ```
+ *    "P1D" -- parses as "1 day"
+ *    "P7D" -- parses as "7 days (or 1 week)"
+ *    "P1M7D" -- parses as "1 month and 7 days (or 1 month and 1 week)"
+ *    "P1Y1M1D" -- parses as "1 year, 1 month and 1 day"
+ * ```
+ *
+ * @see Period.parse
+ */
+open class PeriodDeserializer() : StdDeserializer<Period>(Period::class.java) {
+
+    override fun deserialize(parser: JsonParser, context: DeserializationContext): Period? {
+
+        if (parser.hasToken(JsonToken.VALUE_STRING)) {
+            val string = parser.text.trim { it <= ' ' }
+
+            try {
+                return when (string.isEmpty()) {
+                    true -> null
+                    else -> Period.parse(string)
+                }
+            } catch (e: DateTimeException) {
+                AbstractDateTimeFormatterDeserializer.rethrowDateTimeTypeException<Any, Period>(
+                    handledType() as Class<Period>, context, e, string)
             }
         }
 

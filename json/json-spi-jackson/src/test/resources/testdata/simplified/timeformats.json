@@ -2,5 +2,7 @@
     "someDateTime": "2019-02-01T16:45:00",
     "someDate": "2019-02-01",
     "someTime": "16:45",
-    "someDuration": "PT74H5M"
+    "someDuration": "PT74H5M",
+    "someMonthDay": "--03-21",
+    "somePeriod": "P2Y1M6D"
 }
