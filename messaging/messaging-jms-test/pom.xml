@@ -15,7 +15,7 @@
 
     <groupId>se.jguru.shared.messaging.test.jms</groupId>
     <artifactId>jguru-shared-messaging-jms-test</artifactId>
-    <version>0.9.5-SNAPSHOT</version>
+    <version>0.9.5</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>0.9.5-SNAPSHOT</version>
+                <version>0.9.5</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -145,6 +145,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>HEAD</tag>
+        <tag>jguru-shared-0.9.5</tag>
     </scm>
 </project>
