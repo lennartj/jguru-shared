@@ -13,23 +13,23 @@
         <relativePath />
     </parent>
 
-    <groupId>se.jguru.shared.jaxb.spi.metro</groupId>
-    <artifactId>jguru-shared-jaxb-spi-metro</artifactId>
+    <groupId>se.jguru.shared.persistence.spi.hibernate</groupId>
+    <artifactId>jguru-shared-persistence-spi-hibernate</artifactId>
     <version>0.9.6-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
-    <description>jGuru Shared: JAXB SPI (${project.packaging}, version ${project.version})</description>
+    <description>jGuru Shared: Persistence Hibernate SPI (${project.packaging}, version ${project.version})</description>
 
     <properties>
         <!--
             Define the name and type of this reactor
         -->
-        <path.in.reactor>jaxb/jaxb-spi-metro</path.in.reactor>
+        <path.in.reactor>persistence/persistence-spi-hibernate</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
-        <jaxb.version>2.3.2</jaxb.version>
 
         <owasp.failOnError>true</owasp.failOnError>
+        <hibernate.version>5.4.2.Final</hibernate.version>
     </properties>
 
     <!-- +=============================================== -->
@@ -44,31 +44,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>jaxb-bom</artifactId>
-                <version>${jaxb.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
-
+    
     <dependencies>
         <!--
             Internal dependencies.
         -->
-        <dependency>
-            <groupId>se.jguru.shared.algorithms.api</groupId>
-            <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>0.9.6-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>se.jguru.shared.jaxb.spi.shared</groupId>
-            <artifactId>jguru-shared-jaxb-spi-shared</artifactId>
-            <version>0.9.6-SNAPSHOT</version>
-        </dependency>
 
         <!--
             External dependencies.
@@ -77,32 +59,33 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.mail</groupId>
+                    <artifactId>javax.mail</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-        </dependency>
-
-        <!--
-            JAXB implementations
-
-            Provided scope used to permit accessing project determine
-            which implementation should be used (without importing both onto
-            ClassPath or ModulePath).
-        -->
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.json</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <!--
@@ -118,17 +101,6 @@
             <artifactId>log4j-slf4j-impl</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.xmlunit</groupId>
-            <artifactId>xmlunit-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.xmlunit</groupId>
-            <artifactId>xmlunit-matchers</artifactId>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <!-- +=============================================== -->
