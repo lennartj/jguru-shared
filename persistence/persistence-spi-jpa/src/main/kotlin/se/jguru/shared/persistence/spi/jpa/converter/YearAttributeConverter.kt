@@ -57,21 +57,3 @@ open class YearAttributeConverter : AttributeConverter<Year, Int>, Serializable 
         }
     }
 }
-
-/**
- * JPA AttributeConverter class to handle [java.time.Year]s - which will
- * convert to and from [Integer]s, by means of the [Year.getValue]
- * and [Year.of] methods.
- *
- * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
- */
-@XmlTransient
-@Converter(autoApply = true)
-open class YearIntegerAttributeConverter : AttributeConverter<Year, Integer>, Serializable {
-
-    override fun convertToDatabaseColumn(attribute: Year?): Integer? =
-        YearAttributeConverter.yearToInt(attribute) as Integer
-
-    override fun convertToEntityAttribute(dbData: Integer?): Year? =
-        YearAttributeConverter.intToYear(dbData as Int?)
-}
