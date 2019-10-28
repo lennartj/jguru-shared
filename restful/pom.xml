@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+    ################################################
+    # Section 1:  Project information
+    ################################################
+    -->
+    <parent>
+        <groupId>se.jguru.shared</groupId>
+        <artifactId>jguru-shared-reactor</artifactId>
+        <version>0.9.6-SNAPSHOT</version>
+    </parent>
+
+    <groupId>se.jguru.shared.restful</groupId>
+    <artifactId>jguru-shared-restful-reactor</artifactId>
+    <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
+    <url>${site.top.url}/${path.in.reactor}</url>
+    <description>jGuru Shared: Restful Reactor (${project.packaging}, version ${project.version})</description>
+
+    <properties>
+        <path.in.reactor>restful</path.in.reactor>
+
+        <!-- License plugin configuration parameters. -->
+        <license.id>jguru_apl_v2</license.id>
+        <license.licenseResolver>classpath://codestyle/license</license.licenseResolver>
+        <breakOnFailure.license>true</breakOnFailure.license>
+    </properties>
+
+    <!--
+    ################################################
+    # Section 2:  Modules
+    ################################################
+    -->
+    <modules>
+        <module>restful-spi-jaxrs</module>
+    </modules>
+
+    <!--
+    ################################################
+    # Section 3:  Build settings
+    ################################################
+    -->
+    
+    <!--
+    ################################################
+    # Section 4:  External systems
+    ################################################
+    -->
+
+    <!--
+        Compensate for Maven standard variable extrapolation.
+        Git requires steady URLs (... but Subversion requires path extrapolation, hence the problem).
+     -->
+    <distributionManagement>
+        <site>
+            <id>github_site</id>
+            <name>GitHub Site for jGuru Shared</name>
+            <url>${site.top.url}/${path.in.reactor}</url>
+        </site>
+    </distributionManagement>
+
+    <!--
+        Define connections for Maven's VCS integration.
+    -->
+    <scm>
+        <connection>${scm.connection.url}</connection>
+        <developerConnection>${scm.devConnection.url}</developerConnection>
+        <url>${scm.url}</url>
+        <tag>HEAD</tag>
+    </scm>
+</project>

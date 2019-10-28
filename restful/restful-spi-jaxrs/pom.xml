@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- +=============================================== -->
+    <!-- | Section 1:  Project information                -->
+    <!-- +=============================================== -->
+    <parent>
+        <groupId>se.jguru.codestyle.poms.kotlin</groupId>
+        <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
+        <version>0.9.10-SNAPSHOT</version>
+        <relativePath />
+    </parent>
+
+    <groupId>se.jguru.shared.restful.spi.jaxrs</groupId>
+    <artifactId>jguru-shared-restful-spi-jaxrs</artifactId>
+    <packaging>jar</packaging>
+    <version>0.9.6-SNAPSHOT</version>
+    <name>${project.artifactId}</name>
+    <url>${site.top.url}/${path.in.reactor}</url>
+    <description>jGuru Shared: Restful JaxRS SPI (${project.packaging}, version ${project.version})</description>
+
+    <properties>
+        <!--
+            Define the name and type of this reactor
+        -->
+        <path.in.reactor>restful/restful-spi-jaxrs</path.in.reactor>
+        <reactor.name>jguru-shared</reactor.name>
+
+        <owasp.failOnError>true</owasp.failOnError>
+    </properties>
+
+    <!-- +=============================================== -->
+    <!-- | Section 2:  Dependency (management) settings   -->
+    <!-- +=============================================== -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>se.jguru.shared.bom</groupId>
+                <artifactId>jguru-shared-bom</artifactId>
+                <version>0.9.6-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!--
+            Internal dependencies.
+        -->
+        <dependency>
+            <groupId>se.jguru.shared.json.spi.jackson</groupId>
+            <artifactId>jguru-shared-json-spi-jackson</artifactId>
+            <version>0.9.6-SNAPSHOT</version>
+        </dependency>
+        
+        <!--
+            External dependencies.
+        -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.mail</groupId>
+                    <artifactId>javax.mail</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+
+        <!--
+            Test-scope dependencies.
+         -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- +=============================================== -->
+    <!-- | Section 3:  Build settings                     -->
+    <!-- +=============================================== -->
+    <build>
+        <plugins>
+
+            <!--
+                Provides Plantuml integration into site deployments.
+
+                Why:  Convert Plantuml (*.puml) documents to png images, for use in site documentation.
+                Used: Site lifecycle, mvn site.
+            -->
+            <plugin>
+                <groupId>com.github.jeluard</groupId>
+                <artifactId>plantuml-maven-plugin</artifactId>
+                <version>7954</version>
+                <configuration>
+                    <sourceFiles>
+                        <directory>${basedir}</directory>
+                        <includes>
+                            <include>src/site/**/*.puml</include>
+                        </includes>
+                    </sourceFiles>
+                    <outputDirectory>${project.build.directory}/site/images/plantuml</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-plantuml-diagrams</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <phase>pre-site</phase>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <!--
+                        NOTE!
+
+                        Do not upgrade the plantuml dependency above version 8030, as those plantuml releases
+                        are not binary compatible with the plugin version 7954.
+                    -->
+                    <dependency>
+                        <groupId>net.sourceforge.plantuml</groupId>
+                        <artifactId>plantuml</artifactId>
+                        <version>8030</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- +=============================================== -->
+    <!-- | Section 4:  External systems                   -->
+    <!-- +=============================================== -->
+    <!--
+        Define the Continuous Build server address.
+    -->
+    <ciManagement>
+        <system>TravisCI</system>
+        <url>https://travis-ci.org/lennartj/jguru-shared</url>
+    </ciManagement>
+
+    <!--
+        Define the issue management system.
+    -->
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/lennartj/jguru-shared/issues</url>
+    </issueManagement>
+
+    <!--
+        Define connections for Maven's VCS integration.
+    -->
+    <scm>
+        <connection>${scm.connection.url}</connection>
+        <developerConnection>${scm.devConnection.url}</developerConnection>
+        <url>${scm.url}</url>
+        <tag>HEAD</tag>
+    </scm>
+</project>

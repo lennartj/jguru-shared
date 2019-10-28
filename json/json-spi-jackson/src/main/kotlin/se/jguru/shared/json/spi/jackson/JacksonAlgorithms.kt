@@ -24,6 +24,8 @@ package se.jguru.shared.json.spi.jackson
 import com.dr.ktjsonschema.JsonSchemaGenerator
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import java.io.InputStream
+import java.io.OutputStream
 
 object JacksonAlgorithms {
 
@@ -73,6 +75,54 @@ object JacksonAlgorithms {
 
         // All Done.
         return objectWriter.writeValueAsString(anObject)
+    }
+
+    /**
+     * Converts the JSON-formatted Stream into an Object of the type given.
+     * In Jackson terminology, this process is called "Deserialization".
+     *
+     * @param jsonStream A stream holding JSON-formatted data to convert/resurrect back into an object.
+     * @param expected The type of object expected after de-serialization is done.
+     * @param objectMapper The ObjectMapper used to de-serialize the JSON string.
+     * @return The deserialized/resurrected object.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun <T> deserializeFromStream(jsonStream: InputStream,
+                                  expected: Class<T>,
+                                  objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault()): T {
+
+        // Retrieve the standard reader
+        val objectReader = objectMapper.readerFor(expected)
+
+        // All Done.
+        return objectReader.readValue(jsonStream)
+    }
+
+    /**
+     * "Serializes" (in Jackson terminology) the supplied object onto a given OutputStream.
+     *
+     * @param anObject The object to serialize into a JSON-formatted String.
+     * @param targetStream The stream onto which the result should be written.
+     * @param objectMapper The ObjectMapper used to serialize the object.
+     * @param compactOutput `true` to indicate that the output should be compact, and false to
+     * use pretty printed JSON which should be human-readable.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun <T> serializeToStream(anObject: T,
+                              targetStream: OutputStream,
+                              objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault(),
+                              compactOutput: Boolean = false) {
+
+        // Fetch the relevant printer
+        val objectWriter = when (compactOutput) {
+            false -> objectMapper.writerWithDefaultPrettyPrinter()
+            true -> objectMapper.writer()
+        }
+
+        // All Done.
+        return objectWriter.writeValue(targetStream, anObject)
     }
 
     /**
