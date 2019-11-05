@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
-        <version>0.9.11-SNAPSHOT</version>
+        <version>0.9.11</version>
         <relativePath />
     </parent>
 
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>0.9.6-SNAPSHOT</version>
+                <version>0.9.7-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>se.jguru.shared.json.spi.jackson</groupId>
             <artifactId>jguru-shared-json-spi-jackson</artifactId>
-            <version>0.9.6-SNAPSHOT</version>
+            <version>0.9.7-SNAPSHOT</version>
         </dependency>
         
         <!--
