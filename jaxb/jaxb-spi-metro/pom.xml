@@ -15,7 +15,7 @@
 
     <groupId>se.jguru.shared.jaxb.spi.metro</groupId>
     <artifactId>jguru-shared-jaxb-spi-metro</artifactId>
-    <version>0.9.7</version>
+    <version>0.9.8-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
@@ -40,7 +40,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>0.9.7</version>
+                <version>0.9.8-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -62,12 +62,12 @@
         <dependency>
             <groupId>se.jguru.shared.algorithms.api</groupId>
             <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>0.9.7</version>
+            <version>0.9.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>se.jguru.shared.jaxb.spi.shared</groupId>
             <artifactId>jguru-shared-jaxb-spi-shared</artifactId>
-            <version>0.9.7</version>
+            <version>0.9.8-SNAPSHOT</version>
         </dependency>
 
         <!--
@@ -161,6 +161,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>jguru-shared-0.9.7</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
