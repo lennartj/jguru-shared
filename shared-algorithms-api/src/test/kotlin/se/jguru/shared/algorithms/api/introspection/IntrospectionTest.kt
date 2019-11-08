@@ -1,6 +1,8 @@
 package se.jguru.shared.algorithms.api.introspection
 
 import org.apache.logging.log4j.core.Core
+import org.jboss.vfs.VFS
+import org.jboss.vfs.VirtualFile
 import org.junit.Assert
 import org.junit.Test
 import se.jguru.shared.algorithms.api.Validate
@@ -255,5 +257,4 @@ class IntrospectionTest {
                         .reduce { total, current -> total + "\n" + current })
                         */
     }
-
 }

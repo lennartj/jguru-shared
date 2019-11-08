@@ -25,8 +25,6 @@ import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
 import java.io.InputStream
 import java.io.OutputStream
 import java.lang.reflect.Type
-import javax.ws.rs.Consumes
-import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.ext.MessageBodyReader
@@ -35,35 +33,33 @@ import javax.ws.rs.ext.MessageBodyWriter
 /**
  * Extend and add the Provider annotation to this JacksonJSON Mapper class to use it within a JaxRS application.
  */
-@Consumes("application/json")
-@Produces("application/json")
 open class JacksonJsonMapper<T> : MessageBodyReader<T>, MessageBodyWriter<T> {
 
-    override fun isReadable(aClass: Class<*>,
-                            type: Type,
-                            annotations: Array<Annotation>,
+    override fun isReadable(aClass: Class<*>?,
+                            type: Type?,
+                            annotations: Array<Annotation>?,
                             mediaType: MediaType): Boolean = isJSON(mediaType)
 
-    override fun isWriteable(aClass: Class<*>,
-                             type: Type,
-                             annotations: Array<Annotation>,
+    override fun isWriteable(aClass: Class<*>?,
+                             type: Type?,
+                             annotations: Array<Annotation>?,
                              mediaType: MediaType): Boolean = isJSON(mediaType)
 
     override fun readFrom(
         aClass: Class<T>,
-        type: Type,
-        annotations: Array<Annotation>,
+        type: Type?,
+        annotations: Array<Annotation>?,
         mediaType: MediaType,
-        multivaluedMap: MultivaluedMap<String, String>,
+        multivaluedMap: MultivaluedMap<String, String>?,
         inputStream: InputStream): T = JacksonAlgorithms.deserializeFromStream(inputStream, aClass)
 
     override fun writeTo(
         o: T,
-        aClass: Class<*>,
-        type: Type,
-        annotations: Array<out Annotation>,
+        aClass: Class<*>?,
+        type: Type?,
+        annotations: Array<out Annotation>?,
         mediaType: MediaType,
-        multivaluedMap: MultivaluedMap<String, Any>,
+        multivaluedMap: MultivaluedMap<String, Any>?,
         outputStream: OutputStream) = JacksonAlgorithms.serializeToStream(o, outputStream)
 
     companion object {

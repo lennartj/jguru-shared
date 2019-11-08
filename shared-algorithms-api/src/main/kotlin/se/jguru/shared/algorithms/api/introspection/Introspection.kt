@@ -21,10 +21,13 @@
  */
 package se.jguru.shared.algorithms.api.introspection
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.net.JarURLConnection
 import java.net.URL
 import java.security.CodeSource
 import java.security.ProtectionDomain
+import java.util.Locale
 import java.util.SortedMap
 import java.util.SortedSet
 import java.util.TreeMap
@@ -41,6 +44,8 @@ import kotlin.reflect.full.memberProperties
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 object Introspection {
+
+    private val log: Logger = LoggerFactory.getLogger(Introspection::class.java)
 
     /**
      * Standard [Comparator] for classes, comparing their respective names.
@@ -68,6 +73,11 @@ object Introspection {
     const val SPECIFICATION_VERSION = "Specification-Version"
 
     /**
+     * The known JAR protocols.
+     */
+    val KNOWN_JAR_PROTOCOLS = listOf("jar", "file", "vfs")
+
+    /**
      * Retrieves type information from the supplied objects.
      *
      * @param classLoader The classloader used to harvest the type information
@@ -89,7 +99,6 @@ object Introspection {
     /**
      * Retrieves type information from the supplied objects, but typecast to the fully qualified class names.
      *
-     * @param classLoader The classloader used to harvest the type information
      * @param objects The objects from which to harvest type information.
      */
     @JvmStatic
@@ -133,8 +142,7 @@ object Introspection {
     @JvmStatic
     fun <T : Any> getMutablePropertiesFor(aClass: KClass<T>): List<KMutableProperty1<T, *>> =
         aClass.memberProperties
-            .filter { it is KMutableProperty1 }
-            .map { it as KMutableProperty1<T, *> }
+            .filterIsInstance<KMutableProperty1<T, *>>()
             .toList()
 
     /**
@@ -244,7 +252,7 @@ object Introspection {
             } catch (e: Throwable) {
 
                 builder.append("Could not acquire ClassLoader or CodeSource from class ["
-                                   + aClass.name + "]. This is weird.")
+                    + aClass.name + "]. This is weird.")
             }
         }
 
@@ -291,7 +299,7 @@ object Introspection {
     @JvmOverloads
     @Throws(IllegalArgumentException::class)
     fun getManifestFrom(aClass: Class<*>,
-                        loader: ClassLoader = Thread.currentThread().contextClassLoader) : Manifest {
+                        loader: ClassLoader = Thread.currentThread().contextClassLoader): Manifest {
 
         val codeSource = getCodeSourceFor(aClass)
             ?: return Manifest(loader.getResource(MANIFEST_RESOURCE).openStream())
@@ -306,7 +314,7 @@ object Introspection {
                     .indexOf("/target/")
 
                 Manifest(URL(codeSourceLocation.toString().substring(0, targetIndex) +
-                                 "/target/classes" + MANIFEST_RESOURCE).openStream())
+                    "/target/classes" + MANIFEST_RESOURCE).openStream())
             }
         }
     }
@@ -349,9 +357,7 @@ object Introspection {
         propertyMap: Map<String, String>,
         propNames: List<String> = listOf(BUNDLE_VERSION, SPECIFICATION_VERSION)): RuntimeVersion {
 
-        if (propNames.isEmpty()) {
-            throw IllegalArgumentException("Cannot handle empty 'propNames' argument.")
-        }
+        require(propNames.isNotEmpty()) { "Cannot handle empty 'propNames' argument." }
 
         val toParse = propNames.map { propertyMap[it] }.firstOrNull { it != null }
             ?: throw IllegalArgumentException("Found no value within property $propNames of given Map: $propertyMap")
@@ -389,29 +395,47 @@ object Introspection {
      * Otherwise, the URL is assumed to refer to a JAR file which will be opened as needed.
      */
     @JvmStatic
-    fun isJarFile(aURL: URL): Boolean {
+    @JvmOverloads
+    fun isJarFile(aURL: URL,
+                  locale: Locale = Locale.getDefault()): Boolean {
 
-        val lcProtocol = aURL.protocol.toLowerCase()
+        val lcPath = aURL.path.toLowerCase(locale)
+        val lcProtocol = aURL.protocol.toLowerCase(locale)
 
-        if (lcProtocol != "jar" && lcProtocol != "file") {
-            throw IllegalArgumentException("Unsupported protocol [${aURL.protocol}]. " +
-                                               "Can only handle 'file' and 'jar' protocols.")
+        return when (lcProtocol) {
+            "jar" -> true
+            else -> {
+
+                if (!KNOWN_JAR_PROTOCOLS.any { it.equals(lcProtocol, true) }) {
+                    log.warn("Protocol [$lcProtocol] unknown. Assuming default logic to determine " +
+                        "if [${aURL.toExternalForm()}] is a JAR file or not.")
+                }
+
+                // VFS URLs:
+                // 1) [resource within a JAR]: vfs:/file:/some/path/to/aJarFile.jar!/the/resource/within
+                // 2) [JARfile proper]:        vfs:/some/path/to/a/file.jar
+                //
+                // File URLs:
+                // 1) [resoure within a JAR]:  file:/some/path/to/aJarFile.jar!/the/resource/within
+                // 2) [JARfile proper]:        file:/some/path/to/aJarFile.jar
+                //
+                lcPath.endsWith(".jar") && !lcPath.contains(JAR_URL_SNIPPET)
+            }
         }
-
-        return lcProtocol == "jar"
-            || (lcProtocol == "file" && (aURL.path.contains(JAR_URL_SNIPPET) || aURL.path.endsWith(".jar")))
     }
 
     /**
      * Ensures that the supplied URL is a valid JAR URL according to its specification.
      */
     @JvmStatic
-    fun toCompliantJarURL(aURL: URL): URL {
+    @JvmOverloads
+    fun toCompliantJarURL(aURL: URL,
+                          locale: Locale = Locale.getDefault()): URL {
 
         val jarPrefix = "jar:"
         val extForm = aURL.toExternalForm()
 
-        val newURL = when (aURL.protocol.toLowerCase()) {
+        val newURL = when (aURL.protocol.toLowerCase(locale)) {
 
             "file" -> when (extForm.contains(JAR_URL_SNIPPET)) {
                 true -> "$jarPrefix$extForm"
@@ -423,8 +447,13 @@ object Introspection {
                 else -> "$extForm$JAR_URL_SNIPPET"
             }
 
+            "vfs" -> when (extForm.contains(JAR_URL_SNIPPET)) {
+                true -> extForm
+                else -> "$extForm$JAR_URL_SNIPPET"
+            }
+
             else -> throw IllegalArgumentException("Unsupported protocol [${aURL.protocol}]. " +
-                                                       "Can only handle 'file' and 'jar' protocols.")
+                "Known protocols: " + KNOWN_JAR_PROTOCOLS.reduce { acc, s -> "$acc,$s" })
         }
 
         return URL(newURL)

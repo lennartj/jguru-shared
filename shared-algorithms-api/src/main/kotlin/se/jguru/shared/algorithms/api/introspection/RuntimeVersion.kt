@@ -100,9 +100,10 @@ class RuntimeVersion @JvmOverloads constructor(
             // Implementation-Version: 0.9.6-SNAPSHOT
             val tokens = bundleVersion.split('.', '-')
                 .map { it.trim() }
-            if (tokens.isEmpty()) {
-                throw IllegalArgumentException("Expected argument on the form [major].[minor].[micro].[qualifier], " +
-                    "where only the major version is mandatory. Got: [$bundleVersion]")
+
+            require(tokens.isNotEmpty()) {
+                "Expected argument on the form [major].[minor].[micro].[qualifier], " +
+                "where only the major version is mandatory. Got: [$bundleVersion]"
             }
 
             val major = tokens[0].toInt()
@@ -132,7 +133,7 @@ class RuntimeVersion @JvmOverloads constructor(
         fun parseJavaVersion(versionProperty: String = System.getProperty("java.version")): RuntimeVersion {
 
             // Check sanity
-            if (versionProperty.trim().isEmpty()) {
+            require(versionProperty.trim().isNotEmpty()) {
 
                 // Known values for the java.version property:
                 // 1.8.0_181,
@@ -140,8 +141,8 @@ class RuntimeVersion @JvmOverloads constructor(
                 // 10.0.2,
                 // 11
 
-                throw IllegalArgumentException("Version property [$versionProperty] could not be parsed " +
-                    "into a RuntimeVersion. Expected something like 1.8.0_181, 9.0.4, 10.0.2 or 11.")
+                "Version property [$versionProperty] could not be parsed " +
+                    "into a RuntimeVersion. Expected something like 1.8.0_181, 9.0.4, 10.0.2 or 11."
             }
 
             // No .'s?

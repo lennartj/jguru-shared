@@ -23,6 +23,8 @@ package se.jguru.shared.json.spi.jackson.custom
 
 import com.fasterxml.jackson.core.Version
 import com.fasterxml.jackson.databind.module.SimpleModule
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import se.jguru.shared.algorithms.api.introspection.Introspection
 import java.time.Duration
 import java.time.LocalDate
@@ -30,6 +32,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.MonthDay
 import java.time.Period
+import java.util.TreeMap
 
 /**
  * Module containing Jackson serializers and deserializers, intended to simplify
@@ -60,6 +63,9 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
 
     companion object {
 
+        @JvmStatic
+        private val log: Logger = LoggerFactory.getLogger(SimplifiedFormatModule::class.java)
+
         /**
          * Finds the [Version] by reading the `Bundle-Version` property from the Manifest file.
          * Typically, this has the format `Bundle-Version: 0.9.6.SNAPSHOT`
@@ -67,17 +73,28 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
         @JvmStatic
         fun findLocalJarVersion(): Version {
 
-            val manifest = Introspection.getManifestFrom(SimplifiedFormatModule::class.java)
-            val runtimeVersion = Introspection.findVersionFromManifestProperty(manifest)
+            // Extract the Map from the Manifest, or a fallback
+            val manifestMap = try {
+                Introspection.extractMapOf(Introspection.getManifestFrom(SimplifiedFormatModule::class.java))
+            } catch (e: Exception) {
 
-            val manifestMap = Introspection.extractMapOf(manifest)
-            val groupID = manifestMap["groupId"]
-            val artifactID = manifestMap["artifactId"]
+                log.error("Could not find manifest from [${SimplifiedFormatModule::class.java.name}]")
+
+                // Create a fallback ManifestMap
+                val fallbackMap = TreeMap<String, String>()
+                fallbackMap[Introspection.SPECIFICATION_VERSION] = "0.9.9"
+                fallbackMap
+            }
+
+            // Extract relevant data
+            val runtimeVersion = Introspection.findVersionFromMap(manifestMap)
+            val groupID = manifestMap["groupId"] ?: "se.jguru.shared.json.spi.jackson"
+            val artifactID = manifestMap["artifactId"] ?: "jguru-shared-json-spi-jackson"
 
             // All Done.
             return Version(runtimeVersion.major,
                 runtimeVersion.minor ?: 0,
-                runtimeVersion.minor ?: 0,
+                runtimeVersion.micro ?: 0,
                 runtimeVersion.qualifier ?: "",
                 groupID,
                 artifactID)
