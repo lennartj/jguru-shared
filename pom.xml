@@ -15,7 +15,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms</groupId>
         <artifactId>jguru-codestyle-poms-reactor</artifactId>
-        <version>0.9.12-SNAPSHOT</version>
+        <version>0.9.12</version>
         <relativePath />
     </parent>
 
@@ -106,7 +106,7 @@
         <repository>
             <id>ossrh-staging</id>
             <name>Sonatype OSS Nexus: Releases</name>
-            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
             <id>ossrh-snapshots</id>
