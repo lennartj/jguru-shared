@@ -15,7 +15,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms</groupId>
         <artifactId>jguru-codestyle-poms-reactor</artifactId>
-        <version>0.9.11</version>
+        <version>0.9.12-SNAPSHOT</version>
         <relativePath />
     </parent>
 
