@@ -31,9 +31,60 @@ import javax.ws.rs.ext.MessageBodyReader
 import javax.ws.rs.ext.MessageBodyWriter
 
 /**
- * Extend and add the Provider annotation to this JacksonJSON Mapper class to use it within a JaxRS application.
+ * ## Abstract JSON-form [MessageBodyReader] and [MessageBodyWriter] implementation
+ *
+ * Uses the standard (de-)serialization algorithms found within the JSON SPI for Jackson to
+ * convert T type objects to and from JSON transport form. The recommended approach is to
+ * extend this class and remove the implied generic, which is required to let the CDI
+ * implementation inject a [Provider] in any scope (not only Dependent).
+ *
+ * ### Note!
+ *
+ * According to §3.1 of the JSR-299 (CDI) specification:
+ * > "If the managed bean class is a generic type, it must have scope @Dependent.
+ * > If a managed bean with a parameterized bean class declares any scope other than @Dependent, the
+ * > container automatically detects the problem and treats it as a definition error."
+ *
+ * Therefore, if a class harbours generic annotations, it may imply that the CDI implementation is
+ * scope, not only Dependent which is sometimes required when the producer class has generic annotations.
+ * Resolve this in a manner similar to the below:
+ *
+ * ```java
+ * public abstract class JacksonJsonMapper<T> {...}
+ *
+ * @Producer
+ * public class FooBarJsonMapper extends JacksonJsonMapper<FooBar> {}
+ *
+ * @Producer
+ * public class CarJsonMapper extends JacksonJsonMapper<Car> {}
+ * ```
+ *
+ * ## A common-for-all-classes JSON mapper
+ *
+ * There is a convenience implementation, which can be used in the following manner:
+ *
+ * ```java
+ * @Producer
+ * public class MyJsonProvider extends JacksonJsonAnyMapper {}
+ * ```
+ *
+ * Deserializing objects of type Foo using the MyJsonProvider would be done using a
+ * rather odd class-cast construct, namely:
+ *
+ * ```java
+ *  val resurrected = jsonAnyMapper.readFrom(
+ *      Furniture::class.java as Class<Any>,  // A bit weird, but required to coerce Kotlin's type system.
+ *      String::class.java,
+ *      emptyArray,
+ *      jsonType,
+ *      emptyMultiValuedMap,
+ *      input)
+ * ```
+ *
+ * @param T The class for which this JacksonJsonMapper should be used.
+ * @see [JacksonJsonAnyMapper]
  */
-open class JacksonJsonMapper<T> : MessageBodyReader<T>, MessageBodyWriter<T> {
+abstract class JacksonJsonMapper<T> : MessageBodyReader<T>, MessageBodyWriter<T> {
 
     override fun isReadable(aClass: Class<*>?,
                             type: Type?,

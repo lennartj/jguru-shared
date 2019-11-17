@@ -22,8 +22,36 @@
 package se.jguru.shared.restful.spi.jaxrs
 
 /**
- * JSON mapper using Jackson, handling any class.
- * This also implies that the mapper can use any CDI scope, not only Dependent
- * which is sometimes required when the producer class has generic annotations.
+ * ## JSON mapper using Jackson, handling any class.
+ *
+ * This convenience implementation, should be used in the following manner
+ * within an existing CDI-enabled application such as a WAR:
+ *
+ * ```java
+ * @Producer
+ * public class MyJsonProvider extends JacksonJsonAnyMapper {}
+ * ```
+ *
+ * Deserializing objects of type Foo using the MyJsonProvider would be done using a
+ * rather odd class-cast construct, namely:
+ *
+ * ```java
+ *  val resurrected = myJsonProvider.readFrom(
+ *      Furniture::class.java as Class<Any>,  // A bit weird, but required to coerce Kotlin's type system.
+ *      String::class.java,
+ *      emptyArray,
+ *      jsonType,
+ *      emptyMultiValuedMap,
+ *      input)
+ * ```
+ *
+ * ### Note!
+ *
+ * Do not use generics in your implementation. According to §3.1 of the JSR-299
+ * (CDI) specification:
+ *
+ * > "If the managed bean class is a generic type, it must have scope @Dependent.
+ * > If a managed bean with a parameterized bean class declares any scope other than @Dependent, the
+ * > container automatically detects the problem and treats it as a definition error."
  */
 open class JacksonJsonAnyMapper : JacksonJsonMapper<Any>()

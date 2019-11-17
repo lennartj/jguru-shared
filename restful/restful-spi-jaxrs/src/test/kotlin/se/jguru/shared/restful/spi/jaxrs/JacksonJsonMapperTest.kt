@@ -5,10 +5,7 @@ import org.junit.Before
 import org.junit.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.DataOutputStream
-import java.io.StringWriter
 import java.nio.charset.Charset
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.MultivaluedHashMap
@@ -21,7 +18,7 @@ open class JacksonJsonMapperTest {
 
     val jsonType = MediaType.APPLICATION_JSON_TYPE
 
-    val unitUnderTest = JacksonJsonMapper<Any>()
+    val unitUnderTest = JacksonJsonAnyMapper()
     val emptyArray = emptyArray<Annotation>()
 
 

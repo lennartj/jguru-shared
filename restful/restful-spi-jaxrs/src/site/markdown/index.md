@@ -12,5 +12,8 @@ to the following:
 
     @Consumes("application/json", "application/json;charset=utf-8")
     @Produces("application/json", "application/json;charset=utf-8")
-    open class LocalProducer<T> : JacksonJsonMapper<T>()
+    open class SomeClassJsonMapper : JacksonJsonMapper<SomeClass>()
+    
+As an alternative, you can use the `JacksonJsonAnyMapper` implementation which
+handles *Any* objects. That - in turn - implies that the default Jackson-flavoured 
         
