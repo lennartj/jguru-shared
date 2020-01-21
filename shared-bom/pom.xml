@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-parent</artifactId>
-        <version>0.9.12</version>
+        <version>0.9.13</version>
         <relativePath />
     </parent>
 
@@ -29,20 +29,20 @@
         <reactor.name>jguru-shared</reactor.name>
 
         <!-- Kotlin constants -->
-        <kotlin.version>1.3.60</kotlin.version>
+        <kotlin.version>1.3.61</kotlin.version>
         <kotlin.jvm.target>1.8</kotlin.jvm.target>
         <kotlin.compiler.languageVersion>1.3</kotlin.compiler.languageVersion>
         <kotlin.compiler.apiVersion>1.3</kotlin.compiler.apiVersion>
-
+        
         <!--
             Build-controlled dependencies.
         -->
-        <jackson.version>2.10.1</jackson.version>
+        <jackson.version>2.10.2</jackson.version>
         <jsonSchema.version>1.0.29</jsonSchema.version>
         <javaee.version>8.0.1</javaee.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
 
-        <aspectj.runtime.version>1.9.4</aspectj.runtime.version>
+        <aspectj.runtime.version>1.9.5</aspectj.runtime.version>
         <aspectj-maven-plugin.version>1.11</aspectj-maven-plugin.version>
 
         <jakarta-xml-api.version>2.3.2</jakarta-xml-api.version>
@@ -53,15 +53,15 @@
         <xmlunit.version>2.6.3</xmlunit.version>
 
         <osgi.version>6.0.0</osgi.version>
-        <artemis.version>2.10.1</artemis.version>
-        <camel.version>3.0.0-RC3</camel.version>
+        <artemis.version>2.11.0</artemis.version>
+        <camel.version>3.0.1</camel.version>
         
         <slf4j.version>1.7.28</slf4j.version>
-        <log4j2.version>2.12.1</log4j2.version>
+        <log4j2.version>2.13.0</log4j2.version>
         <logback.version>1.2.3</logback.version>
         <hibernate.version>5.4.2.Final</hibernate.version>
 
-        <spring.version>5.1.9.RELEASE</spring.version>
+        <spring.version>5.2.3.RELEASE</spring.version>
 
         <owasp.failOnError>true</owasp.failOnError>
     </properties>
