@@ -142,30 +142,31 @@ object DbOperations {
             }
 
             // Execute and extract fully
-            prep.executeQuery().use { rs ->
+            prep.use { ps -> ps.executeQuery().use { rs ->
 
-                // Get the metadata
-                val rsMetadata = rs.metaData
-                val colCount = rsMetadata.columnCount
+                    // Get the metadata
+                    val rsMetadata = rs.metaData
+                    val colCount = rsMetadata.columnCount
 
-                if (log.isDebugEnabled) {
+                    if (log.isDebugEnabled) {
 
-                    val buffer = StringBuilder("Retrieved result with [$colCount] columns:\n")
+                        val buffer = StringBuilder("Retrieved result with [$colCount] columns:\n")
 
-                    for (index in 1..colCount) {
-                        buffer.append("Column [$index/$colCount]: \"${rsMetadata.getColumnName(index)}\" " +
-                            "- ${rsMetadata.getColumnTypeName(index)}\n")
+                        for (index in 1..colCount) {
+                            buffer.append("Column [$index/$colCount]: \"${rsMetadata.getColumnName(index)}\" " +
+                                "- ${rsMetadata.getColumnTypeName(index)}\n")
+                        }
+
+                        log.debug(buffer.toString())
                     }
 
-                    log.debug(buffer.toString())
-                }
+                    val index = AtomicInteger()
+                    while (rs.next()) {
+                        val converted = rowDataConverter.invoke(rs, index.incrementAndGet())
 
-                val index = AtomicInteger()
-                while (rs.next()) {
-                    val converted = rowDataConverter.invoke(rs, index.incrementAndGet())
-
-                    if (converted != null) {
-                        toReturn.add(converted)
+                        if (converted != null) {
+                            toReturn.add(converted)
+                        }
                     }
                 }
             }
