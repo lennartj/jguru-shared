@@ -61,7 +61,7 @@ enum class TransactionIsolation(val connectionValue: Int) {
     TRANSACTION_SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE)
 }
 
-abstract class AbstractJdbcTest(driverClass : String = "org.hsqldb.jdbc.JDBCDriver") {
+abstract class AbstractJdbcTest {
 
     protected lateinit var dataSource: DataSource
 
