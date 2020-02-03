@@ -48,7 +48,7 @@
         <jakarta-xml-api.version>2.3.2</jakarta-xml-api.version>
         <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
         <metro.version>2.3.2</metro.version>
-        <eclipselink.version>2.7.5</eclipselink.version>
+        <eclipselink.version>2.7.6</eclipselink.version>
         <dbunit.version>2.6.0</dbunit.version>
         <xmlunit.version>2.6.3</xmlunit.version>
 
@@ -274,12 +274,12 @@
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-api-jpa</artifactId>
-                <version>5.2.0-release</version>
+                <version>5.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-core</artifactId>
-                <version>5.2.1</version>
+                <version>5.2.2</version>
             </dependency>
 
             <!--
@@ -294,7 +294,7 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.199</version>
+                <version>1.4.200</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -306,7 +306,7 @@
             <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
-                <version>3.4.1</version>
+                <version>3.4.2</version>
             </dependency>
 
             <!--

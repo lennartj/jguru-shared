@@ -4,6 +4,9 @@ import org.junit.Assert
 import org.junit.Test
 import se.jguru.shared.persistence.spi.jpa.classloading.CommonPersistenceProvidersInfo
 import java.util.Arrays
+import javax.persistence.EntityManagerFactory
+import javax.persistence.Persistence
+import javax.persistence.spi.PersistenceProvider
 
 /**
  *
