@@ -15,7 +15,7 @@
 
     <groupId>se.jguru.shared.messaging.api</groupId>
     <artifactId>jguru-shared-messaging-api</artifactId>
-    <version>0.9.11</version>
+    <version>0.9.12-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>0.9.11</version>
+                <version>0.9.12-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -128,6 +128,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>jguru-shared-0.9.11</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
