@@ -211,7 +211,7 @@ object DbOperations {
      */
     @JvmStatic
     @JvmOverloads
-    internal fun <T> insertOrUpdate(dataSource: DataSource,
+    fun <T> insertOrUpdate(dataSource: DataSource,
                                     preparedStatementSQL: String,
                                     toInsertOrUpdate: List<T>,
                                     idColumnNames: Array<String>? = null,
