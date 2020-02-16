@@ -76,11 +76,14 @@ abstract class AbstractJdbcTest {
 
     @After
     fun teardownSharedState() {
+        executeStatements(getCleanupDbStateSqlStatements())
     }
 
     protected abstract fun createDataSource(): DataSource
 
     protected abstract fun getInitializeDbStateSqlStatements() : List<String>
+
+    protected abstract fun getCleanupDbStateSqlStatements() : List<String>
 
     //
     // Helpers

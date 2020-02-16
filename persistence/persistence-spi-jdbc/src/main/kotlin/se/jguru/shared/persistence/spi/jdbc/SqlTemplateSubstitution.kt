@@ -33,6 +33,7 @@ enum class SqlTemplateSubstitution(val isSynthetic: Boolean) {
     TABLE(false),
     WHERE(false),
     PARAMS(true),
+    SET_PARAMS(true),
     ARGUMENTS(true);
 
     /**

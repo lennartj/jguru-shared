@@ -119,4 +119,40 @@ class SqlStatementTest {
         // Assert
         Assert.assertEquals(expected, result)
     }
+
+    @Test
+    fun validateSplittingStringIntoListInKotlinManner() {
+
+        // Assemble
+        val expected = listOf("algorithm", "hashiterations", "lastupdatedat")
+        val params = "algorithm, hashiterations, lastupdatedat"
+
+        // Act
+        val result = SqlStatement.split(params)
+
+        // Assert
+        Assert.assertEquals(3, result.size)
+        for(index in expected.indices) {
+            Assert.assertEquals(expected[index], result[index])
+        }
+    }
+
+    @Test
+    fun validateTokenizingUpdateArguments() {
+
+        // Assemble
+        val params = "algorithm, hashiterations, lastupdatedat"
+        val statement = SqlStatement("someID",
+            SqlStatementType.UPDATE,
+            "update organisations.credentials set ##SET_PARAMS## where id = ?",
+            params)
+
+        val expected = "update organisations.credentials set algorithm = ?, hashiterations = ?, lastupdatedat = ? where id = ?"
+
+        // Act
+        val result = statement.tokenize()
+
+        // Assert
+        Assert.assertEquals(expected, result)
+    }
 }

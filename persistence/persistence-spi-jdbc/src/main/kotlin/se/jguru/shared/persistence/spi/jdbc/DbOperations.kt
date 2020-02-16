@@ -23,8 +23,7 @@ package se.jguru.shared.persistence.spi.jdbc
 
 import org.slf4j.LoggerFactory
 import java.sql.ResultSet
-import java.sql.Statement.EXECUTE_FAILED
-import java.sql.Statement.SUCCESS_NO_INFO
+import java.sql.Statement
 import java.util.concurrent.atomic.AtomicInteger
 import javax.sql.DataSource
 
@@ -162,10 +161,11 @@ object DbOperations {
 
                     val index = AtomicInteger()
                     while (rs.next()) {
+
                         val converted = rowDataConverter.invoke(rs, index.incrementAndGet())
 
                         if (converted != null) {
-                            toReturn.add(converted)
+                            toReturn.add(converted as T)
                         }
                     }
                 }
@@ -177,11 +177,12 @@ object DbOperations {
     }
 
     /**
-     * Updates all data from the supplied DataImportResult into the database.
+     * Convenience method to update all data from the supplied DataImportResult into the database.
+     * Does not retrieve auto-generated Primary Keys, since no new records are created in a SQL UPDATE statement.
      *
      * @param dataSource The DataSource where data should be inserted.
      * @param preparedStatementSQL The SQL for the prepared statement.
-     * @param updatedValues The list of objects to update.
+     * @param valueHoldersToUpdate The objects containing values to update (i.e. value holder objects).
      * @param parameterFactory a factory method which should provide an array containing the arguments
      * produced by an element to be updated within the database. The arguments should match the supplied
      * preparedStatementSQL.
@@ -189,52 +190,118 @@ object DbOperations {
     @JvmStatic
     fun <T> update(dataSource: DataSource,
                    preparedStatementSQL: String,
-                   updatedValues: List<T>,
-                   parameterFactory: (anElement: T) -> Array<Any?>): Int =
-        insert(dataSource, preparedStatementSQL, updatedValues, parameterFactory)
+                   valueHoldersToUpdate: List<T>,
+                   parameterFactory: (anElement: T) -> Array<Any?>): DbModificationMetadata =
+        insertOrUpdate(dataSource, preparedStatementSQL, valueHoldersToUpdate, null, parameterFactory)
 
     /**
-     * Inserts all data from the supplied DataImportResult into the database.
+     * Inserts or Updates database records in batched mode (i.e. using JDBC preparedStatement.executeBatch()).
      *
-     * @param dataSource The DataSource where data should be inserted.
-     * @param preparedStatementSQL The SQL for the prepared statement.
-     * @param toInsert The list of objects to persist/insert.
-     * @param parameterFactory a factory method which should provide an array containing the arguments
-     * produced by an element to be inserted into the database. The arguments should match the supplied
-     * preparedStatementSQL.
+     * @param dataSource The [DataSource] to which the statements should be fired
+     * @param preparedStatementSQL The SQL of the prepared statement.
+     * @param toInsertOrUpdate The objects containing values to insert or update (i.e. value holder objects).
+     * @param idColumnNames If supplied, contains the names of ID columns whose (generated) values
+     * are returned within the [DbModificationMetadata] response. This provides a means to retrieve
+     * generated primary key values from the database after creating new records. The order of keys
+     * is given by the `ResultSet.generatedPrimaryKeys` method.
+     * @param parameterFactory A lambda extracting parameters in the order defined within the [preparedStatementSQL])
+     * from a single object within the [toInsertOrUpdate] list.
+     *
+     * @return An [DbModificationMetadata] object wrapping the
      */
     @JvmStatic
-    fun <T> insert(dataSource: DataSource,
-                   preparedStatementSQL: String,
-                   toInsert: List<T>,
-                   parameterFactory: (anElement: T) -> Array<Any?>): Int {
-        
+    @JvmOverloads
+    internal fun <T> insertOrUpdate(dataSource: DataSource,
+                                    preparedStatementSQL: String,
+                                    toInsertOrUpdate: List<T>,
+                                    idColumnNames: Array<String>? = null,
+                                    parameterFactory: (anElement: T) -> Array<Any?>): DbModificationMetadata {
+
         return dataSource.connection.use {
 
-            val ps = it.prepareStatement(preparedStatementSQL)
-            
-            toInsert.forEachIndexed { _, anElement ->
-
-                // Be defensive; this should not really be required.
-                ps.clearParameters()
-
-                // Create and assign the parameters to the PS
-                val parameters = parameterFactory(anElement)
-                parameters.forEachIndexed { paramIndex, paramValue ->
-                    ps.setObject(paramIndex + 1, paramValue)
-                }
-
-                // Add to the batch
-                ps.addBatch()
+            val generatedIdColumnsSupplied = idColumnNames != null && idColumnNames.isNotEmpty()
+            val ps = when (generatedIdColumnsSupplied) {
+                true -> it.prepareStatement(preparedStatementSQL, idColumnNames)
+                else -> it.prepareStatement(preparedStatementSQL)
             }
 
-            // All Done.
-            val toReturn = ps.executeBatch()
-                .filter { result -> result != SUCCESS_NO_INFO }
-                .filter { result -> result != EXECUTE_FAILED }
-                .sum()
+            val toReturn = ps.use {
 
-            ps.closeOnCompletion()
+                toInsertOrUpdate.forEachIndexed { _, anElement ->
+
+                    // Be defensive; this should not really be required.
+                    ps.clearParameters()
+
+                    // Create and assign the parameters to the PS
+                    val parameters = parameterFactory(anElement)
+                    parameters.forEachIndexed { paramIndex, paramValue ->
+                        ps.setObject(paramIndex + 1, paramValue)
+                    }
+
+                    // Add to the batch
+                    ps.addBatch()
+                }
+
+                val numRowsAffected = try {
+                    ps.executeBatch()
+                        .filter { result -> result != Statement.SUCCESS_NO_INFO }
+                        .filter { result -> result != Statement.EXECUTE_FAILED }
+                        .sum()
+                } catch (e: Exception) {
+
+                    log.error("Could not execute batch [$preparedStatementSQL]", e)
+                    throw IllegalStateException("Could not execute batch [$preparedStatementSQL]", e)
+                }
+
+                // Handle returning of primary keys
+                val generatedPrimaryKeys = mutableListOf<Any>()
+
+                if (generatedIdColumnsSupplied) {
+
+                    // Attempt to fetch generated primary keys
+                    ps.generatedKeys.use { rs ->
+                        while (rs.next()) {
+
+                            val rsmd = rs.metaData
+                            val generatedPKsInThisRow = mutableListOf<Any?>()
+
+                            for (index in 1..rsmd.columnCount) {
+
+                                // Handle a null value.
+                                val readValue = rs.getObject(index)
+                                when (rs.wasNull()) {
+                                    true -> {
+
+                                        log.warn("Received a null generated PK for column [${rsmd.getColumnName(index)}" +
+                                            " :: ${rsmd.getColumnTypeName(index)}] in " +
+                                            "table [${rsmd.getTableName(index)}]")
+
+                                        generatedPKsInThisRow.add(null)
+                                    }
+                                    else -> generatedPKsInThisRow.add(readValue)
+                                }
+                            }
+
+                            when (generatedPKsInThisRow.size) {
+                                0 -> {
+                                    log.warn("Expected: at least 1 generated primary key, but got 0. [${idColumnNames?.size}]"
+                                    +
+                                    " Columns: " + idColumnNames?.reduce { acc, s -> "$acc, $s" } ?: "<nothing>")
+                                }
+                                1 -> generatedPrimaryKeys.add(generatedPKsInThisRow[0]!!)
+                                else -> generatedPrimaryKeys.add(generatedPKsInThisRow)
+                            }
+                        }
+                    }
+                }
+
+                // All Done.
+                DbModificationMetadata(numRowsAffected, generatedPrimaryKeys)
+            }
+
+            if (!ps.isClosed) {
+                ps.closeOnCompletion()
+            }
 
             toReturn
         }

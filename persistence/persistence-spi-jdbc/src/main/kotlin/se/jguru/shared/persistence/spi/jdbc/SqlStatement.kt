@@ -58,6 +58,19 @@ open class SqlStatement @JvmOverloads constructor(
         allSubstitutions[SqlTemplateSubstitution.PARAMS] =
             substitutionMap.getOrElse(SqlTemplateSubstitution.PARAMS) { params ?: "" }
 
+        allSubstitutions[SqlTemplateSubstitution.SET_PARAMS] =
+            substitutionMap.getOrElse(SqlTemplateSubstitution.SET_PARAMS) {
+                when (numParameters) {
+                    0 -> ""
+                    else -> {
+                        // Use the #SET_PARAMS# token to
+                        // generate "a = ?, b = ?" - i.e. to generate the bulky part of the statement.
+                        //
+                        split(params).map { "$it = ${getArgumentToken()}" }.reduce { acc, c -> "$acc, $c" }
+                    }
+                }
+            }
+
         allSubstitutions[SqlTemplateSubstitution.ARGUMENTS] =
             substitutionMap.getOrElse(SqlTemplateSubstitution.ARGUMENTS) {
                 when (numParameters) {
@@ -112,11 +125,40 @@ open class SqlStatement @JvmOverloads constructor(
      */
     @JsonIgnore
     fun getArgumentToken(): Char = when (argumentToken == null) {
-        true -> '?'
+        true -> DEFAULT_ARGUMENT_TOKEN
         else -> argumentToken
     }
 
     override fun toString(): String {
         return "SqlStatement [$numParameters parameters]: $template"
+    }
+
+    companion object {
+
+        /**
+         * The standard/default/fallback argument token, which is also the standard JDBC variable token.
+         */
+        const val DEFAULT_ARGUMENT_TOKEN = '?'
+
+        /**
+         * The standard split-arguments token.
+         */
+        const val DEFAULT_SPLIT_TOKEN = ','
+
+        /**
+         * Splits and trims the supplied toSplit into a List.
+         *
+         * @param toSplit The string to split into a List
+         */
+        @JvmStatic
+        @JvmOverloads
+        fun split(toSplit: String?, splitToken: Char = DEFAULT_SPLIT_TOKEN): List<String> {
+
+            if (toSplit == null) {
+                return listOf()
+            }
+
+            return toSplit.split(splitToken).map { it.trim() }
+        }
     }
 }
