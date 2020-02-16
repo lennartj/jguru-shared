@@ -16,7 +16,7 @@
     <groupId>se.jguru.shared.json.spi.jackson</groupId>
     <artifactId>jguru-shared-json-spi-jackson</artifactId>
     <packaging>jar</packaging>
-    <version>0.9.12-SNAPSHOT</version>
+    <version>0.9.12</version>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: JSON Jackson SPI (${project.packaging}, version ${project.version})</description>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>0.9.12-SNAPSHOT</version>
+                <version>0.9.12</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>se.jguru.shared.algorithms.api</groupId>
             <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>0.9.12-SNAPSHOT</version>
+            <version>0.9.12</version>
         </dependency>
         
         <!--
@@ -207,6 +207,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>HEAD</tag>
+        <tag>jguru-shared-0.9.12</tag>
     </scm>
 </project>
