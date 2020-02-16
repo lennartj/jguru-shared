@@ -16,7 +16,7 @@
     <groupId>se.jguru.shared.bom</groupId>
     <artifactId>jguru-shared-bom</artifactId>
     <packaging>pom</packaging>
-    <version>0.9.12</version>
+    <version>0.9.13-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: Bill of Materials (${project.packaging}, version ${project.version})</description>
@@ -545,6 +545,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>jguru-shared-0.9.12</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>

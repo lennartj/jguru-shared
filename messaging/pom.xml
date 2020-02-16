@@ -10,7 +10,7 @@
     <parent>
         <groupId>se.jguru.shared</groupId>
         <artifactId>jguru-shared-reactor</artifactId>
-        <version>0.9.12</version>
+        <version>0.9.13-SNAPSHOT</version>
     </parent>
 
     <groupId>se.jguru.shared.messaging</groupId>
@@ -70,6 +70,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>jguru-shared-0.9.12</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
