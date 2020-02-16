@@ -38,12 +38,19 @@ SQL tokenization must be quick, safe and non-limiting, implying that not all typ
 permitted or supported. Instead, the class `SqlTemplateSubstitution` contains a limited - but normally sufficient - 
 amount of tokens which are substituted within the SQL template when the tokenize() method is invoked.
 
-Of these tokens, the PARAMS and ARGUMENTS are normally synthetic (i.e. calculated during tokenization), whereas the 
-other as simply substituted by strings. Illustrated below, a typical CREATE statement should supply column names 
-which match the arguments for an insert statement. This is conveniently done using a template on the form
-`insert into organisations.credentials (##PARAMS##) values (##ARGUMENTS##)`, where the `##PARAMS##` token is 
-substituted for the string given within the `params` value. This - in itself - is not too productive, but the
-`##ARGUMENTS##` bit is calculated to match the number of given parameters automatically.
+Of these tokens, the PARAMS, SET_PARAMS and ARGUMENTS are normally synthetic (i.e. calculated during 
+tokenization), whereas the other as simply substituted by strings. Illustrated below, a typical CREATE 
+statement should supply column names which match the arguments for an insert statement. This is conveniently 
+done using a template on the form `insert into organisations.credentials (##PARAMS##) values (##ARGUMENTS##)`, where 
+the `##PARAMS##` token is substituted for the string given within the `params` value. 
+This - in itself - is not too productive, but the `##ARGUMENTS##` bit is calculated to match the number 
+of given parameters automatically.
+
+In the same manner, updating a large number of columns quickly gets somewhat repetitive in plan SQL.
+Hence the token SET_PARAMS can be used along with a template on the form
+`update organisations.foobar ##SET_PARAMS## where id = ?`. The value of the `SET_PARAMS` should be
+only the column names (i.e. `foo, bar, baz`) and the SqlStatement tokenization generates the required
+SQL: `update organisations.foobar foo = ?, bar = ?, baz = ? where id = ?` 
 
 ## SQL Statement Storage form
 
@@ -78,8 +85,8 @@ A sample is shown below.
                 {
                   "identifier": "updateEmailForUserJpaID",
                   "sqlType": "UPDATE",
-                  "template": "update organisations.organisationuser set email = ?, emailverifiedat = null where id = ?",
-                  "params": ""
+                  "template": "update organisations.organisationuser set #SET_PARAMS# where id = ?",
+                  "params": "email, emailverifiedat"
                 }                            
             ],
             "DELETE": [            
@@ -128,4 +135,18 @@ all converting and fetching is compressed into a single statement:
                 sqlStatements.getStatement("readUsersBySectionAndSearchCriterion", SqlStatementType.READ).tokenize(),
                 { rs, rowIndex -> getRowConverterFor(section, rs, rowIndex) },
                 mutableListOf(section.jpaId, lcAndEscape(search), lcAndEscape(search)))
- 
+                
+## Returning Generated Primary Keys
+
+Most modern databases support DB-generated primary keys. However, not all JDBC drivers support intuitively knowing
+which columns in a resultset were auto-generated. Therefore, we must supply the names of all generated primary keys
+we want to return from an insert SQL statement. This takes the form of an array:
+
+        val theInsertSQL = "insert into nickname (nick) values (?)"
+        val nicks = ...
+        
+        val insertMetadata = DbOperations.insertOrUpdate(dataSource, nickInsertSQL, nicks, arrayOf("id")) { arrayOf(it) }                 
+        val genPKs = insertNicknamesMetadata.generatedPrimaryKeys 
+        
+The List of retrieved generated keys has the signature `List<Any?>` and contains the generated primary keys
+in the order returned by the database.         
