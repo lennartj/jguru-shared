@@ -29,7 +29,7 @@
         <reactor.name>jguru-shared</reactor.name>
 
         <!-- Kotlin constants -->
-        <kotlin.version>1.3.61</kotlin.version>
+        <kotlin.version>1.3.70</kotlin.version>
         <kotlin.jvm.target>1.8</kotlin.jvm.target>
         <kotlin.compiler.languageVersion>1.3</kotlin.compiler.languageVersion>
         <kotlin.compiler.apiVersion>1.3</kotlin.compiler.apiVersion>

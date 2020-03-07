@@ -141,7 +141,8 @@ object DbOperations {
             }
 
             // Execute and extract fully
-            prep.use { ps -> ps.executeQuery().use { rs ->
+            prep.use { ps ->
+                ps.executeQuery().use { rs ->
 
                     // Get the metadata
                     val rsMetadata = rs.metaData
@@ -191,8 +192,15 @@ object DbOperations {
     fun <T> update(dataSource: DataSource,
                    preparedStatementSQL: String,
                    valueHoldersToUpdate: List<T>,
+                   closeOnCompletion : Boolean = false,
                    parameterFactory: (anElement: T) -> Array<Any?>): DbModificationMetadata =
-        insertOrUpdate(dataSource, preparedStatementSQL, valueHoldersToUpdate, null, parameterFactory)
+
+        insertOrUpdate(dataSource,
+            preparedStatementSQL,
+            valueHoldersToUpdate,
+            null,
+            closeOnCompletion,
+            parameterFactory)
 
     /**
      * Inserts or Updates database records in batched mode (i.e. using JDBC preparedStatement.executeBatch()).
@@ -204,6 +212,7 @@ object DbOperations {
      * are returned within the [DbModificationMetadata] response. This provides a means to retrieve
      * generated primary key values from the database after creating new records. The order of keys
      * is given by the `ResultSet.generatedPrimaryKeys` method.
+     * @param closeOnCompletion if `true`, attempt to close the ResultSet on completion.
      * @param parameterFactory A lambda extracting parameters in the order defined within the [preparedStatementSQL])
      * from a single object within the [toInsertOrUpdate] list.
      *
@@ -212,10 +221,11 @@ object DbOperations {
     @JvmStatic
     @JvmOverloads
     fun <T> insertOrUpdate(dataSource: DataSource,
-                                    preparedStatementSQL: String,
-                                    toInsertOrUpdate: List<T>,
-                                    idColumnNames: Array<String>? = null,
-                                    parameterFactory: (anElement: T) -> Array<Any?>): DbModificationMetadata {
+                           preparedStatementSQL: String,
+                           toInsertOrUpdate: List<T>,
+                           idColumnNames: Array<String>? = null,
+                           closeOnCompletion : Boolean = false,
+                           parameterFactory: (anElement: T) -> Array<Any?>): DbModificationMetadata {
 
         return dataSource.connection.use {
 
@@ -299,7 +309,7 @@ object DbOperations {
                 DbModificationMetadata(numRowsAffected, generatedPrimaryKeys)
             }
 
-            if (!ps.isClosed) {
+            if (closeOnCompletion && !ps.isClosed && !ps.isCloseOnCompletion) {
                 ps.closeOnCompletion()
             }
 
