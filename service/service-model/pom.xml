@@ -16,7 +16,7 @@
     <groupId>se.jguru.shared.service.model</groupId>
     <artifactId>jguru-shared-service-model</artifactId>
     <packaging>jar</packaging>
-    <version>0.10.1</version>
+    <version>0.10.2-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: Service Model (${project.packaging}, version ${project.version})</description>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>0.10.1</version>
+                <version>0.10.2-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>se.jguru.shared.algorithms.api</groupId>
             <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>0.10.1</version>
+            <version>0.10.2-SNAPSHOT</version>
         </dependency>
         <!--
             External dependencies.
@@ -193,6 +193,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>jguru-shared-0.10.1</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
