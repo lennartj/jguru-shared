@@ -24,8 +24,6 @@ package se.jguru.shared.algorithms.api.xml
 import java.util.Collections
 import java.util.SortedMap
 import java.util.TreeMap
-import javax.validation.constraints.NotNull
-import javax.validation.constraints.Size
 
 /**
  *
@@ -57,14 +55,14 @@ interface NamespacePrefixResolver {
     /**
      * Adds the provided mapping between a single xmlNamespaceUri and corresponding xmlPrefix.
      *
-     * @param xmlNamespaceUri the unique URI of an XML namespace.
-     * @param xmlPrefix       the unique prefix of the provided XML namespace.
+     * @param xmlNamespaceUri the unique URI of an XML namespace. Should not be empty.
+     * @param xmlPrefix       the unique prefix of the provided XML namespace. Should not be empty.
      * @throws NullPointerException     if any argument was `null`.
      * @throws IllegalArgumentException if the xmlNamespaceUri was already registered to another prefix, or
      * if any argument was empty.
      */
     @Throws(NullPointerException::class, IllegalArgumentException::class)
-    fun put(@Size(min = 1) xmlNamespaceUri: String, @Size(min = 1) xmlPrefix: String)
+    fun put(xmlNamespaceUri: String, xmlPrefix: String)
 
     /**
      * Convenience method, adding all provided mappings between xmlNamespaceUris and corresponding xmlPrefixes.
@@ -91,7 +89,7 @@ interface NamespacePrefixResolver {
      * @param xmlNamespaceUri The XML namespace URI for which to obtain the corresponding XML prefix.
      * @return the XML prefix for the provided xmlNamespaceUri, or `null` if none was found.
      */
-    fun getXmlPrefix(@NotNull xmlNamespaceUri: String): String?
+    fun getXmlPrefix(xmlNamespaceUri: String): String?
 
     /**
      * Retrieves a [Map] relating String NamespaceURIs (as keys) to String Prefixes (as values).

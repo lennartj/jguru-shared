@@ -30,7 +30,6 @@ import java.util.Comparator
 import java.util.SortedSet
 import java.util.function.Function
 import java.util.function.Predicate
-import javax.validation.constraints.NotNull
 
 /**
  * Collection of network-related algorithms. The address definitions are :
@@ -173,7 +172,7 @@ object NetworkAlgorithms {
      */
     @JvmStatic
     val publicIPv4Addresses: SortedSet<Inet4Address>
-        @NotNull get() {
+        get() {
 
             val toReturn = java.util.TreeSet<Inet4Address>(INETADDRESS_COMPARATOR)
 
@@ -197,7 +196,6 @@ object NetworkAlgorithms {
      */
     @JvmOverloads
     @JvmStatic
-    @NotNull
     @Throws(IllegalStateException::class)
     fun getAllNetworkInterfaces(comparator: Comparator<NetworkInterface> = NETWORK_INTERFACE_COMPARATOR)
         : SortedSet<NetworkInterface> {
@@ -224,7 +222,6 @@ object NetworkAlgorithms {
      */
     @JvmOverloads
     @JvmStatic
-    @NotNull
     fun getAddressesFromAllNetworkInterfaces(
         addressFilter: Predicate<InetAddress> = IPV4_FILTER,
         addressMapper: Function<InetAddress, Set<String>> = GET_ALL_ADRESSES): SortedSet<String> {
