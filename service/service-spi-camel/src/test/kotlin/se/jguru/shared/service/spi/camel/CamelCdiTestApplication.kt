@@ -15,7 +15,7 @@ import javax.inject.Named
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
-class CamelCdiTestApplication {
+open class CamelCdiTestApplication {
 
     internal class Hello : RouteBuilder() {
 

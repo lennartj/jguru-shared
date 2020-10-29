@@ -31,8 +31,6 @@ class JacksonAlgorithmsTest {
     lateinit var lennart: Person
     lateinit var timeFormats: TimeFormats
 
-    private fun normalizeSpace(s: String) = s.replace("\\s+".toRegex(), " ")
-
     @Before
     fun setupSharedState() {
 

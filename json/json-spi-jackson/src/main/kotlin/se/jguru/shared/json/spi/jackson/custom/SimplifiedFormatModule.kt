@@ -33,6 +33,7 @@ import java.time.LocalTime
 import java.time.MonthDay
 import java.time.Period
 import java.util.TreeMap
+import java.util.jar.Manifest
 
 /**
  * Module containing Jackson serializers and deserializers, intended to simplify
@@ -68,28 +69,25 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
 
         /**
          * Finds the [Version] by reading the `Bundle-Version` property from the Manifest file.
-         * Typically, this has the format `Bundle-Version: 0.9.6.SNAPSHOT`
+         * Typically, this has the format `Bundle-Version: 0.10.1.SNAPSHOT`
          */
         @JvmStatic
         fun findLocalJarVersion(): Version {
 
             // Extract the Map from the Manifest, or a fallback
-            val manifestMap = try {
-                Introspection.extractMapOf(Introspection.getManifestFrom(SimplifiedFormatModule::class.java))
-            } catch (e: Exception) {
-
-                log.error("Could not find manifest from [${SimplifiedFormatModule::class.java.name}]")
-
-                // Create a fallback ManifestMap
-                val fallbackMap = TreeMap<String, String>()
-                fallbackMap[Introspection.SPECIFICATION_VERSION] = "0.9.9"
-                fallbackMap
+            val mapFromManifest = when (val mf = findManifest()) {
+                null -> {
+                    val fallbackMap = TreeMap<String, String>()
+                    fallbackMap[Introspection.SPECIFICATION_VERSION] = "0.10.1"
+                    fallbackMap
+                }
+                else -> Introspection.extractMapOf(mf)
             }
 
             // Extract relevant data
-            val runtimeVersion = Introspection.findVersionFromMap(manifestMap)
-            val groupID = manifestMap["groupId"] ?: "se.jguru.shared.json.spi.jackson"
-            val artifactID = manifestMap["artifactId"] ?: "jguru-shared-json-spi-jackson"
+            val runtimeVersion = Introspection.findVersionFromMap(mapFromManifest)
+            val groupID = mapFromManifest["groupId"] ?: "se.jguru.shared.json.spi.jackson"
+            val artifactID = mapFromManifest["artifactId"] ?: "jguru-shared-json-spi-jackson"
 
             // All Done.
             return Version(runtimeVersion.major,
@@ -98,6 +96,61 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
                 runtimeVersion.qualifier ?: "",
                 groupID,
                 artifactID)
+        }
+
+        @JvmStatic
+        internal fun findManifest(): Manifest? {
+
+            val classLoaders = listOf<ClassLoader>(
+                Thread.currentThread().contextClassLoader,
+                SimplifiedFormatModule::class.java.classLoader)
+
+            // #1) Start with the ThreadContext ClassLoader
+            //
+            val currentThread = Thread.currentThread()
+            val threadContextClassLoader = currentThread.contextClassLoader
+            val manifestFromThreadContextClassloader = try {
+
+                Introspection.getManifestFrom(SimplifiedFormatModule::class.java, threadContextClassLoader)
+
+            } catch (e: Exception) {
+
+                if (log.isDebugEnabled) {
+                    log.debug("Could not find SimplifiedFormatModule Manifest using thread " +
+                        "context ClassLoader of type [${threadContextClassLoader::class.java.simpleName}] in " +
+                        "thread [${currentThread.name}]", e)
+                }
+
+                // Ignore this
+                null
+            }
+
+            if (manifestFromThreadContextClassloader != null) {
+                return manifestFromThreadContextClassloader
+            }
+
+            // #2) Attempt the local ClassLoader
+            //
+            val localClassLoader = SimplifiedFormatModule::class.java.classLoader
+            return try {
+
+                Introspection.getManifestFrom(SimplifiedFormatModule::class.java, localClassLoader)
+
+            } catch (e: Exception) {
+
+                val msg = "Could not find SimplifiedFormatModule Manifest using ClassLoader of type " +
+                    "[${localClassLoader::class.java.simpleName}] of class " +
+                    "[${SimplifiedFormatModule::class.java.name}]"
+
+                if (log.isDebugEnabled) {
+                    log.debug(msg, e)
+                } else if (log.isWarnEnabled) {
+                    log.warn(msg)
+                }
+
+                // Ignore this
+                null
+            }
         }
     }
 }

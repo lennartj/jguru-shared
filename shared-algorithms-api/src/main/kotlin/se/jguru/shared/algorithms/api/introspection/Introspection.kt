@@ -400,9 +400,8 @@ object Introspection {
                   locale: Locale = Locale.getDefault()): Boolean {
 
         val lcPath = aURL.path.toLowerCase(locale)
-        val lcProtocol = aURL.protocol.toLowerCase(locale)
 
-        return when (lcProtocol) {
+        return when (val lcProtocol = aURL.protocol.toLowerCase(locale)) {
             "jar" -> true
             else -> {
 

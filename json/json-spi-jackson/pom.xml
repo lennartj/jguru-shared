@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
-        <version>0.10.0</version>
+        <version>0.10.1-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -108,6 +108,10 @@
         <dependency>
             <groupId>com.dr</groupId>
             <artifactId>ktjsonschema</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.victools</groupId>
+            <artifactId>jsonschema-generator</artifactId>
         </dependency>
 
         <!--
