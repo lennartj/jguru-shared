@@ -15,7 +15,7 @@
 
     <groupId>se.jguru.shared.service.spi.camel</groupId>
     <artifactId>jguru-shared-service-spi-camel</artifactId>
-    <version>0.10.3-SNAPSHOT</version>
+    <version>0.10.3</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>0.10.3-SNAPSHOT</version>
+                <version>0.10.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>se.jguru.shared.json.spi.jackson</groupId>
             <artifactId>jguru-shared-json-spi-jackson</artifactId>
-            <version>0.10.3-SNAPSHOT</version>
+            <version>0.10.3</version>
         </dependency>
 
         <!--
@@ -165,6 +165,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>HEAD</tag>
+        <tag>jguru-shared-0.10.3</tag>
     </scm>
 </project>
