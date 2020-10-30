@@ -16,7 +16,7 @@
     <groupId>se.jguru.shared.jaxb.eclipselink.example</groupId>
     <artifactId>jguru-shared-jaxb-eclipselink-example</artifactId>
     <packaging>jar</packaging>
-    <version>0.10.3</version>
+    <version>0.10.4-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: JAXB Eclipselink SPI Example (${project.packaging}, version ${project.version})</description>
@@ -37,7 +37,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>0.10.3</version>
+                <version>0.10.4-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -51,12 +51,12 @@
         <dependency>
             <groupId>se.jguru.shared.algorithms.api</groupId>
             <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>0.10.3</version>
+            <version>0.10.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>se.jguru.shared.jaxb.spi.eclipselink</groupId>
             <artifactId>jguru-shared-jaxb-spi-eclipselink</artifactId>
-            <version>0.10.3</version>
+            <version>0.10.4-SNAPSHOT</version>
         </dependency>
 
         <!--
@@ -198,6 +198,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>jguru-shared-0.10.3</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
