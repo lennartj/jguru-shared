@@ -32,6 +32,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.MonthDay
 import java.time.Period
+import java.util.Locale
 import java.util.TreeMap
 import java.util.jar.Manifest
 
@@ -101,40 +102,18 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
         @JvmStatic
         internal fun findManifest(): Manifest? {
 
-            val classLoaders = listOf<ClassLoader>(
-                Thread.currentThread().contextClassLoader,
-                SimplifiedFormatModule::class.java.classLoader)
-
-            // #1) Start with the ThreadContext ClassLoader
-            //
-            val currentThread = Thread.currentThread()
-            val threadContextClassLoader = currentThread.contextClassLoader
-            val manifestFromThreadContextClassloader = try {
-
-                Introspection.getManifestFrom(SimplifiedFormatModule::class.java, threadContextClassLoader)
-
-            } catch (e: Exception) {
-
-                if (log.isDebugEnabled) {
-                    log.debug("Could not find SimplifiedFormatModule Manifest using thread " +
-                        "context ClassLoader of type [${threadContextClassLoader::class.java.simpleName}] in " +
-                        "thread [${currentThread.name}]", e)
-                }
-
-                // Ignore this
-                null
-            }
-
-            if (manifestFromThreadContextClassloader != null) {
-                return manifestFromThreadContextClassloader
-            }
-
-            // #2) Attempt the local ClassLoader
-            //
             val localClassLoader = SimplifiedFormatModule::class.java.classLoader
+
             return try {
 
-                Introspection.getManifestFrom(SimplifiedFormatModule::class.java, localClassLoader)
+                // This is quite a hardcoded approach, but it works as
+                // long as the artifactID of this JAR is stable.
+                val mfResource = localClassLoader.getResources(Introspection.MANIFEST_RESOURCE)
+                    .toList()
+                    .first { it.file.toLowerCase(Locale.ENGLISH).contains("jguru-shared-json-spi-jackson") }
+
+                // All Done.
+                Manifest(mfResource.openStream())
 
             } catch (e: Exception) {
 

@@ -95,7 +95,7 @@ object PropertyResources {
                   classLoader: ClassLoader = Thread.currentThread().contextClassLoader,
                   charset: Charset = StandardCharsets.UTF_8,
                   useFunction: (_: InputStream) -> String =
-                  { it.bufferedReader(charset).use { it.readText() } }): String {
+                  { it.bufferedReader(charset).use { reader -> reader.readText() } }): String {
 
         // Open an InputStream to the URL at the given resourcePath.
         val resourceURL = classLoader.getResource(resourcePath)
