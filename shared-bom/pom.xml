@@ -37,7 +37,7 @@
         <!--
             Build-controlled dependencies.
         -->
-        <jackson.version>2.11.3</jackson.version>
+        <jackson.version>2.12.0</jackson.version>
         <jsonSchema.version>1.0.29</jsonSchema.version>
         <javaee.version>8.0.1</javaee.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
