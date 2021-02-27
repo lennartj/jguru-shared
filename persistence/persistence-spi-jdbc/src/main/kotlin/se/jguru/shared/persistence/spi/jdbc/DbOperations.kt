@@ -179,7 +179,8 @@ object DbOperations {
 
     /**
      * Convenience method to update all data from the supplied DataImportResult into the database.
-     * Does not retrieve auto-generated Primary Keys, since no new records are created in a SQL UPDATE statement.
+     * Does not retrieve auto-generated Primary Keys, since no new records are created in
+     * a SQL UPDATE or SQL DELETE statement.
      *
      * @param dataSource The DataSource where data should be inserted.
      * @param preparedStatementSQL The SQL for the prepared statement.

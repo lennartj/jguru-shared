@@ -36,7 +36,6 @@
     -->
     <modules>
         <module>service-model</module>
-        <module>service-spi-camel</module>
     </modules>
 
     <!--

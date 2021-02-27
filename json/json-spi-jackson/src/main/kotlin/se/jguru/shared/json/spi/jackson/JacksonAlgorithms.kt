@@ -24,6 +24,7 @@ package se.jguru.shared.json.spi.jackson
 import com.dr.ktjsonschema.JsonSchemaGenerator
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.type.TypeFactory
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -49,6 +50,34 @@ object JacksonAlgorithms {
 
         // All Done.
         return objectReader.readValue(json)
+    }
+
+    /**
+     * Converts the JSON-formatted String into a java Map of the types given.
+     * In Jackson terminology, this process is called "Deserialization".
+     *
+     * @param json The JSON-formatted String to convert/resurrect back into a Map.
+     * @param mapType The type of Map retrieved by deserialization.
+     * @param keyType The type of Key held within the Map.
+     * @param valueType The type of Value held within the Map.
+     * @param objectMapper The ObjectMapper used to de-serialize the JSON string.
+     * @return The deserialized/resurrected object.
+     */
+    @JvmStatic
+    @JvmOverloads
+    @Suppress("UNCHECKED_CAST")
+    fun <K, V> deserializeMap(
+        json: String,
+        keyType: Class<K>,
+        valueType: Class<V>,
+        mapType: Class<MutableMap<K,V>> = HashMap::class.java as Class<MutableMap<K,V>>,
+        objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault()): MutableMap<K, V> {
+
+        // Construct the MapType
+        val jsonMapType = TypeFactory.defaultInstance().constructMapType(mapType, keyType, valueType)
+
+        // All Done.
+        return objectMapper.readValue(json, jsonMapType) as MutableMap<K, V>
     }
 
     /**

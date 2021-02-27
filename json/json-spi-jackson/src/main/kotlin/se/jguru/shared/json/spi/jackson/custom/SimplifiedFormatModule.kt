@@ -108,12 +108,13 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
 
                 // This is quite a hardcoded approach, but it works as
                 // long as the artifactID of this JAR is stable.
-                val mfResource = localClassLoader.getResources(Introspection.MANIFEST_RESOURCE)
-                    .toList()
-                    .first { it.file.toLowerCase(Locale.ENGLISH).contains("jguru-shared-json-spi-jackson") }
+                val mfResource = localClassLoader.getResources(Introspection.MANIFEST_RESOURCE).toList()
+                    .firstOrNull { it.file.toLowerCase(Locale.ENGLISH).contains("jguru-shared-json-spi-jackson") }
 
-                // All Done.
-                Manifest(mfResource.openStream())
+                when(mfResource) {
+                    null -> null
+                    else -> Manifest(mfResource.openStream())
+                }
 
             } catch (e: Exception) {
 

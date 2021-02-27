@@ -1,6 +1,7 @@
 package se.jguru.shared.json.spi.jackson
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
+import com.fasterxml.jackson.databind.type.TypeFactory
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -10,15 +11,19 @@ import se.jguru.shared.json.spi.jackson.people.DrinkingPreferences
 import se.jguru.shared.json.spi.jackson.people.Person
 import se.jguru.shared.json.spi.jackson.simplified.TimeFormats
 import se.jguru.shared.json.spi.jackson.validation.Animal
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.Month
-import java.time.MonthDay
-import java.time.Period
+import java.time.*
 import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.find
+import kotlin.collections.first
+import kotlin.collections.forEach
+import kotlin.collections.listOf
+import kotlin.collections.set
 
 /**
  *
@@ -30,6 +35,7 @@ class JacksonAlgorithmsTest {
     lateinit var prefs: DrinkingPreferences
     lateinit var lennart: Person
     lateinit var timeFormats: TimeFormats
+    lateinit var collectionMap : SortedMap<Long, List<String>>
 
     @Before
     fun setupSharedState() {
@@ -44,6 +50,10 @@ class JacksonAlgorithmsTest {
             Duration.of(3L, ChronoUnit.DAYS).plusHours(2).plusMinutes(5),
             MonthDay.of(Month.MARCH, 21),
             Period.ofYears(2).plusMonths(1).plusDays(6))
+
+        collectionMap = TreeMap<Long, List<String>>()
+        collectionMap[1L] = listOf("a", "b", "c")
+        collectionMap[2L] = listOf("d", "e", "f")
     }
 
     @Test
@@ -194,5 +204,47 @@ class JacksonAlgorithmsTest {
         // Assert
         Assert.assertNotNull(resurrected)
         Assert.assertEquals(timeFormats, resurrected)
+    }
+
+    @Test
+    fun validateMapSerialization() {
+
+        // Assemble
+        val expected = PropertyResources.readFully("testdata/simplified/sortedMap.json")
+
+        // Act
+        val result = JacksonAlgorithms.serialize(collectionMap)
+        // println("Got: $result")
+
+        // Assert
+        JSONAssert.assertEquals(expected, result, true)
+    }
+
+    @Test
+    fun validateMapDeserialization() {
+
+        // Assemble
+        val data = PropertyResources.readFully("testdata/simplified/sortedMap.json")
+        val mapper = ObjectMapperBuilder.getDefault()
+
+        // Act
+        val resurrected = JacksonAlgorithms.deserializeMap(data, Long::class.java, ArrayList::class.java)
+        // println("Got: $resurrected, of type ${resurrected::class.java.simpleName}")
+
+        // Assert
+        Assert.assertNotNull(resurrected)
+        Assert.assertTrue(resurrected is HashMap)
+        Assert.assertEquals(collectionMap.size, resurrected.size)
+
+        collectionMap.forEach { (key, value) ->
+            val actual = resurrected[key]
+
+            Assert.assertNotNull(actual)
+            Assert.assertEquals(value.size, actual!!.size)
+
+            for(i in value.indices) {
+                Assert.assertEquals(value[i], actual[i])
+            }
+        }
     }
 }
