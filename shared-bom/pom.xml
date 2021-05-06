@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-parent</artifactId>
-        <version>0.11.3</version>
+        <version>1.0.0</version>
         <relativePath />
     </parent>
 
@@ -29,7 +29,7 @@
         <reactor.name>jguru-shared</reactor.name>
 
         <!-- Kotlin constants -->
-        <kotlin.version>1.4.31</kotlin.version>
+        <kotlin.version>1.4.32</kotlin.version>
         <kotlin.jvm.target>11</kotlin.jvm.target>
         <kotlin.compiler.languageVersion>1.4</kotlin.compiler.languageVersion>
         <kotlin.compiler.apiVersion>1.4</kotlin.compiler.apiVersion>
@@ -37,7 +37,7 @@
         <!--
             Build-controlled dependencies.
         -->
-        <jackson.version>2.12.1</jackson.version>
+        <jackson.version>2.12.3</jackson.version>
         <jsonSchema.version>1.0.29</jsonSchema.version>
         <javaee.version>8.0.1</javaee.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
