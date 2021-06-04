@@ -34,7 +34,9 @@ import javax.jms.Session
 import javax.jms.Topic
 
 /**
- * Simplified specification for how to create destinations and
+ * Simplified helper assisting in creating destinations and sending messages.
+ *
+ * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 abstract class MessagingHelper {
 
@@ -79,7 +81,9 @@ abstract class MessagingHelper {
         destination: Destination,
         mode: JmsDeliveryMode = JmsDeliveryMode.NON_PERSISTENT,
         priority: JmsMessagePriority = JmsMessagePriority.DEFAULT,
-        commitSession: Boolean = true): String
+        commitSession: Boolean = true,
+        completionListener: DurationAwareCompletionListener = SimpleDurationMeasuringCompletionListener()
+    ): String
 }
 
 /**
@@ -138,8 +142,10 @@ class JmsSessionMessagingHelper(val jmsSession: Session) : MessagingHelper() {
                 toReturn
             }
 
-            else -> throw IllegalArgumentException("Cannot create a JMS-compliant message or " +
-                "body of type [${body::class.java.name}]")
+            else -> throw IllegalArgumentException(
+                "Cannot create a JMS-compliant message or " +
+                    "body of type [${body::class.java.name}]"
+            )
         }
     }
 
@@ -149,7 +155,9 @@ class JmsSessionMessagingHelper(val jmsSession: Session) : MessagingHelper() {
         destination: Destination,
         mode: JmsDeliveryMode,
         priority: JmsMessagePriority,
-        commitSession: Boolean): String {
+        commitSession: Boolean,
+        completionListener: DurationAwareCompletionListener
+    ): String {
 
         val toSend = createMessage(body)
 
@@ -162,7 +170,8 @@ class JmsSessionMessagingHelper(val jmsSession: Session) : MessagingHelper() {
         producer.priority = priority.jmsStandardValue
 
         // Send the message
-        producer.send(toSend)
+        completionListener.noteStart()
+        producer.send(toSend, completionListener)
 
         // Commit the JMS Session if asked to.
         if (jmsSession.transacted && commitSession) {
@@ -230,8 +239,10 @@ class JmsContextMessagingHelper(val jmsContext: JMSContext) : MessagingHelper() 
                 toReturn
             }
 
-            else -> throw IllegalArgumentException("Cannot create a JMS-compliant message or " +
-                "body of type [${body::class.java.name}]")
+            else -> throw IllegalArgumentException(
+                "Cannot create a JMS-compliant message or " +
+                    "body of type [${body::class.java.name}]"
+            )
         }
     }
 
@@ -241,7 +252,9 @@ class JmsContextMessagingHelper(val jmsContext: JMSContext) : MessagingHelper() 
         destination: Destination,
         mode: JmsDeliveryMode,
         priority: JmsMessagePriority,
-        commitSession: Boolean): String {
+        commitSession: Boolean,
+        completionListener: DurationAwareCompletionListener
+    ): String {
 
         val toSend = createMessage(body)
 
@@ -252,8 +265,10 @@ class JmsContextMessagingHelper(val jmsContext: JMSContext) : MessagingHelper() 
         val producer = jmsContext.createProducer()
         producer.deliveryMode = mode.jmsStandardValue
         producer.priority = priority.jmsStandardValue
+        producer.async = completionListener
 
         // Send the message
+        completionListener.noteStart()
         producer.send(destination, toSend)
 
         // Commit the JMS Session if asked to.

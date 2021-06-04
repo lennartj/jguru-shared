@@ -102,7 +102,7 @@ object Messages {
     fun copyProperties(target: Message, properties: JmsCompliantMap) {
 
         // Set all available properties as JMS Object Properties.
-        properties.forEach { key, value ->
+        properties.forEach { (key, value) ->
 
             try {
                 target.setObjectProperty(key, value)

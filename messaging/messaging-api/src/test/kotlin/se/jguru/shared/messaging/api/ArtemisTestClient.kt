@@ -1,12 +1,13 @@
 package se.jguru.shared.messaging.api
 
-import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory
 import org.apache.activemq.artemis.jms.client.ActiveMQDestination
+import org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import javax.jms.BytesMessage
 import javax.jms.Connection
 import javax.jms.ConnectionFactory
+import javax.jms.DeliveryMode
 import javax.jms.JMSException
 import javax.jms.MapMessage
 import javax.jms.Message
@@ -24,7 +25,7 @@ private val log : Logger = LoggerFactory.getLogger(ArtemisTestClient::class.java
  */
 open class ArtemisTestClient(vmURL : String) {
 
-    var connectionFactory: ConnectionFactory = ActiveMQConnectionFactory(vmURL)
+    var connectionFactory: ConnectionFactory = ActiveMQJMSConnectionFactory(vmURL)
     var connection: Connection?
     var session: Session?
     var producer: MessageProducer?
@@ -33,8 +34,11 @@ open class ArtemisTestClient(vmURL : String) {
         try {
 
             connection = connectionFactory.createConnection()
-            session = connection!!.createSession()
+            session = connection!!.createSession(Session.AUTO_ACKNOWLEDGE)
+
             producer = session!!.createProducer(null)
+            producer!!.deliveryMode = DeliveryMode.NON_PERSISTENT
+
             connection!!.start()
 
         } catch (jmsEx: JMSException) {
