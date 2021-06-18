@@ -24,12 +24,7 @@ package se.jguru.shared.json.spi.jackson.custom
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.MonthDay
-import java.time.Period
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
 
@@ -89,6 +84,25 @@ open class LocalTimeSerializer(
          */
         @JvmStatic
         val ISO_WITHOUT_SECONDS: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    }
+}
+
+/**
+ * A Serializer for [ZonedDateTime] objects.
+ *
+ * @param formatter The DateTimeFormatter used to format the ZonedDateTime as a String.
+ */
+open class ZonedDateTimeSerializer(
+    override val formatter: DateTimeFormatter = ZONED_HUMAN_READABLE_FORM
+) : AbstractDateTimeFormatterSerializer<ZonedDateTime>(formatter, ZonedDateTime::class.java) {
+
+    companion object {
+
+        /**
+         * Default [DateTimeFormatter] for ZonedDateTime objects.
+         */
+        @JvmStatic
+        val ZONED_HUMAN_READABLE_FORM : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss v")
     }
 }
 

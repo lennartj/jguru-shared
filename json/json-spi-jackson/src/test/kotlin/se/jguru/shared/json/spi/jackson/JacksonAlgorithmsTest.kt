@@ -1,7 +1,6 @@
 package se.jguru.shared.json.spi.jackson
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
-import com.fasterxml.jackson.databind.type.TypeFactory
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -11,18 +10,20 @@ import se.jguru.shared.json.spi.jackson.people.DrinkingPreferences
 import se.jguru.shared.json.spi.jackson.people.Person
 import se.jguru.shared.json.spi.jackson.simplified.TimeFormats
 import se.jguru.shared.json.spi.jackson.validation.Animal
-import java.time.*
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.Month
+import java.time.MonthDay
+import java.time.Period
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.List
+import java.util.SortedMap
+import java.util.TreeMap
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.find
-import kotlin.collections.first
-import kotlin.collections.forEach
-import kotlin.collections.listOf
 import kotlin.collections.set
 
 /**
@@ -35,7 +36,7 @@ class JacksonAlgorithmsTest {
     lateinit var prefs: DrinkingPreferences
     lateinit var lennart: Person
     lateinit var timeFormats: TimeFormats
-    lateinit var collectionMap : SortedMap<Long, List<String>>
+    lateinit var collectionMap: SortedMap<Long, List<String>>
 
     @Before
     fun setupSharedState() {
@@ -43,13 +44,18 @@ class JacksonAlgorithmsTest {
         prefs = DrinkingPreferences.createPrefs()
         lennart = prefs.people.first()
 
+        val localDate = LocalDate.of(2019, Month.FEBRUARY, 1)
+        val localTime = LocalTime.of(16, 45)
+
         timeFormats = TimeFormats(
-            LocalDateTime.of(2019, Month.FEBRUARY, 1, 16, 45),
-            LocalDate.of(2019, Month.FEBRUARY, 1),
-            LocalTime.of(16, 45),
+            ZonedDateTime.of(localDate, localTime, ZoneId.of("Europe/Stockholm")),
+            LocalDateTime.of(localDate, localTime),
+            localDate,
+            localTime,
             Duration.of(3L, ChronoUnit.DAYS).plusHours(2).plusMinutes(5),
             MonthDay.of(Month.MARCH, 21),
-            Period.ofYears(2).plusMonths(1).plusDays(6))
+            Period.ofYears(2).plusMonths(1).plusDays(6)
+        )
 
         collectionMap = TreeMap<Long, List<String>>()
         collectionMap[1L] = listOf("a", "b", "c")
@@ -99,7 +105,7 @@ class JacksonAlgorithmsTest {
 
         // Act
         val result = JacksonAlgorithms.serialize(prefs)
-        println("Got: $result")
+        // println("Got: $result")
 
         // Assert
         JSONAssert.assertEquals(expected, result, true)
@@ -172,7 +178,8 @@ class JacksonAlgorithmsTest {
         val result = JacksonAlgorithms.getSchemaAsString(
             Animal::class.java,
             title = "The schema Title",
-            description = "Some longwinded description")
+            description = "Some longwinded description"
+        )
 
         // Assert
         JSONAssert.assertEquals(expected, result, true)
@@ -242,7 +249,7 @@ class JacksonAlgorithmsTest {
             Assert.assertNotNull(actual)
             Assert.assertEquals(value.size, actual!!.size)
 
-            for(i in value.indices) {
+            for (i in value.indices) {
                 Assert.assertEquals(value[i], actual[i])
             }
         }

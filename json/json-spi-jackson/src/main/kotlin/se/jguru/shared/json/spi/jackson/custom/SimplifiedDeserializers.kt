@@ -26,13 +26,7 @@ import com.fasterxml.jackson.core.JsonToken
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import java.time.DateTimeException
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.MonthDay
-import java.time.Period
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.TemporalAccessor
@@ -144,6 +138,18 @@ open class LocalTimeDeserializer(
     LocalTime::class.java,
     { toParse, ldFormatter -> LocalTime.parse(toParse, ldFormatter)})
 
+/**
+ * A Deserializer for [ZonedDateTime] objects.
+ *
+ * @param formatter The DateTimeFormatter used to format the ZonedDateTime as a String.
+ */
+open class ZonedDateTimeDeserializer(
+    override val formatter: DateTimeFormatter = ZonedDateTimeSerializer.ZONED_HUMAN_READABLE_FORM
+) : AbstractDateTimeFormatterDeserializer<ZonedDateTime>(
+    formatter,
+    ZonedDateTime::class.java,
+    { toParse, ldFormatter -> ZonedDateTime.parse(toParse, ldFormatter)})
+
 
 /**
  * Deserializes a Duration from an ISO-8601-compliant string.
@@ -163,7 +169,7 @@ open class LocalTimeDeserializer(
  *
  * @see Duration.parse
  */
-open class DurationDeserializer() : StdDeserializer<Duration>(Duration::class.java) {
+open class DurationDeserializer : StdDeserializer<Duration>(Duration::class.java) {
 
     override fun deserialize(parser: JsonParser, context: DeserializationContext): Duration? {
 
@@ -198,7 +204,7 @@ open class DurationDeserializer() : StdDeserializer<Duration>(Duration::class.ja
  *
  * @see MonthDay.parse
  */
-open class MonthDayDeserializer() : StdDeserializer<MonthDay>(MonthDay::class.java) {
+open class MonthDayDeserializer : StdDeserializer<MonthDay>(MonthDay::class.java) {
 
     override fun deserialize(parser: JsonParser, context: DeserializationContext): MonthDay? {
 
@@ -235,7 +241,7 @@ open class MonthDayDeserializer() : StdDeserializer<MonthDay>(MonthDay::class.ja
  *
  * @see Period.parse
  */
-open class PeriodDeserializer() : StdDeserializer<Period>(Period::class.java) {
+open class PeriodDeserializer : StdDeserializer<Period>(Period::class.java) {
 
     override fun deserialize(parser: JsonParser, context: DeserializationContext): Period? {
 

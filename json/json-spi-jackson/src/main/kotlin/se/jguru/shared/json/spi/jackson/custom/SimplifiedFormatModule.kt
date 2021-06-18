@@ -26,12 +26,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import se.jguru.shared.algorithms.api.introspection.Introspection
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.MonthDay
-import java.time.Period
+import java.time.*
 import java.util.Locale
 import java.util.TreeMap
 import java.util.jar.Manifest
@@ -47,6 +42,7 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
     init {
 
         // Add Serializers
+        addSerializer(ZonedDateTime::class.java, ZonedDateTimeSerializer())
         addSerializer(LocalDateTime::class.java, LocalDateTimeSerializer())
         addSerializer(LocalDate::class.java, LocalDateSerializer())
         addSerializer(LocalTime::class.java, LocalTimeSerializer())
@@ -55,6 +51,7 @@ class SimplifiedFormatModule : SimpleModule(SimplifiedFormatModule::class.java.s
         addSerializer(MonthDay::class.java, MonthDaySerializer())
 
         // Add Deserializers
+        addDeserializer(ZonedDateTime::class.java, ZonedDateTimeDeserializer())
         addDeserializer(LocalDateTime::class.java, LocalDateTimeDeserializer())
         addDeserializer(LocalDate::class.java, LocalDateDeserializer())
         addDeserializer(LocalTime::class.java, LocalTimeDeserializer())
