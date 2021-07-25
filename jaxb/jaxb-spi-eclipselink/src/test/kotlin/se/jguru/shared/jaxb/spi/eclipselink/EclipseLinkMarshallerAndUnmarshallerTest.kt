@@ -3,7 +3,7 @@ package se.jguru.shared.jaxb.spi.eclipselink
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.diff.DefaultNodeMatcher

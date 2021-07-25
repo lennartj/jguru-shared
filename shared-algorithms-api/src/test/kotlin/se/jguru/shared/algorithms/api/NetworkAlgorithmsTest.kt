@@ -1,9 +1,9 @@
 package se.jguru.shared.algorithms.api
 
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
 import java.net.Inet4Address
 import java.net.Inet6Address
 import java.net.InetAddress
@@ -15,7 +15,7 @@ import java.util.function.Consumer
  *
  * @author [Lennart Jörelid](mailto:lj@jguru.se), jGuru Europe AB
  */
-@Ignore("The network tests are really slow on Mac OS X")
+@Disabled("The network tests are really slow on Mac OS X")
 class NetworkAlgorithmsTest {
 
     // Shared state
@@ -27,7 +27,7 @@ class NetworkAlgorithmsTest {
     private var foundPublicIPv4Addresses: Boolean = false
     private var foundLocalIPv6Addresses: Boolean = false
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         allLocalInterfaces = NetworkAlgorithms.getAllNetworkInterfaces()
@@ -87,7 +87,7 @@ class NetworkAlgorithmsTest {
                 .forEach { sortedIFs.addAll(it) }
 
             // Assert
-            Assert.assertFalse(sortedIFs.isEmpty())
+            assertThat(sortedIFs).isNotEmpty
             validateAdresses(publicIpV4Addresses, false, false)
         }
     }
@@ -120,7 +120,7 @@ class NetworkAlgorithmsTest {
                 .forEach { sortedIFs.addAll(it) }
 
             // Assert
-            Assert.assertFalse(sortedIFs.isEmpty())
+            assertThat(sortedIFs).isNotEmpty
             validateAdresses(ipV4Addresses, true, false)
         }
     }
@@ -152,7 +152,7 @@ class NetworkAlgorithmsTest {
                 .forEach(Consumer<Set<String>> { sortedIFs.addAll(it) })
 
             // Assert
-            Assert.assertFalse(sortedIFs.isEmpty())
+            assertThat(sortedIFs).isNotEmpty
             validateAdresses(ipV6Addresses, false, true)
 
             // System.out.println("Got sorted IPv6 addresses: " + ipV6Addresses);
@@ -167,28 +167,31 @@ class NetworkAlgorithmsTest {
                                  shouldBeLoopback: Boolean,
                                  shouldContainLinkLocalAddress: Boolean) {
 
-        Assert.assertFalse(inetAddresses.isEmpty())
-        Assert.assertTrue(inetAddresses.size <= allLocalInterfaces!!.size)
+        assertThat(inetAddresses).isNotEmpty
+        assertThat(inetAddresses.size).isLessThanOrEqualTo(allLocalInterfaces!!.size)
 
         inetAddresses.forEach { inetAddress ->
 
             if (shouldBeLoopback) {
-                Assert.assertTrue(inetAddress.isLoopbackAddress)
+                assertThat(inetAddress.isLoopbackAddress).isTrue
             } else {
-                Assert.assertFalse(inetAddress.isLoopbackAddress)
+                assertThat(inetAddress.isLoopbackAddress).isFalse
             }
         }
-        inetAddresses.forEach { inetAddress -> Assert.assertFalse(inetAddress.isAnyLocalAddress) }
-        inetAddresses.forEach { inetAddress -> Assert.assertFalse(inetAddress.isMulticastAddress) }
+
+        inetAddresses.forEach { inetAddress -> assertThat(inetAddress.isAnyLocalAddress).isFalse }
+        inetAddresses.forEach { inetAddress -> assertThat(inetAddress.isMulticastAddress).isFalse }
 
         // Link-local unicast in IPv4 (169.254.0.0/16)
         if (!shouldContainLinkLocalAddress) {
             inetAddresses.forEach { inetAddress ->
-                Assert.assertFalse("Address [$inetAddress] is LinkLocal",
-                    inetAddress.isLinkLocalAddress)
+
+                assertThat(inetAddress.isLinkLocalAddress)
+                    .isFalse
+                    .withFailMessage("Address [$inetAddress] is LinkLocal")
             }
         } else {
-            Assert.assertTrue(inetAddresses.stream().anyMatch { it.isLinkLocalAddress })
+            assertThat(inetAddresses.stream().anyMatch { it.isLinkLocalAddress }).isTrue
         }
 
         // System.out.println("Got: " + sortedIFs);

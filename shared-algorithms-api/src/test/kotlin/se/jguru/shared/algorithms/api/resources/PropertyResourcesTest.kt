@@ -1,7 +1,7 @@
 package se.jguru.shared.algorithms.api.resources
 
-import org.junit.Assert
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import java.net.URL
 
 /**
@@ -24,11 +24,11 @@ class PropertyResourcesTest {
         val pair2 = PropertyResources.splitPropertyLine(line2) as Pair
 
         // Assert
-        Assert.assertEquals(theKey, pair1.first)
-        Assert.assertEquals(theKey, pair2.first)
+        assertThat(pair1.first).isEqualTo(theKey)
+        assertThat(pair2.first).isEqualTo(theKey)
 
-        Assert.assertEquals(theValue, pair1.second)
-        Assert.assertEquals(theValue, pair2.second)
+        assertThat(pair1.second).isEqualTo(theValue)
+        assertThat(pair2.second).isEqualTo(theValue)
     }
 
     @Test
@@ -43,8 +43,8 @@ class PropertyResourcesTest {
         val pair2 = PropertyResources.splitPropertyLine(line2)
 
         // Assert
-        Assert.assertNull(pair1)
-        Assert.assertNull(pair2)
+        assertThat(pair1).isNull()
+        assertThat(pair2).isNull()
     }
 
     @Test
@@ -61,12 +61,12 @@ class PropertyResourcesTest {
         val keys = parsed.keys
 
         // Assert
-        Assert.assertEquals(3, parsed.size)
-        expectedKeys.forEach { Assert.assertTrue(keys.contains(it)) }
+        assertThat(parsed.size).isEqualTo(3)
+        expectedKeys.forEach { assertThat(keys).contains(it) }
 
-        Assert.assertEquals(groupIdValue, parsed["groupId"])
-        Assert.assertEquals(artifactIdValue, parsed["artifactId"])
-        Assert.assertEquals(version, parsed["version"])
+        assertThat(parsed["groupId"]).isEqualTo(groupIdValue)
+        assertThat(parsed["artifactId"]).isEqualTo(artifactIdValue)
+        assertThat(parsed["version"]).isEqualTo(version)
     }
 
     @Test
@@ -81,7 +81,7 @@ class PropertyResourcesTest {
         // println("Got:\n" + result)
 
         // Assert
-        Assert.assertEquals(expected, result)
+        assertThat(result).isEqualTo(expected)
     }
 
     @Test
@@ -105,8 +105,8 @@ class PropertyResourcesTest {
         //
 
         // Assert
-        Assert.assertTrue(filtered.size <= unfiltered.size)
-        Assert.assertEquals(1, filtered.size)
-        Assert.assertTrue(filtered.first().toString().contains("shared-algorithms-api", true))
+        assertThat(unfiltered.size).isGreaterThanOrEqualTo(filtered.size)
+        assertThat(filtered.size).isEqualTo(1)
+        assertThat(filtered.first().toString()).contains("shared-algorithms-api")
     }
 }

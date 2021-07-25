@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jdbc
 
 import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import se.jguru.shared.persistence.spi.jdbc.helpers.Person
 import se.jguru.shared.persistence.spi.jdbc.helpers.PersonAndPetView
 import se.jguru.shared.persistence.spi.jdbc.helpers.Pet

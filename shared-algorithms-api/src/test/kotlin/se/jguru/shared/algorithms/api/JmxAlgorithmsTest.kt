@@ -1,9 +1,9 @@
 package se.jguru.shared.algorithms.api
 
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import se.jguru.shared.algorithms.api.jmx.FooBarImpl
 import se.jguru.shared.algorithms.api.jmx.FooBarMXBean
 import java.lang.management.MemoryMXBean
@@ -22,15 +22,15 @@ class JmxAlgorithmsTest {
     // Shared state
     lateinit var platformServer: MBeanServer
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         platformServer = JmxAlgorithms.getPlatformServer()
 
-        Assert.assertNotNull(platformServer)
+        assertThat(platformServer).isNotNull
     }
 
-    @After
+    @AfterEach
     fun removeBoundMXBeans() {
 
         val jmxDomain = FooBarMXBean::class.java.`package`.name
@@ -38,7 +38,7 @@ class JmxAlgorithmsTest {
         val namesInDomain = JmxAlgorithms.getNamesInDomain(jmxDomain)
         if (namesInDomain.isEmpty()) {
 
-            System.out.println("No JMX names found in domain [$jmxDomain]. Not unbinding.")
+            println("No JMX names found in domain [$jmxDomain]. Not unbinding.")
 
         } else {
 
@@ -49,7 +49,7 @@ class JmxAlgorithmsTest {
                     JmxAlgorithms.getPlatformServer().unregisterMBean(current)
                     println("Done!")
                 } catch (e: Exception) {
-                    println("Failed! Caused by:\n" + e)
+                    println("Failed! Caused by:\n$e")
                 }
             }
         }
@@ -83,8 +83,8 @@ java.lang:type=Compilation
         val memoryMBeanObjects: Set<ObjectInstance> = JmxAlgorithms.getPlatformServer()
             .queryMBeans(ObjectName("*:type=Memory"), null)
 
-        Assert.assertNotNull(memoryMBeanObjects)
-        Assert.assertEquals(1, memoryMBeanObjects.size)
+        assertThat(memoryMBeanObjects).isNotNull
+        assertThat(memoryMBeanObjects.size).isEqualTo(1)
         val memoryMxBean = memoryMBeanObjects.first()
 
         // Act
@@ -92,8 +92,8 @@ java.lang:type=Compilation
         val mxBeanProxy = JmxAlgorithms.getMXBeanProxy(MemoryMXBean::class.java, memoryMxBean.objectName)
 
         // Assert
-        Assert.assertEquals(MemoryMXBean::class.java.name, mBeanInterfaceName)
-        Assert.assertTrue(MemoryMXBean::class.java.isAssignableFrom(mxBeanProxy::class.java))
+        assertThat(mBeanInterfaceName).isEqualTo(MemoryMXBean::class.java.name)
+        assertThat(MemoryMXBean::class.java).isAssignableFrom(mxBeanProxy::class.java)
 
         /*
         for (aDomain in someDomains) {
@@ -116,10 +116,9 @@ java.lang:type=Compilation
         // println("Got result: " + result);
 
         // Assert
-        Assert.assertEquals(expectedDomain, result.getDomain())
-        Assert.assertEquals("se.jguru.shared.algorithms.api.jmx:jmxInterfaceType=FooBarMXBean,foo=bar",
-            result.toString())
-        Assert.assertEquals(interfaceType.simpleName, result.getKeyProperty(JmxAlgorithms.JMX_INTERFACE_TYPE))
+        assertThat(result.domain).isEqualTo(expectedDomain)
+        assertThat(result.toString()).isEqualTo("se.jguru.shared.algorithms.api.jmx:jmxInterfaceType=FooBarMXBean,foo=bar")
+        assertThat(result.getKeyProperty(JmxAlgorithms.JMX_INTERFACE_TYPE)).isEqualTo(interfaceType.simpleName)
     }
 
     @Test
@@ -138,10 +137,10 @@ java.lang:type=Compilation
             JmxAlgorithms.getNaturalObjectNameFor(FooBarMXBean::class.java))
 
         // Assert
-        Assert.assertNotNull(mxBean)
-        Assert.assertNotSame(mxBean, theImpl)
-        Assert.assertEquals("newBar", mxBean.getBar())
-        Assert.assertEquals("foo!", mxBean.getFoo())
+        assertThat(mxBean).isNotNull
+        assertThat(theImpl).isNotSameAs(mxBean)
+        assertThat(mxBean.getBar()).isEqualTo("newBar")
+        assertThat(mxBean.getFoo()).isEqualTo("foo!")
     }
 
     @Test
@@ -180,7 +179,7 @@ java.lang:type=Compilation
                     .filter({ obj -> obj.objectName == current })
                     .findFirst()
                     .orElse(null)
-                Assert.assertEquals(FooBarImpl::class.java.name, directObjectInstance.className)
+                assertThat(directObjectInstance.className).isEqualTo(FooBarImpl::class.java.name)
 
                 // Call a method within the Proxy, and stash the results
                 name2ObjectName[key] = current
@@ -188,14 +187,14 @@ java.lang:type=Compilation
             }
 
         // Assert
-        Assert.assertEquals(2, name2ObjectName.size.toLong())
-        Assert.assertEquals(2, objectName2Bar.size.toLong())
+        assertThat(name2ObjectName.size.toLong()).isEqualTo(2)
+        assertThat(objectName2Bar.size.toLong()).isEqualTo(2)
 
-        objectName2Bar.forEach { k, v ->
+        objectName2Bar.forEach { (k, v) ->
 
             val qualifier = k.keyPropertyList[qualifierKey]
-            Assert.assertNotNull(qualifier)
-            Assert.assertEquals(qualifier, v)
+            assertThat(qualifier).isNotNull
+            assertThat(v).isEqualTo(qualifier)
 
             println("Domain: " + k.domain
                 + ", Canonical Name: " + k.canonicalName

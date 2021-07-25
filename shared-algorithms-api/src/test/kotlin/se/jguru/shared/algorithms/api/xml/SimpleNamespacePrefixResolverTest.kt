@@ -1,7 +1,7 @@
 package se.jguru.shared.algorithms.api.xml
 
-import org.junit.Assert
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 
 /**
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
@@ -23,12 +23,12 @@ class SimpleNamespacePrefixResolverTest {
         val prefixes = unitUnderTest.getRegisteredPrefixes()
 
         // Assert
-        Assert.assertEquals(1, namespaceURIs.size)
-        Assert.assertEquals(1, prefixes.size)
+        assertThat(namespaceURIs.size).isEqualTo(1)
+        assertThat(prefixes.size).isEqualTo(1)
 
-        Assert.assertEquals(prefix, prefixes.first())
-        Assert.assertEquals(namespaceURI, namespaceURIs.first())
-        Assert.assertEquals(prefix, unitUnderTest.getXmlPrefix(namespaceURI))
-        Assert.assertEquals(namespaceURI, unitUnderTest.getNamespaceUri(prefix))
+        assertThat(prefixes.first()).isEqualTo(prefix)
+        assertThat(namespaceURIs.first()).isEqualTo(namespaceURI)
+        assertThat(unitUnderTest.getXmlPrefix(namespaceURI)).isEqualTo(prefix)
+        assertThat(unitUnderTest.getNamespaceUri(prefix)).isEqualTo(namespaceURI)
     }
 }

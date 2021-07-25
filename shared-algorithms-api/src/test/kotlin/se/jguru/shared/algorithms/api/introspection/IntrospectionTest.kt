@@ -1,10 +1,8 @@
 package se.jguru.shared.algorithms.api.introspection
 
 import org.apache.logging.log4j.core.Core
-import org.jboss.vfs.VFS
-import org.jboss.vfs.VirtualFile
-import org.junit.Assert
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import se.jguru.shared.algorithms.api.Validate
 import java.util.TreeMap
 
@@ -33,7 +31,7 @@ class IntrospectionTest {
         typesFrom
             .sortedWith(Introspection.CLASSNAME_COMPARATOR)
             .forEachIndexed { index, currentClass ->
-                Assert.assertEquals(expected[index], currentClass.name)
+                assertThat(currentClass.name).isEqualTo(expected[index])
             }
     }
 
@@ -50,11 +48,12 @@ class IntrospectionTest {
         val typesFound = Introspection.getTypeNamesFrom("FooBar!", 42, StringBuilder())
 
         // Assert
-        Assert.assertEquals(expected.size, typesFound.size)
+        assertThat(typesFound.size).isEqualTo(expected.size)
+
         typesFound
             .sorted()
             .forEachIndexed { index, currentClassName ->
-                Assert.assertEquals(expected[index], currentClassName)
+                assertThat(currentClassName).isEqualTo(expected[index])
             }
     }
 
@@ -63,14 +62,14 @@ class IntrospectionTest {
 
         // Act & Assert
         // println("String .protectionDomain: ${String::class.java.protectionDomain}")
-        Assert.assertNull(Introspection.getCodeSourceFor(String::class.java))
+        assertThat(Introspection.getCodeSourceFor(String::class.java)).isNull()
     }
 
     @Test
     fun validateNonNullCodeSourceForNonSystemClass() {
 
         // Act & Assert
-        Assert.assertNotNull(Introspection.getCodeSourceFor(Validate::class.java))
+        assertThat(Introspection.getCodeSourceFor(Validate::class.java)).isNotNull
     }
 
     @Test
@@ -87,8 +86,8 @@ class IntrospectionTest {
         // println("Got: $systemResult")
 
         // Assert
-        Assert.assertTrue(nonSystemResult.isNotEmpty())
-        Assert.assertTrue(systemResult.isNotEmpty())
+        assertThat(nonSystemResult.isNotEmpty()).isTrue
+        assertThat(systemResult.isNotEmpty()).isTrue
     }
 
     @Test
@@ -102,11 +101,11 @@ class IntrospectionTest {
         val versionSystemProperties = Introspection.getSystemProperties(versionFilter)
 
         // Assert
-        Assert.assertTrue(allSystemProperties.isNotEmpty()  )
-        Assert.assertTrue(versionSystemProperties.isNotEmpty())
-        Assert.assertTrue(versionSystemProperties.size < allSystemProperties.size)
+        assertThat(allSystemProperties).isNotEmpty
+        assertThat(versionSystemProperties).isNotEmpty
+        assertThat(versionSystemProperties.size).isLessThan(allSystemProperties.size)
 
-        versionSystemProperties.forEach { key, value -> println("[$key]: $value") }
+        // versionSystemProperties.forEach { (key, value) -> println("[$key]: $value") }
     }
 
     @Test
@@ -119,10 +118,10 @@ class IntrospectionTest {
         val mutableProperties = Introspection.getMutablePropertiesFor(SemiMutableType::class)
 
         // Assert
-        Assert.assertNotNull(mutableProperties)
-        Assert.assertEquals(2, mutableProperties.size)
+        assertThat(mutableProperties).isNotNull
+        assertThat(mutableProperties.size).isEqualTo(2)
 
-        mutableProperties.map { it.name }.forEach { Assert.assertTrue(expectedNames.contains(it)) }
+        mutableProperties.map { it.name }.forEach { assertThat(expectedNames).contains(it) }
     }
 
     @Test
@@ -151,8 +150,8 @@ class IntrospectionTest {
         val updated = Introspection.updateProperties(SemiMutableType::class, incoming, localState)
 
         // Assert
-        Assert.assertTrue(updated)
-        Assert.assertEquals(expected, localState)
+        assertThat(updated).isTrue
+        assertThat(localState).isEqualTo(expected)
     }
 
     @Test
@@ -165,10 +164,10 @@ class IntrospectionTest {
         val semVer = Introspection.findVersionFromManifestProperty(manifest)
 
         // Assert
-        Assert.assertNotNull(semVer)
-        Assert.assertNotNull(semVer.major)
-        Assert.assertNotNull(semVer.minor)
-        Assert.assertNotNull(semVer.micro)
+        assertThat(semVer).isNotNull
+        assertThat(semVer.major).isNotNull
+        assertThat(semVer.minor).isNotNull
+        assertThat(semVer.micro).isNotNull
     }
 
     @Test
@@ -181,14 +180,14 @@ class IntrospectionTest {
         val manifestMap = Introspection.extractMapOf(fileBasedManifest)
 
         // Assert
-        Assert.assertNotNull(fileBasedManifest)
-        Assert.assertNotNull(manifestMap)
+        assertThat(fileBasedManifest).isNotNull
+        assertThat(manifestMap).isNotNull
 
-        Assert.assertNotNull(manifestMap["Bundle-Version"])
-        Assert.assertEquals(fileBasedManifest.mainAttributes.size, manifestMap.size)
+        assertThat(manifestMap["Bundle-Version"]).isNotNull()
+        assertThat(manifestMap.size).isEqualTo(fileBasedManifest.mainAttributes.size)
 
         fileBasedManifest.mainAttributes
-            .forEach { key, value -> Assert.assertEquals("" + value, manifestMap["" + key]) }
+            .forEach { key, value -> assertThat(manifestMap["" + key]).isEqualTo("" + value) }
 
         /*
         println("Got ${fileBasedManifest.mainAttributes.size} main " +
@@ -222,10 +221,10 @@ class IntrospectionTest {
         val result4 = Introspection.findVersionFromMap(specificationMajorMinorStyleMap)
 
         // Assert
-        Assert.assertEquals(result1, RuntimeVersion(5, 4, 3, "SNAPSHOT"))
-        Assert.assertEquals(result2, RuntimeVersion(15, 14))
-        Assert.assertEquals(result3, RuntimeVersion(6, 5, 4, "SNAPSHOT"))
-        Assert.assertEquals(result4, RuntimeVersion(16, 15))
+        assertThat(result1).isEqualTo(RuntimeVersion(5, 4, 3, "SNAPSHOT"))
+        assertThat(result2).isEqualTo(RuntimeVersion(15, 14))
+        assertThat(result3).isEqualTo(RuntimeVersion(6, 5, 4, "SNAPSHOT"))
+        assertThat(result4).isEqualTo(RuntimeVersion(16, 15))
     }
 
     @Test
@@ -238,14 +237,14 @@ class IntrospectionTest {
         val manifestMap = Introspection.extractMapOf(jarBasedManifest)
 
         // Assert
-        Assert.assertNotNull(jarBasedManifest)
-        Assert.assertNotNull(manifestMap)
+        assertThat(jarBasedManifest).isNotNull
+        assertThat(manifestMap).isNotNull
 
-        Assert.assertNotNull(manifestMap["Bundle-Version"])
-        Assert.assertEquals(jarBasedManifest.mainAttributes.size, manifestMap.size)
+        assertThat(manifestMap["Bundle-Version"]).isNotNull()
+        assertThat(jarBasedManifest.mainAttributes.size).isEqualTo(manifestMap.size)
 
         jarBasedManifest.mainAttributes
-            .forEach { key, value -> Assert.assertEquals("" + value, manifestMap["" + key]) }
+            .forEach { key, value -> assertThat(manifestMap["" + key]).isEqualTo("" + value) }
 
         /*
         println("Got ${jarBasedManifest.mainAttributes.size} main " +

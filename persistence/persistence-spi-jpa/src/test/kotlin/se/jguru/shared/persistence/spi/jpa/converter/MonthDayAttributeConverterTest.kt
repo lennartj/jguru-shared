@@ -2,7 +2,7 @@ package se.jguru.shared.persistence.spi.jpa.converter
 
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Month
 import java.time.MonthDay
 import java.util.SortedMap

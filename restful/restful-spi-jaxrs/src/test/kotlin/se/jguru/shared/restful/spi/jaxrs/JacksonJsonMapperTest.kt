@@ -2,7 +2,7 @@ package se.jguru.shared.restful.spi.jaxrs
 
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
 import java.io.ByteArrayOutputStream

@@ -2,7 +2,7 @@ package se.jguru.shared.persistence.spi.jdbc
 
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms

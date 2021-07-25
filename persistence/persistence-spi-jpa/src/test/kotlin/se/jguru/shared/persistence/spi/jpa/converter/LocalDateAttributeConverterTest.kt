@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
 import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.sql.Date
 import java.time.LocalDate
 import java.time.ZoneId

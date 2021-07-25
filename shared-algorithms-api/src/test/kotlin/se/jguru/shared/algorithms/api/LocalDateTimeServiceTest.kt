@@ -1,7 +1,7 @@
 package se.jguru.shared.algorithms.api
 
-import org.junit.Assert
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.time.Month
 import java.time.ZoneOffset
@@ -49,7 +49,7 @@ class LocalDateTimeServiceTest {
 
         // Assert
         val diffInSeconds = defaultNow.toEpochSecond(ZoneOffset.UTC) - now.toEpochSecond(ZoneOffset.UTC)
-        Assert.assertTrue(diffInSeconds < 1)
-        Assert.assertEquals(now.toLocalDate(), defaultToday)
+        assertThat(diffInSeconds).isLessThan(1)
+        assertThat(defaultToday).isEqualTo(now.toLocalDate())
     }
 }

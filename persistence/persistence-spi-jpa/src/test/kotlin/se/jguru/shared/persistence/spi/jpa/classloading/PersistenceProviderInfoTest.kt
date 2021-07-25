@@ -1,6 +1,6 @@
 package se.jguru.shared.persistence.spi.jpa.classloading
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  *

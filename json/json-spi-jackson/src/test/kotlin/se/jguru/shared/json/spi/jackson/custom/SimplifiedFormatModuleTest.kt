@@ -1,7 +1,7 @@
 package se.jguru.shared.json.spi.jackson.custom
 
 import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 open class SimplifiedFormatModuleTest {
 

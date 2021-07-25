@@ -2,7 +2,7 @@ package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Duration
 import java.util.SortedMap
 import java.util.TreeMap

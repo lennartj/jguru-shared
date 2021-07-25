@@ -1,7 +1,8 @@
 package se.jguru.shared.algorithms.api.tls
 
-import org.junit.Assert
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.junit.jupiter.api.Test
 import java.security.KeyStore
 import java.security.KeyStoreException
 import java.security.cert.X509Certificate
@@ -25,16 +26,19 @@ class CertificateAlgorithmsTest {
         val result = CertificateAlgorithms.createKeyStore(passwd)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(JKS_KEYSTORE_TYPE, result.type)
-        Assert.assertEquals(0, result.size())
+        assertThat(result).isNotNull
+        assertThat(result.type).isEqualTo(JKS_KEYSTORE_TYPE)
+        assertThat(result.size()).isEqualTo(0)
     }
 
-    @Test(expected = KeyStoreException::class)
+    @Test
     fun validateExceptionOnCreatingUnknownKeystoreType() {
 
         // Act & Assert
-        CertificateAlgorithms.createKeyStore("foobats", "unknownType")
+        assertThatExceptionOfType(KeyStoreException::class.java)
+            .isThrownBy {
+                CertificateAlgorithms.createKeyStore("foobats", "unknownType")
+            }
     }
 
     @Test
@@ -47,14 +51,14 @@ class CertificateAlgorithmsTest {
         val result2 = CertificateAlgorithms.getStandardJKS()
 
         // Assert
-        Assert.assertNotNull(result1)
-        Assert.assertNotNull(result2)
+        assertThat(result1).isNotNull
+        assertThat(result2).isNotNull
 
-        Assert.assertEquals(JKS_KEYSTORE_TYPE, result1.type)
-        Assert.assertEquals(JKS_KEYSTORE_TYPE, result2.type)
+        assertThat(result1.type).isEqualTo(JKS_KEYSTORE_TYPE)
+        assertThat(result2.type).isEqualTo(JKS_KEYSTORE_TYPE)
 
-        Assert.assertTrue(result1.size() > 0)
-        Assert.assertTrue(result1.size() == result2.size())
+        assertThat(result1.size()).isGreaterThan(0)
+        assertThat(result1.size()).isEqualTo(result2.size())
     }
 
     @Test
@@ -67,12 +71,12 @@ class CertificateAlgorithmsTest {
         val result = CertificateAlgorithms.getEntryMapFrom(standardJKS)
 
         // Assert
-        Assert.assertNotNull(standardJKS)
-        Assert.assertNotNull(result)
+        assertThat(standardJKS).isNotNull
+        assertThat(result).isNotNull
 
         result
             .filter { CertificateAlgorithms.IS_X509_CERTIFICATE.test(it.value) }
-            .forEach { key, value ->
+            .forEach { (key, value) ->
 
                 val certEntry = (value as KeyStore.TrustedCertificateEntry).trustedCertificate as X509Certificate
                 val certificateClassName = certEntry::class.java.simpleName
@@ -115,18 +119,18 @@ class CertificateAlgorithmsTest {
         val result = CertificateAlgorithms.getEntryMapFrom(ks, mapOf(Pair(alias, passwd)))
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(1, result.size)
+        assertThat(result).isNotNull
+        assertThat(result.size).isEqualTo(1)
 
         val privateKey = result[alias] as KeyStore.PrivateKeyEntry
         val relativeDNs = CertificateAlgorithms.getRelativeDistinguishedNamesFor(
             privateKey.certificate as X509Certificate)
 
-        Assert.assertNotNull(relativeDNs)
-        Assert.assertEquals(7, relativeDNs.size)
+        assertThat(relativeDNs).isNotNull
+        assertThat(relativeDNs.size).isEqualTo(7)
 
         val keyCN: Rdn = relativeDNs.first { it.type == "CN" }
-        Assert.assertEquals("Mr Testo", keyCN.value)
+        assertThat(keyCN.value).isEqualTo("Mr Testo")
     }
 
     @Test
@@ -152,17 +156,17 @@ class CertificateAlgorithmsTest {
         val mergedEntryMap = CertificateAlgorithms.getEntryMapFrom(merged, alias2PasswordMap)
 
         // Assert
-        Assert.assertNotNull(merged)
-        Assert.assertEquals(defaultKeystore.size() + 1, merged.size())
+        assertThat(merged).isNotNull
+        assertThat(merged.size()).isEqualTo(defaultKeystore.size() + 1)
 
-        Assert.assertNotNull(mergedEntryMap)
-        Assert.assertEquals(defaultKeystore.size() + 1, mergedEntryMap.size)
+        assertThat(mergedEntryMap).isNotNull
+        assertThat(mergedEntryMap.size).isEqualTo(defaultKeystore.size() + 1)
 
         val allPrivateKeyEntries = mergedEntryMap.filter { e -> e.value is KeyStore.PrivateKeyEntry }
         val allTrustedCertificateEntries = mergedEntryMap.filter { e -> e.value is KeyStore.TrustedCertificateEntry }
 
-        Assert.assertEquals(1, allPrivateKeyEntries.size)
-        Assert.assertEquals(defaultKeystore.size(), allTrustedCertificateEntries.size)
+        assertThat(allPrivateKeyEntries.size).isEqualTo(1)
+        assertThat(allTrustedCertificateEntries.size).isEqualTo(defaultKeystore.size())
     }
 
     @Test
@@ -195,17 +199,17 @@ class CertificateAlgorithmsTest {
         val mergedEntryMap = CertificateAlgorithms.getEntryMapFrom(merged, alias2PasswordMap)
 
         // Assert
-        Assert.assertNotNull(merged)
-        Assert.assertEquals(defaultKeystore.size() + 1, merged.size())
+        assertThat(merged).isNotNull
+        assertThat(merged.size()).isEqualTo(defaultKeystore.size() + 1)
 
-        Assert.assertNotNull(mergedEntryMap)
-        Assert.assertEquals(defaultKeystore.size() + 1, mergedEntryMap.size)
+        assertThat(mergedEntryMap).isNotNull
+        assertThat(mergedEntryMap.size).isEqualTo(defaultKeystore.size() + 1)
 
         val allPrivateKeyEntries = mergedEntryMap.filter { e -> e.value is KeyStore.PrivateKeyEntry }
         val allTrustedCertificateEntries = mergedEntryMap.filter { e -> e.value is KeyStore.TrustedCertificateEntry }
 
-        Assert.assertEquals(0, allPrivateKeyEntries.size)
-        Assert.assertEquals(defaultKeystore.size() + 1, allTrustedCertificateEntries.size)
+        assertThat(allPrivateKeyEntries).isEmpty()
+        assertThat(allTrustedCertificateEntries.size).isEqualTo(defaultKeystore.size() + 1)
     }
 
     @Test
@@ -229,17 +233,17 @@ class CertificateAlgorithmsTest {
         val mergedEntryMap = CertificateAlgorithms.getEntryMapFrom(merged, alias2PasswordMap)
 
         // Assert
-        Assert.assertNotNull(merged)
-        Assert.assertEquals(defaultKeystore.size() + 1, merged.size())
+        assertThat(merged).isNotNull
+        assertThat(merged.size()).isEqualTo(defaultKeystore.size() + 1)
 
-        Assert.assertNotNull(mergedEntryMap)
-        Assert.assertEquals(defaultKeystore.size() + 1, mergedEntryMap.size)
+        assertThat(mergedEntryMap).isNotNull
+        assertThat(mergedEntryMap.size).isEqualTo(defaultKeystore.size() + 1)
 
         val allPrivateKeyEntries = mergedEntryMap.filter { e -> e.value is KeyStore.PrivateKeyEntry }
         val allTrustedCertificateEntries = mergedEntryMap.filter { e -> e.value is KeyStore.TrustedCertificateEntry }
 
-        Assert.assertEquals(0, allPrivateKeyEntries.size)
-        Assert.assertEquals(defaultKeystore.size() + 1, allTrustedCertificateEntries.size)
+        assertThat(allPrivateKeyEntries).isEmpty()
+        assertThat(allTrustedCertificateEntries.size).isEqualTo(defaultKeystore.size() + 1)
 
     }
 }

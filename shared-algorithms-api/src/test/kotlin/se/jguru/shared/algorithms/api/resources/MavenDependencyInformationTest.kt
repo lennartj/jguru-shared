@@ -1,8 +1,8 @@
 package se.jguru.shared.algorithms.api.resources
 
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.util.SortedMap
 
 /**
@@ -14,13 +14,13 @@ class MavenDependencyInformationTest {
     // Shared state
     lateinit var propertyMap : SortedMap<String, String>
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         propertyMap = PropertyResources.parseResource(resourcePath = "testdata/introspection/dependencies.properties")
 
-        Assert.assertNotNull(propertyMap)
-        Assert.assertEquals(40, propertyMap.size)
+        assertThat(propertyMap).isNotNull
+        assertThat(propertyMap.size).isEqualTo(40)
 
         propertyMap.entries.forEach { println("[${it.key}]: ${it.value}") }
     }
@@ -39,11 +39,11 @@ class MavenDependencyInformationTest {
         val result = MavenDependencyInformation.parse("org.slf4j", "slf4j-api", propertyMap)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals("1.7.25", result.mavenVersion)
-        Assert.assertEquals("org.slf4j", result.groupID)
-        Assert.assertEquals("slf4j-api", result.artifactID)
-        Assert.assertEquals(DependencyScope.COMPILE, result.scope)
+        assertThat(result).isNotNull
+        assertThat(result.mavenVersion).isEqualTo("1.7.25")
+        assertThat(result.groupID).isEqualTo("org.slf4j")
+        assertThat(result.artifactID).isEqualTo("slf4j-api")
+        assertThat(result.scope).isEqualTo(DependencyScope.COMPILE)
     }
 
     @Test
@@ -57,10 +57,10 @@ class MavenDependencyInformationTest {
         val result = MavenDependencyInformation.parse(propertyMap)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(13, result.size)
+        assertThat(result).isNotNull
+        assertThat(result.size).isEqualTo(13)
 
         val ownArtifact = result.first { it.artifactID == currentArtifact }
-        Assert.assertEquals("1.0.0-SNAPSHOT", ownArtifact.mavenVersion)
+        assertThat(ownArtifact.mavenVersion).isEqualTo("1.0.0-SNAPSHOT")
     }
 }

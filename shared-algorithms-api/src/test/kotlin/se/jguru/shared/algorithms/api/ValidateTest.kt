@@ -1,8 +1,9 @@
 package se.jguru.shared.algorithms.api
 
-import org.junit.Assert
-import org.junit.Test
-import java.util.ArrayList
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.fail
+import org.junit.jupiter.api.Test
 import java.util.SortedMap
 import java.util.TreeMap
 
@@ -23,9 +24,9 @@ class ValidateTest {
         try {
             Validate.notEmpty("", argumentName)
         } catch (expected: IllegalArgumentException) {
-            Assert.assertEquals(expectedMsg, expected.message)
+            assertThat(expected.message).isEqualTo(expectedMsg)
         } catch (e: Exception) {
-            Assert.fail("Expected IllegalArgumentException, but got $e")
+            fail("Expected IllegalArgumentException, but got $e")
         }
     }
 
@@ -40,30 +41,34 @@ class ValidateTest {
         try {
             Validate.notNull<Any>(null, argumentName)
         } catch (expected: NullPointerException) {
-            Assert.assertEquals(expectedMsg, expected.message)
+            assertThat(expected.message).isEqualTo(expectedMsg)
         } catch (e: Exception) {
-            Assert.fail("Expected IllegalArgumentException, but got $e")
+            fail("Expected IllegalArgumentException, but got $e")
         }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateCollectionEmptyness() {
 
         // Assemble
         val aCollection = ArrayList<String>()
 
         // Act & Assert
-        Validate.notEmpty<String, List<String>>(aCollection, "aCollection")
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            Validate.notEmpty<String, List<String>>(aCollection, "aCollection")
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateMapEmptyness() {
 
         // Assemble
         val anEmptySortedMap = TreeMap<String, Double>()
 
         // Act & Assert
-        Validate.notEmpty<String, Double, SortedMap<String, Double>>(anEmptySortedMap, "anEmptySortedMap")
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            Validate.notEmpty<String, Double, SortedMap<String, Double>>(anEmptySortedMap, "anEmptySortedMap")
+        }
     }
 
     @Test
@@ -73,9 +78,9 @@ class ValidateTest {
         try {
             Validate.notNull<Any>(null, "")
         } catch (expected: NullPointerException) {
-            Assert.assertEquals("Cannot handle null argument.", expected.message)
+            assertThat(expected.message).isEqualTo("Cannot handle null argument.")
         } catch (e: Exception) {
-            Assert.fail("Expected IllegalArgumentException, but got " + e)
+            fail("Expected IllegalArgumentException, but got $e")
         }
 
     }
@@ -90,6 +95,6 @@ class ValidateTest {
         val result = Validate.notNull(toValidate, "toValidate")
 
         // Assert
-        Assert.assertSame(toValidate, result)
+        assertThat(result).isSameAs(toValidate)
     }
 }

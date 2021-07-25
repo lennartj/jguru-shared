@@ -2,7 +2,7 @@ package se.jguru.shared.persistence.spi.jpa.converter
 
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.util.Arrays
 import java.util.SortedMap
 import java.util.TimeZone

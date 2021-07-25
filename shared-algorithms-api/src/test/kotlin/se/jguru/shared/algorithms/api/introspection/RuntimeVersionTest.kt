@@ -1,14 +1,13 @@
 package se.jguru.shared.algorithms.api.introspection
 
-import org.junit.Assert
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 
 /**
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 class RuntimeVersionTest {
-
 
     @Test
     fun validateParsingJava18VersionStrings() {
@@ -20,10 +19,10 @@ class RuntimeVersionTest {
         val result = RuntimeVersion.parseJavaVersion(versionString)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(8, result.major)
-        Assert.assertEquals(0, result.minor)
-        Assert.assertEquals(181, result.micro)
+        assertThat(result).isNotNull
+        assertThat(result.major).isEqualTo(8)
+        assertThat(result.minor).isEqualTo(0)
+        assertThat(result.micro).isEqualTo(181)
     }
 
     @Test
@@ -36,10 +35,10 @@ class RuntimeVersionTest {
         val result = RuntimeVersion.parseJavaVersion(versionString)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(9, result.major)
-        Assert.assertEquals(0, result.minor)
-        Assert.assertEquals(4, result.micro)
+        assertThat(result).isNotNull
+        assertThat(result.major).isEqualTo(9)
+        assertThat(result.minor).isEqualTo(0)
+        assertThat(result.micro).isEqualTo(4)
     }
 
     @Test
@@ -52,10 +51,10 @@ class RuntimeVersionTest {
         val result = RuntimeVersion.parseJavaVersion(versionString)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(10, result.major)
-        Assert.assertEquals(0, result.minor)
-        Assert.assertEquals(2, result.micro)
+        assertThat(result).isNotNull
+        assertThat(result.major).isEqualTo(10)
+        assertThat(result.minor).isEqualTo(0)
+        assertThat(result.micro).isEqualTo(2)
     }
 
     @Test
@@ -68,10 +67,10 @@ class RuntimeVersionTest {
         val result = RuntimeVersion.parseJavaVersion(versionString)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(10, result.major)
-        Assert.assertEquals(0, result.minor)
-        Assert.assertNull(result.micro)
+        assertThat(result).isNotNull
+        assertThat(result.major).isEqualTo(10)
+        assertThat(result.minor).isEqualTo(0)
+        assertThat(result.micro).isNull()
     }
 
     @Test
@@ -84,9 +83,9 @@ class RuntimeVersionTest {
         val result = RuntimeVersion.parseJavaVersion(versionString)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(11, result.major)
-        Assert.assertNull(result.minor)
-        Assert.assertNull(result.micro)
+        assertThat(result).isNotNull
+        assertThat(result.major).isEqualTo(11)
+        assertThat(result.minor).isNull()
+        assertThat(result.micro).isNull()
     }
 }

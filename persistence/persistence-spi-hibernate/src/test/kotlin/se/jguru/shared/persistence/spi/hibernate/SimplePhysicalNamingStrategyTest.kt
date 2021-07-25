@@ -2,7 +2,7 @@ package se.jguru.shared.persistence.spi.hibernate
 
 import org.hibernate.boot.model.naming.Identifier
 import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 open class SimplePhysicalNamingStrategyTest {
 

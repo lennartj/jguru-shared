@@ -1,7 +1,7 @@
 package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.util.Arrays
 import java.util.Locale
 import java.util.TreeMap

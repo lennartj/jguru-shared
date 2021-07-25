@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jpa
 
 import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import se.jguru.shared.persistence.spi.jpa.classloading.CommonPersistenceProvidersInfo
 import java.util.Arrays
 import javax.persistence.EntityManagerFactory

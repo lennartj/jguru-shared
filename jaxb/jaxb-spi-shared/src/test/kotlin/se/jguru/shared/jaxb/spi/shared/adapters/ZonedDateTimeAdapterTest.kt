@@ -1,7 +1,7 @@
 package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import se.jguru.shared.algorithms.api.WellKnownTimeZones
 import java.time.LocalDate
 import java.time.LocalTime

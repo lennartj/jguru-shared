@@ -1,13 +1,13 @@
 package se.jguru.shared.algorithms.api.introspection
 
 import org.apache.logging.log4j.core.Core
+import org.assertj.core.api.Assertions.assertThat
 import org.jboss.vfs.VFS
 import org.jboss.vfs.VFSUtils
 import org.jboss.vfs.VirtualFile
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.net.URL
 import java.net.URLClassLoader
 
@@ -19,7 +19,7 @@ open class VfsIntrospectionTest {
     lateinit var originalThreadContextClassLoader: ClassLoader
     lateinit var jarWithPropertyFilesURL : URL
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         // Stash the original TC classloader
@@ -36,16 +36,16 @@ open class VfsIntrospectionTest {
             .toList()
             .mapIndexed { index, currentURL -> " [$index]: $currentURL" }
             .reduce { acc, s -> "$acc\n$s" }
-        Assert.assertTrue(resourcePaths.isNotEmpty())
+        assertThat(resourcePaths).isNotEmpty
 
         // Ensure that we have a non-null URL to the added resource when
         // searched within the test contextClassLoader.
         //
         jarWithPropertyFilesURL = testContextClassLoader.getResource(JAR_RESOURCE_PATH)
-        Assert.assertNotNull(jarWithPropertyFilesURL)
+        assertThat(jarWithPropertyFilesURL).isNotNull
     }
 
-    @After
+    @AfterEach
     fun teardownSharedState() {
 
         // Restore the original TC classloader
@@ -65,8 +65,8 @@ open class VfsIntrospectionTest {
         // println("Got location: ${vFileLocation.toURI()}")
 
         // Assert
-        Assert.assertNotNull(vFileLocation)
-        Assert.assertEquals(VFSUtils.VFS_PROTOCOL, vFileToJarFile.asFileURL().protocol)
+        assertThat(vFileLocation).isNotNull
+        assertThat(vFileToJarFile.asFileURL().protocol).isEqualTo(VFSUtils.VFS_PROTOCOL)
     }
 
     @Test
@@ -79,14 +79,14 @@ open class VfsIntrospectionTest {
         val manifestMap = Introspection.extractMapOf(jarBasedManifest)
 
         // Assert
-        Assert.assertNotNull(jarBasedManifest)
-        Assert.assertNotNull(manifestMap)
+        assertThat(jarBasedManifest).isNotNull
+        assertThat(manifestMap).isNotNull
 
-        Assert.assertNotNull(manifestMap["Bundle-Version"])
-        Assert.assertEquals(jarBasedManifest.mainAttributes.size, manifestMap.size)
+        assertThat(manifestMap["Bundle-Version"]).isNotNull()
+        assertThat(manifestMap.size).isEqualTo(jarBasedManifest.mainAttributes.size)
 
         jarBasedManifest.mainAttributes
-            .forEach { key, value -> Assert.assertEquals("" + value, manifestMap["" + key]) }
+            .forEach { key, value -> assertThat(manifestMap["" + key]).isEqualTo("" + value) }
 
         /*
         println("Got ${jarBasedManifest.mainAttributes.size} main " +
@@ -109,14 +109,14 @@ open class VfsIntrospectionTest {
         val manifestMap = Introspection.extractMapOf(fileBasedManifest)
 
         // Assert
-        Assert.assertNotNull(fileBasedManifest)
-        Assert.assertNotNull(manifestMap)
+        assertThat(fileBasedManifest).isNotNull
+        assertThat(manifestMap).isNotNull
 
-        Assert.assertNotNull(manifestMap["Bundle-Version"])
-        Assert.assertEquals(fileBasedManifest.mainAttributes.size, manifestMap.size)
+        assertThat(manifestMap["Bundle-Version"]).isNotNull
+        assertThat(manifestMap.size).isEqualTo(fileBasedManifest.mainAttributes.size)
 
         fileBasedManifest.mainAttributes
-            .forEach { key, value -> Assert.assertEquals("" + value, manifestMap["" + key]) }
+            .forEach { key, value -> assertThat(manifestMap["" + key]).isEqualTo("" + value) }
 
         /*
         println("Got ${fileBasedManifest.mainAttributes.size} main " +

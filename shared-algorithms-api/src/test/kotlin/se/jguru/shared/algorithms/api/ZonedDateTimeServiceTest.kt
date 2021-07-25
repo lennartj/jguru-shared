@@ -1,7 +1,7 @@
 package se.jguru.shared.algorithms.api
 
-import org.junit.Assert
-import org.junit.Test
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.time.Month
 import java.time.ZoneId
@@ -20,7 +20,7 @@ class ZonedDateTimeServiceTest {
         ZoneId.getAvailableZoneIds()
             .map { it.toString() }
             .sorted()
-            .forEach { System.out.println(it) }
+            .forEach { println(it) }
     }
 
     @Test
@@ -63,17 +63,17 @@ class ZonedDateTimeServiceTest {
         val defaultToday = unitUnderTest.getToday()
 
         // Assert
-        Assert.assertEquals(defaultZonedNow.offset, now.offset)
+        assertThat(now.offset).isEqualTo(defaultZonedNow.offset)
 
         val diffInSeconds = defaultZonedNow.toEpochSecond() - now.toEpochSecond()
-        Assert.assertTrue(diffInSeconds < 1)
-        Assert.assertEquals(now.toLocalDate(), defaultToday)
+        assertThat(diffInSeconds).isLessThan(1)
+        assertThat(defaultToday).isEqualTo(now.toLocalDate())
 
         val localDiffInSeconds = defaultNow.toEpochSecond(defaultZonedNow.offset) - now
             .toLocalDateTime()
             .toEpochSecond(now.offset)
 
-        Assert.assertTrue(localDiffInSeconds < 1)
-        Assert.assertEquals(now.toLocalDate(), defaultToday)
+        assertThat(localDiffInSeconds).isLessThan(1)
+        assertThat(defaultToday).isEqualTo(now.toLocalDate())
     }
 }

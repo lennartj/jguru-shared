@@ -1,7 +1,7 @@
 package se.jguru.shared.algorithms.api
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -20,7 +20,7 @@ class WellKnownTimeZonesTest {
     lateinit var anInstant: Instant
     lateinit var timestamp : ZonedDateTime
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         this.anInstant = Instant.ofEpochMilli(1000L)

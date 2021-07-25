@@ -1,15 +1,13 @@
 package se.jguru.shared.algorithms.api.messaging
 
-import org.junit.AfterClass
-import org.junit.Assert
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.Test
-import org.springframework.mock.jndi.SimpleNamingContextBuilder
-import java.util.Hashtable
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.osjava.sj.loader.JndiLoader
+import java.util.Properties
 import javax.naming.Context
-import javax.naming.spi.InitialContextFactory
-
+import javax.naming.InitialContext
 
 /**
  *
@@ -18,37 +16,31 @@ import javax.naming.spi.InitialContextFactory
 class ContextsTest {
 
     // Shared state
-    companion object {
-
-        lateinit var jndiBuilder: SimpleNamingContextBuilder
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-
-            jndiBuilder = SimpleNamingContextBuilder()
-            jndiBuilder.bind("java:foo", "fooValue")
-            jndiBuilder.bind("java:bar", "barValue")
-            jndiBuilder.bind("java:theStringBuilder", StringBuilder("tjo"))
-            jndiBuilder.activate()
-        }
-
-        @JvmStatic
-        @AfterClass
-        fun tearDownClass() {
-            jndiBuilder.deactivate()
-        }
-    }
-
-    // Shared state
-    lateinit var initContextFactory : InitialContextFactory
     lateinit var ctx: Context
+    lateinit var props: Properties
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
-        initContextFactory = jndiBuilder.createInitialContextFactory(Hashtable<Any, Any>())
-        ctx = initContextFactory.getInitialContext(Hashtable<Any, Any>())
+        // Create the properties
+        props = Properties()
+
+        props["java:foo"] = "fooValue"
+        props["java:bar"] = "barValue"
+        props["java:theStringBuilder"] = StringBuilder("tjo")
+        props["java:theStringBuilder.type"] = StringBuilder::class.java.name
+
+        // Create the empty InitialContext
+        ctx = InitialContext()
+
+        // Load the properties into the InitialContext
+        val loader = JndiLoader(ctx.environment)
+        loader.load(props, ctx)
+    }
+
+    @AfterEach
+    fun teardownSharedState() {
+        ctx.close()
     }
 
     @Test
@@ -61,8 +53,8 @@ class ContextsTest {
         val stringBuilderValue = Contexts.lookup(ctx, "java:theStringBuilder", StringBuilder::class.java)
 
         // Assert
-        Assert.assertEquals("fooValue", fooValue)
-        Assert.assertEquals("tjo", stringBuilderValue.toString())
+        assertThat(fooValue).isEqualTo("fooValue")
+        assertThat(stringBuilderValue.toString()).isEqualTo("tjo")
     }
 
     @Test
@@ -77,7 +69,6 @@ class ContextsTest {
         val result = Contexts.lookup(ctx, key, String::class.java)
 
         // Assert
-        Assert.assertEquals(value, result)
-
+        assertThat(result).isEqualTo(value)
     }
 }
