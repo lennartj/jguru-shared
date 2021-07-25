@@ -1,8 +1,8 @@
 package se.jguru.shared.jaxb.spi.metro
 
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.diff.DefaultNodeMatcher
@@ -22,7 +22,7 @@ class MetroMarshallerAndUnmarshallerTest {
     private var originalContextFactory: String? = null
     lateinit var unitUnderTest: ReferenceImplementationMarshallerAndUnmarshaller
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         originalContextFactory = System.getProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
@@ -32,7 +32,7 @@ class MetroMarshallerAndUnmarshallerTest {
         unitUnderTest.namespacePrefixResolver.put(Beverage.NAMESPACE, "bev")
     }
 
-    @After
+    @AfterEach
     fun teardownSharedState() {
         if (originalContextFactory == null) {
             System.clearProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
@@ -54,7 +54,7 @@ class MetroMarshallerAndUnmarshallerTest {
         val result = unitUnderTest.marshal(toMarshal = arrayOf(prefs))
 
         // Assert
-        Assert.assertNotNull(result)
+        assertThat(result).isNotNull()
 
         val myDiffIdentical = DiffBuilder.compare(expected)
             .withTest(result)
@@ -62,7 +62,8 @@ class MetroMarshallerAndUnmarshallerTest {
             .withNodeMatcher(DefaultNodeMatcher(ElementSelectors.byName))
             .checkForIdentical()
             .build()
-        Assert.assertFalse(myDiffIdentical.hasDifferences());
+
+        assertThat(myDiffIdentical.hasDifferences()).isFalse
     }
 
     @Test
@@ -77,7 +78,7 @@ class MetroMarshallerAndUnmarshallerTest {
         val result = unitUnderTest.unmarshal(resultType = DrinkingPreferences::class.java, toUnmarshal = data)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(0, expected.compareTo(result))
+        assertThat(result).isNotNull
+        assertThat(expected.compareTo(result)).isEqualTo(0)
     }
 }

@@ -1,8 +1,7 @@
 package se.jguru.shared.jaxb.spi.shared.adapters
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import se.jguru.shared.jaxb.spi.shared.adapters.CurrencyAdapter
 import java.util.Currency
 
 /**
@@ -24,8 +23,8 @@ class CurrencyAdapterTest {
         // System.out.println("Got: " + result);
 
         // Assert
-        Assert.assertNull(unitUnderTest.marshal(null))
-        Assert.assertEquals(transportForm, result)
+        assertThat(unitUnderTest.marshal(null)).isNull()
+        assertThat(result).isEqualTo(transportForm)
     }
 
     @Test
@@ -37,7 +36,7 @@ class CurrencyAdapterTest {
         val result = unitUnderTest.unmarshal(transportForm)
 
         // Assert
-        Assert.assertNull(unitUnderTest.unmarshal(null))
-        Assert.assertEquals(objectForm, result)
+        assertThat(unitUnderTest.unmarshal(null)).isNull()
+        assertThat(result).isEqualTo(objectForm)
     }
 }

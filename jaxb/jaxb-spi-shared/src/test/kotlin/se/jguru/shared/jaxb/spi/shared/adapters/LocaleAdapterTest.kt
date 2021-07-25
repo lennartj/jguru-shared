@@ -1,6 +1,6 @@
 package se.jguru.shared.jaxb.spi.shared.adapters
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.Arrays
 import java.util.Locale
@@ -36,7 +36,7 @@ class LocaleAdapterTest {
 
         // Assert
         for (i in results.indices) {
-            Assert.assertEquals(expectedTransportForms[i], results[i])
+            assertThat(results[i]).isEqualTo(expectedTransportForms[i])
         }
     }
 
@@ -53,7 +53,7 @@ class LocaleAdapterTest {
 
         // Assert
         for (i in results.indices) {
-            Assert.assertEquals(objectForms[i], results[i])
+            assertThat(results[i]).isEqualTo(objectForms[i])
         }
     }
 
@@ -80,17 +80,17 @@ class LocaleAdapterTest {
         languageTag2Locale.keys.forEach { k -> parsed.put(k, Locale.forLanguageTag(k)) }
 
         // Assert
-        Assert.assertEquals(languageTag2Locale.size.toLong(), parsed.size.toLong())
-        languageTag2Locale.forEach { key, value ->
+        assertThat(parsed.size.toLong()).isEqualTo(languageTag2Locale.size.toLong())
+        languageTag2Locale.forEach { (key, value) ->
 
-            val reparsedValue = parsed[key]
+            val reParsedValue = parsed[key]
 
-            if (value != reparsedValue) {
-                println("[$key]: $value ($reparsedValue)")
+            if (value != reParsedValue) {
+                println("[$key]: $value ($reParsedValue)")
             }
 
             // Check sanity
-            Assert.assertEquals(value, reparsedValue)
+            assertThat(reParsedValue).isEqualTo(value)
         }
     }
 }

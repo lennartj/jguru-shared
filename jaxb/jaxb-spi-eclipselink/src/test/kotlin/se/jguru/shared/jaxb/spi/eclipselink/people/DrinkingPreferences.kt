@@ -1,6 +1,6 @@
 package se.jguru.shared.jaxb.spi.eclipselink.people
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import java.io.Serializable
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
@@ -14,19 +14,20 @@ import javax.xml.bind.annotation.XmlType
 @XmlType(namespace = Beverage.NAMESPACE)
 class DrinkingPreferences(
     @XmlElement(nillable = false, required = true)
-    var people: List<Person> = mutableListOf()) : Serializable, Comparable<DrinkingPreferences> {
+    var people: List<Person> = mutableListOf()
+) : Serializable, Comparable<DrinkingPreferences> {
 
     /**
      * JAXB-friendly constructor
      */
     constructor() : this(mutableListOf())
 
-    override fun compareTo(that: DrinkingPreferences): Int {
+    override fun compareTo(other: DrinkingPreferences): Int {
 
-        var toReturn: Int = this.people.size - that.people.size
+        val toReturn: Int = this.people.size - other.people.size
 
         if (toReturn == 0) {
-            people.forEachIndexed { index, aPerson -> Assert.assertEquals(aPerson, that.people[index])}
+            people.forEachIndexed { index, aPerson -> assertThat(other.people[index]).isEqualTo(aPerson) }
         }
 
         // All Done.

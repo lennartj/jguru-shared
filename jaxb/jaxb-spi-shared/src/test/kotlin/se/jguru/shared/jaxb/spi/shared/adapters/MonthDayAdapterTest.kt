@@ -1,10 +1,9 @@
 package se.jguru.shared.jaxb.spi.shared.adapters
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.Month
 import java.time.MonthDay
-
 
 /**
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
@@ -35,7 +34,7 @@ class MonthDayAdapterTest {
 
         // Assert
         for (i in results.indices) {
-            Assert.assertEquals(transportForms[i], results[i])
+            assertThat(results[i]).isEqualTo(transportForms[i])
         }
     }
 
@@ -52,7 +51,7 @@ class MonthDayAdapterTest {
 
         // Assert
         for (i in results.indices) {
-            Assert.assertEquals(objectForms[i], results[i])
+            assertThat(results[i]).isEqualTo(objectForms[i])
         }
     }
 }

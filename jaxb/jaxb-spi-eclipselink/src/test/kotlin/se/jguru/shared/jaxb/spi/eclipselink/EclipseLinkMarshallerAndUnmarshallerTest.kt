@@ -1,8 +1,7 @@
 package se.jguru.shared.jaxb.spi.eclipselink
 
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.xmlunit.builder.DiffBuilder
@@ -25,7 +24,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
     var originalContextFactory: String? = null
     lateinit var unitUnderTest: MoxyMarshallerAndUnmarshaller
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         originalContextFactory = System.getProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
@@ -35,7 +34,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
         unitUnderTest.namespacePrefixResolver.put(Beverage.NAMESPACE, "bev")
     }
 
-    @After
+    @BeforeEach
     fun teardownSharedState() {
         if (originalContextFactory == null) {
             System.clearProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
@@ -57,7 +56,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
         val result = unitUnderTest.marshal(arrayOf(prefs))
 
         // Assert
-        Assert.assertNotNull(result)
+        assertThat(result).isNotNull
 
         val normalizedDiff: Diff = DiffBuilder.compare(expected)
             .withTest(result)
@@ -65,7 +64,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
             .withNodeMatcher(DefaultNodeMatcher(ElementSelectors.byName))
             .checkForIdentical()
             .build()
-        Assert.assertFalse(normalizedDiff.hasDifferences());
+        assertThat(normalizedDiff.hasDifferences()).isFalse
     }
 
     @Test
@@ -80,8 +79,8 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
         val result = unitUnderTest.unmarshal(resultType = DrinkingPreferences::class.java, toUnmarshal = data)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(0, expected.compareTo(result))
+        assertThat(result).isNotNull
+        assertThat(expected.compareTo(result)).isEqualTo(0)
     }
 
     @Test
@@ -95,10 +94,10 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
 
         // Act
         val result = unitUnderTest.marshal(toMarshal = arrayOf(prefs), format = MarshallingFormat.JSON)
-        println("got: $result")
+        // println("got: $result")
 
         // Assert
-        Assert.assertNotNull(result)
+        assertThat(result).isNotNull
         JSONAssert.assertEquals(expected, result, true)
     }
 
@@ -118,7 +117,7 @@ class EclipseLinkMarshallerAndUnmarshallerTest {
         )
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(0, expected.compareTo(result))
+        assertThat(result).isNotNull
+        assertThat(expected.compareTo(result)).isEqualTo(0)
     }
 }

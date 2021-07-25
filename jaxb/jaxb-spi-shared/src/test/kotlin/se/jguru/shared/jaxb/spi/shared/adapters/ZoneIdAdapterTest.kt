@@ -1,6 +1,6 @@
 package se.jguru.shared.jaxb.spi.shared.adapters
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.ZoneId
 
@@ -23,8 +23,8 @@ class ZoneIdAdapterTest {
         // System.out.println("Got: " + result);
 
         // Assert
-        Assert.assertNull(unitUnderTest.marshal(null))
-        Assert.assertEquals(transportForm, result)
+        assertThat(unitUnderTest.marshal(null)).isNull()
+        assertThat(result).isEqualTo(transportForm)
     }
 
     @Test
@@ -36,7 +36,7 @@ class ZoneIdAdapterTest {
         val result = unitUnderTest.unmarshal(transportForm)
 
         // Assert
-        Assert.assertNull(unitUnderTest.unmarshal(null))
-        Assert.assertEquals(objectForm, result)
+        assertThat(unitUnderTest.unmarshal(null)).isNull()
+        assertThat(result).isEqualTo(objectForm)
     }
 }

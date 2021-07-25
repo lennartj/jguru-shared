@@ -1,8 +1,8 @@
 package se.jguru.shared.jaxb.eclipselink.example
 
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.xmlunit.builder.DiffBuilder
 import org.xmlunit.diff.DefaultNodeMatcher
@@ -31,7 +31,7 @@ class ExampleCode {
     lateinit var prefs: DrinkingPreferences
     lateinit var moxyMarsh: MoxyMarshallerAndUnmarshaller
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         ale = Beverage("Avenyn Ale")
@@ -51,7 +51,7 @@ class ExampleCode {
         moxyMarsh.namespacePrefixResolver.put("http://typical/people", "tp")
     }
 
-    @After
+    @AfterEach
     fun teardownSharedState() {
         System.clearProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
     }
@@ -73,7 +73,7 @@ class ExampleCode {
             .withNodeMatcher(DefaultNodeMatcher(ElementSelectors.byName))
             .checkForIdentical()
             .build()
-        Assert.assertFalse(normalizedDiff.hasDifferences());
+        assertThat(normalizedDiff.hasDifferences()).isFalse
     }
 
     @Test
@@ -86,7 +86,7 @@ class ExampleCode {
         val resurrected = moxyMarsh.unmarshal(DrinkingPreferences::class.java, data)
 
         // Assert
-        Assert.assertNotNull(resurrected)
-        Assert.assertEquals(0, prefs.compareTo(resurrected))
+        assertThat(resurrected).isNotNull
+        assertThat(prefs.compareTo(resurrected)).isEqualTo(0)
     }
 }
