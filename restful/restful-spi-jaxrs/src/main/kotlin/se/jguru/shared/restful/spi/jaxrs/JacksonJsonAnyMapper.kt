@@ -21,6 +21,9 @@
  */
 package se.jguru.shared.restful.spi.jaxrs
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import se.jguru.shared.json.spi.jackson.ObjectMapperBuilder
+
 /**
  * ## JSON mapper using Jackson, handling any class.
  *
@@ -54,4 +57,6 @@ package se.jguru.shared.restful.spi.jaxrs
  * > If a managed bean with a parameterized bean class declares any scope other than @Dependent, the
  * > container automatically detects the problem and treats it as a definition error."
  */
-open class JacksonJsonAnyMapper : JacksonJsonMapper<Any>()
+open class JacksonJsonAnyMapper @JvmOverloads constructor(
+    objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault()
+) : JacksonJsonMapper<Any>(objectMapper)

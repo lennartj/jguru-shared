@@ -21,7 +21,9 @@
  */
 package se.jguru.shared.restful.spi.jaxrs
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
+import se.jguru.shared.json.spi.jackson.ObjectMapperBuilder
 import java.io.InputStream
 import java.io.OutputStream
 import java.lang.reflect.Type
@@ -84,7 +86,9 @@ import javax.ws.rs.ext.MessageBodyWriter
  * @param T The class for which this JacksonJsonMapper should be used.
  * @see [JacksonJsonAnyMapper]
  */
-abstract class JacksonJsonMapper<T> : MessageBodyReader<T>, MessageBodyWriter<T> {
+abstract class JacksonJsonMapper<T> @JvmOverloads constructor(
+    val objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault()
+) : MessageBodyReader<T>, MessageBodyWriter<T> {
 
     override fun isReadable(aClass: Class<*>?,
                             type: Type?,
@@ -102,7 +106,7 @@ abstract class JacksonJsonMapper<T> : MessageBodyReader<T>, MessageBodyWriter<T>
         annotations: Array<Annotation>?,
         mediaType: MediaType,
         multivaluedMap: MultivaluedMap<String, String>?,
-        inputStream: InputStream): T = JacksonAlgorithms.deserializeFromStream(inputStream, aClass)
+        inputStream: InputStream): T = JacksonAlgorithms.deserializeFromStream(inputStream, aClass, objectMapper)
 
     override fun writeTo(
         o: T,
@@ -111,7 +115,7 @@ abstract class JacksonJsonMapper<T> : MessageBodyReader<T>, MessageBodyWriter<T>
         annotations: Array<out Annotation>?,
         mediaType: MediaType,
         multivaluedMap: MultivaluedMap<String, Any>?,
-        outputStream: OutputStream) = JacksonAlgorithms.serializeToStream(o, outputStream)
+        outputStream: OutputStream) = JacksonAlgorithms.serializeToStream(o, outputStream, objectMapper)
 
     companion object {
 
