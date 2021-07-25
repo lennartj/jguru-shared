@@ -1,6 +1,6 @@
 package se.jguru.shared.json.spi.jackson.people
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import java.io.Serializable
 
 /**
@@ -15,7 +15,7 @@ data class DrinkingPreferences(
         val toReturn: Int = this.people.size - other.people.size
 
         if (toReturn == 0) {
-            people.forEachIndexed { index, aPerson -> Assert.assertEquals(aPerson, other.people[index]) }
+            people.forEachIndexed { index, aPerson -> assertThat(other.people[index]).isEqualTo(aPerson) }
         }
 
         // All Done.

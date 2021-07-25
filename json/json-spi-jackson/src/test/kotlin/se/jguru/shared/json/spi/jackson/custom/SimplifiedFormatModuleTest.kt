@@ -1,6 +1,6 @@
 package se.jguru.shared.json.spi.jackson.custom
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 open class SimplifiedFormatModuleTest {
@@ -15,6 +15,6 @@ open class SimplifiedFormatModuleTest {
         // println("Got: ${result.toFullString()}")
 
         // Assert
-        Assert.assertNotNull(result)
+        assertThat(result).isNotNull
     }
 }

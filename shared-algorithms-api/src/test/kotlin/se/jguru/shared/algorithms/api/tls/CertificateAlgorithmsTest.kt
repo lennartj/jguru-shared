@@ -100,7 +100,16 @@ class CertificateAlgorithmsTest {
                         .filter(Objects::nonNull)
                         .map { "${it.name}: ${it.value}" }.reduce { l: String?, r: String? -> "$l,$r" } + "]"
                 }
-                println("$key: $certificateClassName ($attributes) $desc")
+
+                // Uncomment to print out a blurb on each Certificate.
+                // Something like:
+                //
+                // addtrustexternalca [jdk]: X509CertImpl ()
+                //      Issuer Name: [C]: SE, [O]: AddTrust AB, [OU]: AddTrust External TTP Network, [CN]: AddTrust External CA Root
+                //      Subject Name: [C]: SE, [O]: AddTrust AB, [OU]: AddTrust External TTP Network, [CN]: AddTrust External CA Root
+                //      Algorithm : SHA1withRSA
+                //
+                // println("$key: $certificateClassName ($attributes) $desc")
             }
     }
 

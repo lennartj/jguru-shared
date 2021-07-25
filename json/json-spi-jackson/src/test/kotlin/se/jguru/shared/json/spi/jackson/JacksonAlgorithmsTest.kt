@@ -1,8 +1,9 @@
 package se.jguru.shared.json.spi.jackson
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import se.jguru.shared.algorithms.api.resources.PropertyResources
@@ -38,7 +39,7 @@ class JacksonAlgorithmsTest {
     lateinit var timeFormats: TimeFormats
     lateinit var collectionMap: SortedMap<Long, List<String>>
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         prefs = DrinkingPreferences.createPrefs()
@@ -75,12 +76,12 @@ class JacksonAlgorithmsTest {
 
         // Assert
         JSONAssert.assertEquals(compactFormat, humanReadableFormat, true)
-        Assert.assertFalse(compactFormat == humanReadableFormat)
-        Assert.assertFalse(compactFormat.compareTo(humanReadableFormat) == 0)
+        assertThat(compactFormat).isNotEqualTo(humanReadableFormat)
+        assertThat(compactFormat.compareTo(humanReadableFormat)).isNotEqualTo(0)
 
         JSONAssert.assertEquals(expectedCompactFormat, compactFormat, true)
         JSONAssert.assertEquals(expectedPrettyFormat, humanReadableFormat, true)
-        Assert.assertEquals(expectedCompactFormat, compactFormat)
+        assertThat(expectedCompactFormat).isEqualTo(compactFormat)
     }
 
     @Test
@@ -93,8 +94,8 @@ class JacksonAlgorithmsTest {
         val result = JacksonAlgorithms.deserialize(data, Person::class.java)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(lennart, result)
+        assertThat(result).isNotNull
+        assertThat(result).isEqualTo(lennart)
     }
 
     @Test
@@ -121,14 +122,14 @@ class JacksonAlgorithmsTest {
         val result = JacksonAlgorithms.deserialize(data, DrinkingPreferences::class.java)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals(prefs, result)
+        assertThat(result).isNotNull
+        assertThat(result).isEqualTo(prefs)
 
         val anders = result.people.find { it.name == "Anders" }
         val lennart = result.people.find { it.name == "Lennart" }
 
-        Assert.assertEquals(anders?.beverage, lennart?.beverage)
-        Assert.assertSame(anders?.beverage, lennart?.beverage)
+        assertThat(lennart?.beverage).isEqualTo(anders?.beverage)
+        assertThat(lennart?.beverage).isSameAs(anders?.beverage)
     }
 
     @Test
@@ -145,14 +146,16 @@ class JacksonAlgorithmsTest {
         JSONAssert.assertEquals(data, result, true)
     }
 
-    @Test(expected = UnrecognizedPropertyException::class)
+    @Test
     fun validateDeserializingIncorrectRepresentation() {
 
         // Assemble
         val data = PropertyResources.readFully("testdata/validation/incorrect_animal.json")
 
         // Act & Assert
-        JacksonAlgorithms.deserialize(data, Animal::class.java)
+        assertThatExceptionOfType(UnrecognizedPropertyException::class.java).isThrownBy {
+            JacksonAlgorithms.deserialize(data, Animal::class.java)
+        }
     }
 
     @Test
@@ -209,8 +212,8 @@ class JacksonAlgorithmsTest {
         val resurrected = JacksonAlgorithms.deserialize(data, TimeFormats::class.java)
 
         // Assert
-        Assert.assertNotNull(resurrected)
-        Assert.assertEquals(timeFormats, resurrected)
+        assertThat(resurrected).isNotNull
+        assertThat(resurrected).isEqualTo(timeFormats)
     }
 
     @Test
@@ -239,18 +242,18 @@ class JacksonAlgorithmsTest {
         // println("Got: $resurrected, of type ${resurrected::class.java.simpleName}")
 
         // Assert
-        Assert.assertNotNull(resurrected)
-        Assert.assertTrue(resurrected is HashMap)
-        Assert.assertEquals(collectionMap.size, resurrected.size)
+        assertThat(resurrected).isNotNull
+        assertThat(resurrected).isInstanceOf(HashMap::class.java)
+        assertThat(resurrected.size).isEqualTo(collectionMap.size)
 
         collectionMap.forEach { (key, value) ->
             val actual = resurrected[key]
 
-            Assert.assertNotNull(actual)
-            Assert.assertEquals(value.size, actual!!.size)
+            assertThat(actual).isNotNull
+            assertThat(actual!!.size).isEqualTo(value.size)
 
             for (i in value.indices) {
-                Assert.assertEquals(value[i], actual[i])
+                assertThat(actual[i]).isEqualTo(value[i])
             }
         }
     }
