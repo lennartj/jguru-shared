@@ -1,6 +1,6 @@
 package se.jguru.shared.json.jackson.example
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import se.jguru.shared.algorithms.api.resources.PropertyResources
@@ -50,8 +50,8 @@ class ExampleCode {
         val deserialized: Car = JacksonAlgorithms.deserialize(jsonData, Car::class.java)
 
         // Ensure that the deserialized Car equals the expected one
-        Assert.assertEquals(expected, deserialized)
-        Assert.assertNotSame(expected, deserialized)
+        assertThat(deserialized).isEqualTo(expected)
+        assertThat(deserialized).isNotSameAs(expected)
     }
 
     @Test
@@ -60,7 +60,7 @@ class ExampleCode {
         // Assemble test data:
         // 1) Create a CarPool consisting of 3 cars and 2 drivers
         //
-        val volvo = Car("Volvo", "ABC 123", "SpungeBob")
+        val volvo = Car("Volvo", "ABC 123", "SpongeBob")
         val ford = Car("Ford", "EFG 456")
         val tesla = Car("Tesla", "HIJ 789")
 
@@ -72,7 +72,7 @@ class ExampleCode {
         // Act
         // 2) Serialize the CarPool into JSON and deserialize it back again
         val jsonCarPool: String = JacksonAlgorithms.serialize(carPool)
-        println("Serialized CarPool object:\n\n$jsonCarPool")
+        // println("Serialized CarPool object:\n\n$jsonCarPool")
 
         val deserialized: CarPool = JacksonAlgorithms.deserialize(jsonCarPool, CarPool::class.java)
 
@@ -84,19 +84,20 @@ class ExampleCode {
         val mickeysTesla: Car = deserializedMickey.cars.find { it.name == "Tesla" }!!
         val minniesTesla: Car = deserializedMinnie.cars.find { it.name == "Tesla" }!!
 
-        Assert.assertSame("Mickey's tesla was not the same as Minnie's tesla. Referential integrity compromized.",
-            mickeysTesla, minniesTesla)
+        assertThat(mickeysTesla)
+            .isSameAs(minniesTesla)
+            .withFailMessage { "Mickey's tesla was not the same as Minnie's tesla. Referential integrity compromised." }
 
-        Assert.assertEquals("SpungeBob", deserialized.cars.find { it.name == "Volvo" }!!.nickname)
-        Assert.assertNull(deserialized.cars.find { it.name == "Tesla" }!!.nickname)
-        Assert.assertNull(deserialized.cars.find { it.name == "Ford" }!!.nickname)
+        assertThat(deserialized.cars.find { it.name == "Volvo" }!!.nickname).isEqualTo("SpongeBob")
+        assertThat(deserialized.cars.find { it.name == "Tesla" }!!.nickname).isNull()
+        assertThat(deserialized.cars.find { it.name == "Ford" }!!.nickname).isNull()
     }
 
     //
     // Shared functions
     //
 
-    fun printActualDataAndAssertEquality(title : String, actual : String, resourcePathToExpectedData : String) {
+    private fun printActualDataAndAssertEquality(title : String, actual : String, resourcePathToExpectedData : String) {
 
         //
         // Printout the actual data.
