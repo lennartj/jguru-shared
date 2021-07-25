@@ -31,7 +31,6 @@ import javax.jms.Message
 import javax.jms.MessageProducer
 import javax.jms.Session
 
-
 /**
  * Abstract superclass for Request-Response-based JMS tests.
  *

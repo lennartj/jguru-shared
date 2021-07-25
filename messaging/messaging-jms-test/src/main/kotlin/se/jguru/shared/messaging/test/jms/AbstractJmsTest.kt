@@ -21,8 +21,8 @@
  */
 package se.jguru.shared.messaging.test.jms
 
-import org.junit.After
-import org.junit.Before
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.slf4j.LoggerFactory
 import javax.jms.Connection
 import javax.jms.ConnectionFactory
@@ -57,7 +57,7 @@ abstract class AbstractJmsTest(
      *
      * @throws JMSException if any of the underlying JMS methods does.
      */
-    @Before
+    @BeforeEach
     @Throws(JMSException::class)
     fun startJmsBroker() {
 
@@ -85,7 +85,7 @@ abstract class AbstractJmsTest(
      *
      * @throws JMSException if any of the underlying JMS methods does.
      */
-    @After
+    @AfterEach
     @Throws(JMSException::class)
     fun stopJmsBroker() {
 

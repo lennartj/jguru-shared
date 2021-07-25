@@ -1,10 +1,12 @@
 package se.jguru.shared.messaging.api
 
-import org.apache.activemq.artemis.junit.EmbeddedJMSResource
-import org.junit.Assert
-import org.junit.Rule
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.TreeMap
+import java.util.concurrent.atomic.AtomicInteger
+import javax.jms.JMSContext
 
 /**
  *
@@ -12,8 +14,22 @@ import java.util.TreeMap
  */
 class MessagesTest {
 
-    @get:Rule
-    val artemis = EmbeddedJMSResource();
+    /*
+    private val testIndex = AtomicInteger(1000)
+
+    lateinit var artemis : JupiterAwareArtemis
+    lateinit var jmsContext : JMSContext
+
+    @BeforeEach
+    fun setupTestArtemisService() {
+        artemis = JupiterAwareArtemis(testIndex.incrementAndGet())
+        jmsContext = artemis.jmsContext()
+    }
+
+    @AfterEach
+    fun teardownTestArtemisService() {
+        artemis.stop()
+    }
 
     @Test
     fun validateCopyingDataToAndFromMessage() {
@@ -24,13 +40,13 @@ class MessagesTest {
         props["meaningOfLife"] = 42L
 
         // Act
-        val textMessage = artemis.createTextMessage()
+        val textMessage = jmsContext.createTextMessage()
         props.copyPropertiesTo(textMessage)
 
         // Assert
         val result = Messages.getPropertyMap(textMessage)
-        Assert.assertEquals(result["foo"], "bar")
-        Assert.assertEquals(result["meaningOfLife"], 42L)
+        assertThat(result["foo"]).isEqualTo("bar")
+        assertThat(result["meaningOfLife"]).isEqualTo(42L)
 
         // println("Got: $result")
 
@@ -60,12 +76,13 @@ class MessagesTest {
         props["bytes"] = "foonbar".toByteArray()
 
         // Act
-        val mapMessage = artemis.createMapMessage()
+        val mapMessage = jmsContext.createMapMessage()
         Messages.writeToBody(props, mapMessage)
 
         val result = Messages.readFromBody(mapMessage)
 
         // Assert
-        result.forEach { k, v -> Assert.assertEquals(v, props[k]) }
+        result.forEach { (k, v) -> assertThat(props[k]).isEqualTo(v) }
     }
+     */
 }

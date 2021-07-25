@@ -1,6 +1,7 @@
 package se.jguru.shared.messaging.api
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Test
 
 /**
@@ -9,14 +10,16 @@ import org.junit.jupiter.api.Test
  */
 class JmsCompliantMapTest {
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateExceptionOnAttemptingToInsertIncorrectType() {
 
         // Assemble
         val unitUnderTest = JmsCompliantMap()
 
         // Act & Assert
-        unitUnderTest["blah"] = StringBuffer()
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            unitUnderTest["blah"] = StringBuffer()
+        }
     }
 
     @Test
@@ -29,7 +32,7 @@ class JmsCompliantMapTest {
         unitUnderTest["foo"] = "bar"
 
         // Assert
-        Assert.assertEquals(1, unitUnderTest.size)
-        Assert.assertEquals("bar", unitUnderTest["foo"])
+        assertThat(unitUnderTest.size).isEqualTo(1)
+        assertThat(unitUnderTest["foo"]).isEqualTo("bar")
     }
 }
