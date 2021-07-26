@@ -1,12 +1,9 @@
 package se.jguru.shared.persistence.spi.jpa
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import se.jguru.shared.persistence.spi.jpa.classloading.CommonPersistenceProvidersInfo
 import java.util.Arrays
-import javax.persistence.EntityManagerFactory
-import javax.persistence.Persistence
-import javax.persistence.spi.PersistenceProvider
 
 /**
  *
@@ -24,21 +21,13 @@ class JpaHelperTest {
         val persistenceProviders = JpaHelper.persistenceProviders
 
         // Assert
-        Assert.assertNotNull(persistenceProviders)
-        Assert.assertEquals(commonProviders.size, persistenceProviders.size)
+        assertThat(persistenceProviders).isNotNull
+        assertThat(persistenceProviders.size).isEqualTo(commonProviders.size)
 
         Arrays.stream(commonProviders)
             .map { it.getProviderClassName() }
-            .forEach { current -> Assert.assertNotNull(persistenceProviders.firstOrNull { it::class.java.name == current }) }
-    }
-
-    @Test
-    fun validateCreatingSchema() {
-
-        // Assemble
-
-        // Act
-
-        // Assert
+            .forEach { current ->
+                assertThat(persistenceProviders.firstOrNull { it::class.java.name == current }).isNotNull
+            }
     }
 }

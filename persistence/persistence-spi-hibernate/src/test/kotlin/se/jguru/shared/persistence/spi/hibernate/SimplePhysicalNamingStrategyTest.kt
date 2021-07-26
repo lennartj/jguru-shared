@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.hibernate
 
+import org.assertj.core.api.Assertions.assertThat
 import org.hibernate.boot.model.naming.Identifier
-import org.junit.Assert
 import org.junit.jupiter.api.Test
 
 open class SimplePhysicalNamingStrategyTest {
@@ -20,8 +20,8 @@ open class SimplePhysicalNamingStrategyTest {
         val result = SimplePhysicalNamingStrategy.toLowerCase(supplied, struct)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals("thisiscamelcase", result!!.render())
+        assertThat(result).isNotNull
+        assertThat(result!!.render()).isEqualTo("thisiscamelcase")
     }
 
     @Test
@@ -34,8 +34,8 @@ open class SimplePhysicalNamingStrategyTest {
         val resultWithNullText = SimplePhysicalNamingStrategy.toLowerCase(Identifier.toIdentifier(null), struct)
 
         // Assert
-        Assert.assertNull(resultWithNull)
-        Assert.assertNull(resultWithNullText)
+        assertThat(resultWithNull).isNull()
+        assertThat(resultWithNullText).isNull()
     }
 
     @Test
@@ -49,8 +49,8 @@ open class SimplePhysicalNamingStrategyTest {
         val result = SimplePhysicalNamingStrategy.toSnakeCase(supplied, struct)
 
         // Assert
-        Assert.assertNotNull(result)
-        Assert.assertEquals("this_is_camel_case", result!!.render())
+        assertThat(result).isNotNull
+        assertThat(result!!.render()).isEqualTo("this_is_camel_case")
     }
 
     @Test
@@ -63,7 +63,7 @@ open class SimplePhysicalNamingStrategyTest {
         val resultWithNullText = SimplePhysicalNamingStrategy.toSnakeCase(Identifier.toIdentifier(null), struct)
 
         // Assert
-        Assert.assertNull(resultWithNull)
-        Assert.assertNull(resultWithNullText)
+        assertThat(resultWithNull).isNull()
+        assertThat(resultWithNullText).isNull()
     }
 }

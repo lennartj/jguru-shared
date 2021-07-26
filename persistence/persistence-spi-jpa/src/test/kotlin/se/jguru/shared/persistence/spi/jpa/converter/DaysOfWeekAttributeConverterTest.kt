@@ -1,7 +1,8 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 import java.util.SortedSet
@@ -18,7 +19,7 @@ class DaysOfWeekAttributeConverterTest {
     private lateinit var weekEnds: SortedSet<DayOfWeek>
     private val unitUnderTest = DaysOfWeekAttributeConverter()
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         weekDays = TreeSet<DayOfWeek>(listOf(
@@ -44,9 +45,9 @@ class DaysOfWeekAttributeConverterTest {
         val weekendResults = unitUnderTest.convertToDatabaseColumn(weekEnds)
 
         // Assert
-        Assert.assertNull(unitUnderTest.convertToDatabaseColumn(null))
-        Assert.assertEquals("1,2,3,4,5", weekdayResults)
-        Assert.assertEquals("6,7", weekendResults)
+        assertThat(unitUnderTest.convertToDatabaseColumn(null)).isNull()
+        assertThat(weekdayResults).isEqualTo("1,2,3,4,5")
+        assertThat(weekendResults).isEqualTo("6,7")
     }
 
     @Test
@@ -60,20 +61,20 @@ class DaysOfWeekAttributeConverterTest {
         val reallyNothing = unitUnderTest.convertToEntityAttribute(null)
 
         // Assert
-        Assert.assertNotNull(reallyNothing)
-        Assert.assertNotNull(nothing)
-        Assert.assertTrue(nothing.isEmpty())
-        Assert.assertTrue(reallyNothing.isEmpty())
+        assertThat(reallyNothing).isNotNull
+        assertThat(nothing).isNotNull
+        assertThat(nothing).isEmpty()
+        assertThat(reallyNothing).isEmpty()
 
-        Assert.assertEquals(weekDays, weekdays)
+        assertThat(weekdays).isEqualTo(weekDays)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateExceptionOnIncorrectWeekOfDayValue() {
 
         // Act & Assert
-        val result = unitUnderTest.convertToEntityAttribute("1,2,42")
-
-        println("Got: $result")
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            unitUnderTest.convertToEntityAttribute("1,2,42")
+        }
     }
 }

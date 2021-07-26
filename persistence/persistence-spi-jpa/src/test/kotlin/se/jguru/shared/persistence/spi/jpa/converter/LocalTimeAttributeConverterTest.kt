@@ -1,6 +1,6 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.sql.Time
 import java.time.LocalTime
@@ -25,8 +25,8 @@ class LocalTimeAttributeConverterTest {
         val result = unitUnderTest.convertToDatabaseColumn(theTime)
 
         // Assert
-        Assert.assertNull(unitUnderTest.convertToDatabaseColumn(null))
-        Assert.assertEquals(objectForm, result)
+        assertThat(unitUnderTest.convertToDatabaseColumn(null)).isNull()
+        assertThat(result).isEqualTo(objectForm)
     }
 
     @Test
@@ -38,7 +38,7 @@ class LocalTimeAttributeConverterTest {
         val result = unitUnderTest.convertToEntityAttribute(objectForm)
 
         // Assert
-        Assert.assertNull(unitUnderTest.convertToEntityAttribute(null))
-        Assert.assertEquals(theTime, result)
+        assertThat(unitUnderTest.convertToEntityAttribute(null)).isNull()
+        assertThat(result).isEqualTo(theTime)
     }
 }

@@ -1,6 +1,6 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.Locale
 
@@ -34,7 +34,7 @@ class LocaleAttributeConverterTest {
 
         // Assert
         for (i in results.indices) {
-            Assert.assertEquals(expectedTransportForms[i], results[i])
+            assertThat(results[i]).isEqualTo(expectedTransportForms[i])
         }
     }
 
@@ -51,7 +51,7 @@ class LocaleAttributeConverterTest {
 
         // Assert
         for (i in results.indices) {
-            Assert.assertEquals(objectForms[i], results[i])
+            assertThat(results[i]).isEqualTo(objectForms[i])
         }
     }
 }

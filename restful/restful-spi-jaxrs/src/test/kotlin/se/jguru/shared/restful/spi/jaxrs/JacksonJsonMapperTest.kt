@@ -1,7 +1,7 @@
 package se.jguru.shared.restful.spi.jaxrs
 
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
@@ -24,9 +24,8 @@ open class JacksonJsonMapperTest {
 
     lateinit var serializedChesterfield : String
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
-
         serializedChesterfield = JacksonAlgorithms.serialize(chesterfield)
     }
 
@@ -53,7 +52,7 @@ open class JacksonJsonMapperTest {
         // println("Got: $result")
 
         // Assert
-        Assert.assertTrue(isWriteable)
+        assertThat(isWriteable).isTrue
         JSONAssert.assertEquals(serializedChesterfield, result, true)
     }
 
@@ -76,7 +75,7 @@ open class JacksonJsonMapperTest {
             input)
 
         // Assert
-        Assert.assertTrue(isReadable)
-        Assert.assertEquals(chesterfield, resurrected)
+        assertThat(isReadable).isTrue
+        assertThat(resurrected).isEqualTo(chesterfield)
     }
 }

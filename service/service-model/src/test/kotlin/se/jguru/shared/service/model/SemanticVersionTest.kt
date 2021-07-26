@@ -1,6 +1,7 @@
 package se.jguru.shared.service.model
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Test
 
 class SemanticVersionTest {
@@ -14,13 +15,13 @@ class SemanticVersionTest {
         val v1 = SemanticVersion(1)
 
         // Act & Assert
-        Assert.assertEquals(v120, v12)
-        Assert.assertEquals(0, v120.compareTo(v12))
+        assertThat(v120).isEqualTo(v12)
+        assertThat(v120.compareTo(v12)).isEqualTo(0)
 
-        Assert.assertEquals(-2, v1.compareTo(v120))
-        Assert.assertEquals(2, v12.compareTo(v1))
+        assertThat(v1.compareTo(v120)).isEqualTo(-2)
+        assertThat(v12.compareTo(v1)).isEqualTo(2)
 
-        Assert.assertFalse(v120.isUndefined)
+        assertThat(v120.isUndefined).isFalse
     }
 
     @Test
@@ -33,13 +34,13 @@ class SemanticVersionTest {
         val v1 = SemanticVersion(1)
 
         // Act & Assert
-        Assert.assertEquals(v120, v12)
-        Assert.assertEquals(0, v120.compareTo(v12))
+        assertThat(v12).isEqualTo(v120)
+        assertThat(v120.compareTo(v12)).isEqualTo(0)
 
-        Assert.assertEquals(-2, v1.compareTo(v120))
-        Assert.assertEquals(2, v12.compareTo(v1))
-        Assert.assertEquals(3, v1Bah.compareTo(v1))
-        Assert.assertEquals(-3, v1.compareTo(v1Bah))
+        assertThat(v1.compareTo(v120)).isEqualTo(-2)
+        assertThat(v12.compareTo(v1)).isEqualTo(2)
+        assertThat(v1Bah.compareTo(v1)).isEqualTo(3)
+        assertThat(v1.compareTo(v1Bah)).isEqualTo(-3)
     }
 
     @Test
@@ -60,42 +61,50 @@ class SemanticVersionTest {
         val semVer123Final = SemanticVersion.parseFrom(v123Final)
 
         // Assert
-        Assert.assertEquals(semVer120, semVer12)
-        Assert.assertNull(semVer123.qualifier)
+        assertThat(semVer120).isEqualTo(semVer12)
+        assertThat(semVer123.qualifier).isNull()
 
-        Assert.assertEquals("Final", semVer123Final.qualifier)
+        assertThat(semVer123Final.qualifier).isEqualTo("Final")
 
-        Assert.assertEquals(1, semVer1.major)
-        Assert.assertEquals(0, semVer1.minor)
-        Assert.assertEquals(0, semVer1.micro)
-        Assert.assertNull(semVer1.qualifier)
+        assertThat(semVer1.major).isEqualTo(1)
+        assertThat(semVer1.minor).isEqualTo(0)
+        assertThat(semVer1.micro).isEqualTo(0)
+        assertThat(semVer1.qualifier).isNull()
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateExceptionOnIncorrectParsing() {
 
         // Act & Assert
-        SemanticVersion.parseFrom("not.a.version")
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            SemanticVersion.parseFrom("not.a.version")
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateExceptionOnNegativeMajorVersion() {
 
         // Act & Assert
-        SemanticVersion(-1)
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            SemanticVersion(-1)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateExceptionOnNegativeMinorVersion() {
 
         // Act & Assert
-        SemanticVersion(23, -1)
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            SemanticVersion(23, -1)
+        }
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateExceptionOnNegativeMicroVersion() {
 
         // Act & Assert
-        SemanticVersion(23, 24, -25)
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            SemanticVersion(23, 24, -25)
+        }
     }
 }

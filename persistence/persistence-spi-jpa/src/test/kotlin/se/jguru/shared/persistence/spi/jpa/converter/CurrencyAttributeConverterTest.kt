@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -20,7 +20,7 @@ class CurrencyAttributeConverterTest {
     private val code2ObjectForm : SortedMap<String, Currency> = TreeMap()
     private val unitUnderTest = CurrencyAttributeConverter()
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         Currency.getAvailableCurrencies()
@@ -46,15 +46,16 @@ class CurrencyAttributeConverterTest {
     @Test
     fun validateConvertingToTransportForm() {
 
-        code2ObjectForm.forEach { code, currency ->
-            Assert.assertSame(currency, unitUnderTest.convertToEntityAttribute(code)) }
+        code2ObjectForm.forEach { (code, currency) ->
+            assertThat(unitUnderTest.convertToEntityAttribute(code)).isSameAs(currency)
+        }
     }
 
     @Test
     fun validateConvertingFromTransportForm() {
 
-        code2ObjectForm.forEach { code, currency ->
-            Assert.assertEquals(code, unitUnderTest.convertToDatabaseColumn(currency))
+        code2ObjectForm.forEach { (code, currency) ->
+            assertThat(unitUnderTest.convertToDatabaseColumn(currency)).isEqualTo(code)
         }
     }
 }

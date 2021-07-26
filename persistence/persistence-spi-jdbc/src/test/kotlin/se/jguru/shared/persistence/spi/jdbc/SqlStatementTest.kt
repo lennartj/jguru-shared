@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jdbc
 
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import se.jguru.shared.algorithms.api.resources.PropertyResources
@@ -15,7 +15,7 @@ class SqlStatementTest {
 
     lateinit var unitUnderTest: SqlStatements
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         unitUnderTest = SqlStatements("SomeSystem")
@@ -61,11 +61,11 @@ class SqlStatementTest {
 
             val statementList = entry.value
             val resurrectedStatementList = resurrected.statements[entry.key]!!
-            Assert.assertEquals(statementList.size, resurrectedStatementList.size)
+            assertThat(resurrectedStatementList.size).isEqualTo(statementList.size)
 
             statementList.forEachIndexed { index, sqlStatement ->
-                Assert.assertEquals(1, sqlStatement.numParameters)
-                Assert.assertEquals(0, sqlStatement.compareTo(resurrectedStatementList.get(index)))
+                assertThat(sqlStatement.numParameters).isEqualTo(1)
+                assertThat(sqlStatement.compareTo(resurrectedStatementList[index])).isEqualTo(0)
             }
         }
     }
@@ -88,17 +88,17 @@ class SqlStatementTest {
         val sql = statement.tokenize(tokenMap)
 
         // Assert
-        Assert.assertNotNull(statement)
-        Assert.assertNotNull(sql)
+        assertThat(statement).isNotNull
+        assertThat(sql).isNotNull
 
-        Assert.assertTrue(template.contains(SqlTemplateSubstitution.DISTINCT.token()))
-        Assert.assertTrue(template.contains(SqlTemplateSubstitution.WHERE.token()))
+        assertThat(template).contains(SqlTemplateSubstitution.DISTINCT.token())
+        assertThat(template).contains(SqlTemplateSubstitution.WHERE.token())
 
-        Assert.assertFalse(sql.contains(SqlTemplateSubstitution.DISTINCT.token()))
-        Assert.assertFalse(sql.contains(SqlTemplateSubstitution.WHERE.token()))
+        assertThat(sql).doesNotContain(SqlTemplateSubstitution.DISTINCT.token())
+        assertThat(sql).doesNotContain(SqlTemplateSubstitution.WHERE.token())
 
-        Assert.assertTrue(sql.contains("distinct"))
-        Assert.assertTrue(sql.contains(whereClause))
+        assertThat(sql).contains("distinct")
+        assertThat(sql).contains(whereClause)
     }
 
     @Test
@@ -117,7 +117,7 @@ class SqlStatementTest {
         val result = statement.tokenize()
 
         // Assert
-        Assert.assertEquals(expected, result)
+        assertThat(result).isEqualTo(expected)
     }
 
     @Test
@@ -131,9 +131,9 @@ class SqlStatementTest {
         val result = SqlStatement.split(params)
 
         // Assert
-        Assert.assertEquals(3, result.size)
+        assertThat(result.size).isEqualTo(3)
         for(index in expected.indices) {
-            Assert.assertEquals(expected[index], result[index])
+            assertThat(result[index]).isEqualTo(expected[index])
         }
     }
 
@@ -153,6 +153,6 @@ class SqlStatementTest {
         val result = statement.tokenize()
 
         // Assert
-        Assert.assertEquals(expected, result)
+        assertThat(result).isEqualTo(expected)
     }
 }

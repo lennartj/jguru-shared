@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.Arrays
 import java.util.SortedMap
@@ -17,7 +17,7 @@ class TimeZoneAttributeConverterTest {
     private val allTimeZones : SortedMap<String, TimeZone> = TreeMap()
     private val unitUnderTest = TimeZoneAttributeConverter()
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
         Arrays.stream(TimeZone.getAvailableIDs()).forEach { allTimeZones.put(it, TimeZone.getTimeZone(it)) }
     }
@@ -31,8 +31,8 @@ class TimeZoneAttributeConverterTest {
             val result = unitUnderTest.convertToDatabaseColumn(current.value)
 
             // Assert
-            Assert.assertNull(unitUnderTest.convertToDatabaseColumn(null))
-            Assert.assertEquals(current.key, result)
+            assertThat(unitUnderTest.convertToDatabaseColumn(null)).isNull()
+            assertThat(result).isEqualTo(current.key)
         }
     }
 
@@ -45,8 +45,8 @@ class TimeZoneAttributeConverterTest {
             val result = unitUnderTest.convertToEntityAttribute(current.key)
 
             // Assert
-            Assert.assertNull(unitUnderTest.convertToEntityAttribute(null))
-            Assert.assertEquals(current.value, result)
+            assertThat(unitUnderTest.convertToEntityAttribute(null)).isNull()
+            assertThat(result).isEqualTo(current.value)
         }
     }
 }

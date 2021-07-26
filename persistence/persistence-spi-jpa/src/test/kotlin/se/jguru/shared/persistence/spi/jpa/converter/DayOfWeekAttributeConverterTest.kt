@@ -1,7 +1,6 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
-import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.DayOfWeek
 
@@ -22,8 +21,8 @@ class DayOfWeekAttributeConverterTest {
         val result = unitUnderTest.convertToDatabaseColumn(DayOfWeek.THURSDAY)
 
         // Assert
-        Assert.assertNull(unitUnderTest.convertToDatabaseColumn(null))
-        Assert.assertEquals(DayOfWeek.THURSDAY.value, result)
+        assertThat(unitUnderTest.convertToDatabaseColumn(null)).isNull()
+        assertThat(result).isEqualTo(DayOfWeek.THURSDAY.value)
     }
 
     @Test
@@ -36,7 +35,7 @@ class DayOfWeekAttributeConverterTest {
         val result = unitUnderTest.convertToEntityAttribute(theDay.value)
 
         // Assert
-        Assert.assertNull(unitUnderTest.convertToEntityAttribute(null))
-        Assert.assertEquals(theDay, result)
+        assertThat(unitUnderTest.convertToEntityAttribute(null)).isNull()
+        assertThat(result).isEqualTo(theDay)
     }
 }

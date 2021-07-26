@@ -2,8 +2,8 @@ package se.jguru.shared.persistence.spi.jdbc
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.junit.After
-import org.junit.Before
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.slf4j.LoggerFactory
 import java.sql.Connection
 import java.sql.Statement
@@ -65,7 +65,7 @@ abstract class AbstractJdbcTest {
 
     protected lateinit var dataSource: DataSource
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
 
         dataSource = createDataSource()
@@ -74,7 +74,7 @@ abstract class AbstractJdbcTest {
         executeStatements(getInitializeDbStateSqlStatements())
     }
 
-    @After
+    @AfterEach
     fun teardownSharedState() {
         executeStatements(getCleanupDbStateSqlStatements())
     }

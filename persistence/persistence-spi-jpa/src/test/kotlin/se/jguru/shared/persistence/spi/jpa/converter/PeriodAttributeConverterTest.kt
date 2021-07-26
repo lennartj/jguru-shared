@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Period
 import java.util.SortedMap
@@ -16,7 +16,7 @@ class PeriodAttributeConverterTest {
     private val allPeriods: SortedMap<String, Period> = TreeMap()
     private val unitUnderTest = PeriodAttributeConverter()
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
         listOf(
             Period.ofDays(1),
@@ -36,8 +36,8 @@ class PeriodAttributeConverterTest {
             val result = unitUnderTest.convertToDatabaseColumn(current.value)
 
             // Assert
-            Assert.assertNull(unitUnderTest.convertToDatabaseColumn(null))
-            Assert.assertEquals(current.key, result)
+            assertThat(unitUnderTest.convertToDatabaseColumn(null)).isNull()
+            assertThat(result).isEqualTo(current.key)
         }
     }
 
@@ -50,8 +50,8 @@ class PeriodAttributeConverterTest {
             val result = unitUnderTest.convertToEntityAttribute(current.key)
 
             // Assert
-            Assert.assertNull(unitUnderTest.convertToEntityAttribute(null))
-            Assert.assertEquals(current.value, result)
+            assertThat(unitUnderTest.convertToEntityAttribute(null)).isNull()
+            assertThat(result).isEqualTo(current.value)
         }
     }
 }

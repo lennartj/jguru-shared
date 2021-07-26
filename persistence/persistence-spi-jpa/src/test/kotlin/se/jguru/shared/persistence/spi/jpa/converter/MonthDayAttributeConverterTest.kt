@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Month
 import java.time.MonthDay
@@ -17,7 +17,7 @@ class MonthDayAttributeConverterTest {
     private val allMonthDays : SortedMap<String, MonthDay> = TreeMap()
     private val unitUnderTest = MonthDayAttributeConverter()
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
         for(current in Month.values()) {
             for(i in 8 .. 25) {
@@ -37,8 +37,8 @@ class MonthDayAttributeConverterTest {
             val result = unitUnderTest.convertToDatabaseColumn(current.value)
 
             // Assert
-            Assert.assertNull(unitUnderTest.convertToDatabaseColumn(null))
-            Assert.assertEquals(current.key, result)
+            assertThat(unitUnderTest.convertToDatabaseColumn(null)).isNull()
+            assertThat(result).isEqualTo(current.key)
         }
     }
 
@@ -51,8 +51,8 @@ class MonthDayAttributeConverterTest {
             val result = unitUnderTest.convertToEntityAttribute(current.key)
 
             // Assert
-            Assert.assertNull(unitUnderTest.convertToEntityAttribute(null))
-            Assert.assertEquals(current.value, result)
+            assertThat(unitUnderTest.convertToEntityAttribute(null)).isNull()
+            assertThat(result).isEqualTo(current.value)
         }
     }
 }

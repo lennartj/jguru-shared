@@ -1,6 +1,6 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.Year
 
@@ -22,8 +22,8 @@ class YearAttributeConverterTest {
         val result = unitUnderTest.convertToDatabaseColumn(nineteenEightyFour)
 
         // Assert
-        Assert.assertNull(unitUnderTest.convertToDatabaseColumn(null))
-        Assert.assertEquals(1984, result)
+        assertThat(unitUnderTest.convertToDatabaseColumn(null)).isNull()
+        assertThat(result).isEqualTo(1984)
     }
 
     @Test
@@ -36,7 +36,7 @@ class YearAttributeConverterTest {
         val result = unitUnderTest.convertToEntityAttribute(theYear.value)
 
         // Assert
-        Assert.assertNull(unitUnderTest.convertToEntityAttribute(null))
-        Assert.assertEquals(theYear, result)
+        assertThat(unitUnderTest.convertToEntityAttribute(null)).isNull()
+        assertThat(result).isEqualTo(theYear)
     }
 }

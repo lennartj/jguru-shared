@@ -1,6 +1,6 @@
 package se.jguru.shared.persistence.spi.jdbc
 
-import org.junit.Assert
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import se.jguru.shared.persistence.spi.jdbc.helpers.Person
 import se.jguru.shared.persistence.spi.jdbc.helpers.PersonAndPetView
@@ -93,8 +93,10 @@ class DbOperationsTest : AbstractJdbcTest() {
         }
 
         // Assert
-        Assert.assertNotNull(databaseMetadata)
-        expected.forEach { Assert.assertTrue(expected.contains(it.toUpperCase(Locale.ENGLISH))) }
+        assertThat(databaseMetadata).isNotNull
+        expected.forEach {
+            assertThat(expected).contains(it.uppercase(Locale.ENGLISH))
+        }
     }
 
     @Test
@@ -117,10 +119,10 @@ class DbOperationsTest : AbstractJdbcTest() {
             .toMap()
 
         // Assert
-        Assert.assertEquals(2, people.size)
+        assertThat(people.size).isEqualTo(2)
 
-        Assert.assertEquals("Jörelid", people[1]?.lastName)
-        Assert.assertEquals("Wendels", people[2]?.lastName)
+        assertThat(people[1]?.lastName).isEqualTo("Jörelid")
+        assertThat(people[2]?.lastName).isEqualTo("Wendels")
     }
 
     @Test
@@ -139,14 +141,14 @@ class DbOperationsTest : AbstractJdbcTest() {
         { arrayOf(it.first, it.second) }
 
         // Assert
-        Assert.assertEquals(10, insertPetMetadata.numRowsAffected)
-        Assert.assertEquals(10, insertOwnersMetadata.numRowsAffected)
+        assertThat(insertPetMetadata.numRowsAffected).isEqualTo(10)
+        assertThat(insertOwnersMetadata.numRowsAffected).isEqualTo(10)
 
         val db = getDbStructure()
-        Assert.assertEquals(2, db.size)
+        assertThat(db.size).isEqualTo(2)
 
         val personWithManyPets = db.first { it.id == 1 }
-        Assert.assertEquals(11, personWithManyPets.pets.size)
+        assertThat(personWithManyPets.pets.size).isEqualTo(11)
     }
 
     @Test
@@ -161,12 +163,12 @@ class DbOperationsTest : AbstractJdbcTest() {
         { arrayOf(it) }
 
         // Assert
-        Assert.assertEquals(2, insertNicknamesMetadata.numRowsAffected)
+        assertThat(insertNicknamesMetadata.numRowsAffected).isEqualTo(2)
 
         val genPKs = insertNicknamesMetadata.generatedPrimaryKeys
-        Assert.assertEquals(2, genPKs.size)
+        assertThat(genPKs.size).isEqualTo(2)
 
-        Assert.assertArrayEquals(arrayOf(101, 102), genPKs.toTypedArray())
+        assertThat(genPKs.toTypedArray()).containsExactlyElementsOf(listOf(101, 102))
     }
 
     @Test
@@ -181,14 +183,14 @@ class DbOperationsTest : AbstractJdbcTest() {
         { arrayOf(it.firstName, it.lastName, it.id) }
 
         // Assert
-        Assert.assertEquals(1, updateMetadata.numRowsAffected)
+        assertThat(updateMetadata.numRowsAffected).isEqualTo(1)
 
         val db = getDbStructure()
-        Assert.assertEquals(2, db.size)
+        assertThat(db.size).isEqualTo(2)
 
         val theLennart = db.first { it.id == 1 }
-        Assert.assertEquals("Fleptut", theLennart.firstName)
-        Assert.assertEquals("Jörelid", theLennart.lastName)
+        assertThat(theLennart.firstName).isEqualTo("Fleptut")
+        assertThat(theLennart.lastName).isEqualTo("Jörelid")
     }
 
     //

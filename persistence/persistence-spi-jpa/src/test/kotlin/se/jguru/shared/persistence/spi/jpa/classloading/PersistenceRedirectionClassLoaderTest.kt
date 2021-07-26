@@ -1,9 +1,10 @@
 package se.jguru.shared.persistence.spi.jpa.classloading
 
 import org.apache.logging.log4j.LogManager
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.Collections
 
@@ -21,21 +22,23 @@ class PersistenceRedirectionClassLoaderTest {
     // Shared state
     private lateinit var originalClassLoader: ClassLoader
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
         originalClassLoader = Thread.currentThread().contextClassLoader
     }
 
-    @After
+    @AfterEach
     fun teardownSharedState() {
         Thread.currentThread().contextClassLoader = originalClassLoader
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun validateExceptionOnEmptyRedirectionTarget() {
 
         // Act & Assert
-        PersistenceRedirectionClassLoader(originalClassLoader, "")
+        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
+            PersistenceRedirectionClassLoader(originalClassLoader, "")
+        }
     }
 
     @Test
@@ -45,7 +48,7 @@ class PersistenceRedirectionClassLoaderTest {
         val activeClassloader = Thread.currentThread().contextClassLoader
 
         // Assert
-        Assert.assertFalse(activeClassloader is PersistenceRedirectionClassLoader)
+        assertThat(activeClassloader).isNotInstanceOf(PersistenceRedirectionClassLoader::class.java)
     }
 
     @Test
@@ -67,19 +70,18 @@ class PersistenceRedirectionClassLoaderTest {
         val nonRedirectedURLs = Collections.list(nonRedirectedResources)
 
         // Assert
-        Assert.assertEquals(1, redirectedURLs.size.toLong())
-        Assert.assertEquals(1, nonRedirectedURLs.size.toLong())
+        assertThat(redirectedURLs.size).isEqualTo(1)
+        assertThat(nonRedirectedURLs.size).isEqualTo(1)
 
-        Assert.assertTrue(redirectedURLs[0].path.endsWith(REDIRECTED))
-        Assert.assertTrue(nonRedirectedURLs[0].path.endsWith(NON_REDIRECTED))
+        assertThat(redirectedURLs[0].path).endsWith(REDIRECTED)
+        assertThat(nonRedirectedURLs[0].path).endsWith(NON_REDIRECTED)
 
-        Assert.assertTrue(unitUnderTest.caseInsensitive)
-        Assert.assertEquals(REDIRECTED, unitUnderTest.redirectTo)
-        Assert.assertTrue(unitUnderTest.toString().isNotBlank())
+        assertThat(unitUnderTest.caseInsensitive).isTrue
+        assertThat(unitUnderTest.toString()).isNotBlank
+        assertThat(unitUnderTest.redirectTo).isEqualTo(REDIRECTED)
     }
 
     @Test
-    @Throws(Exception::class)
     fun validateRedirectionForSingleResource() {
 
         // Assemble
@@ -91,15 +93,14 @@ class PersistenceRedirectionClassLoaderTest {
         val nonRedirectedResource = unitUnderTest.getResource(NON_REDIRECTED)
 
         // Assert
-        Assert.assertNotNull(redirectedResource)
-        Assert.assertNotNull(nonRedirectedResource)
+        assertThat(redirectedResource).isNotNull
+        assertThat(nonRedirectedResource).isNotNull
 
-        Assert.assertTrue(redirectedResource.path.endsWith(REDIRECTED))
-        Assert.assertTrue(nonRedirectedResource.path.endsWith(NON_REDIRECTED))
+        assertThat(redirectedResource?.path).endsWith(REDIRECTED)
+        assertThat(nonRedirectedResource?.path).endsWith(NON_REDIRECTED)
     }
 
     @Test
-    @Throws(Exception::class)
     fun validateRedirectionOnlyHappensForPersistenceXmlWithQuietLogging() {
 
         // Assemble
@@ -107,7 +108,7 @@ class PersistenceRedirectionClassLoaderTest {
         val quietLogConfig = javaClass.classLoader.getResource("log4j2-test-quiet.xml")
 
         // this will force a reconfiguration
-        loggerContext.configLocation = quietLogConfig.toURI()
+        loggerContext.configLocation = quietLogConfig?.toURI()
 
         val unitUnderTest = PersistenceRedirectionClassLoader(
             originalClassLoader, REDIRECTED)
@@ -123,10 +124,10 @@ class PersistenceRedirectionClassLoaderTest {
         val nonRedirectedURLs = Collections.list(nonRedirectedResources)
 
         // Assert
-        Assert.assertEquals(1, redirectedURLs.size.toLong())
-        Assert.assertEquals(1, nonRedirectedURLs.size.toLong())
+        assertThat(redirectedURLs.size).isEqualTo(1)
+        assertThat(nonRedirectedURLs.size).isEqualTo(1)
 
-        Assert.assertTrue(redirectedURLs[0].path.endsWith(REDIRECTED))
-        Assert.assertTrue(nonRedirectedURLs[0].path.endsWith(NON_REDIRECTED))
+        assertThat(redirectedURLs[0].path).endsWith(REDIRECTED)
+        assertThat(nonRedirectedURLs[0].path).endsWith(NON_REDIRECTED)
     }
 }

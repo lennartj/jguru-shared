@@ -1,7 +1,7 @@
 package se.jguru.shared.persistence.spi.jpa.converter
 
-import org.junit.Assert
-import org.junit.Before
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.ZoneId
 import java.util.SortedMap
@@ -16,11 +16,11 @@ class ZoneIdAttributeConverterTest {
     private val allZoneIDs: SortedMap<String, ZoneId> = TreeMap()
     private val unitUnderTest = ZoneIdAttributeConverter()
 
-    @Before
+    @BeforeEach
     fun setupSharedState() {
         ZoneId.getAvailableZoneIds().forEach { allZoneIDs[it] = ZoneId.of(it) }
 
-        allZoneIDs.forEach { anID, aZoneID -> println("[$anID]: $aZoneID") }
+        allZoneIDs.forEach { (anID, aZoneID) -> println("[$anID]: $aZoneID") }
     }
 
     @Test
@@ -32,8 +32,8 @@ class ZoneIdAttributeConverterTest {
             val result = unitUnderTest.convertToDatabaseColumn(current.value)
 
             // Assert
-            Assert.assertNull(unitUnderTest.convertToDatabaseColumn(null))
-            Assert.assertEquals(current.key, result)
+            assertThat(unitUnderTest.convertToDatabaseColumn(null)).isNull()
+            assertThat(result).isEqualTo(current.key)
         }
     }
 
@@ -46,8 +46,8 @@ class ZoneIdAttributeConverterTest {
             val result = unitUnderTest.convertToEntityAttribute(current.key)
 
             // Assert
-            Assert.assertNull(unitUnderTest.convertToEntityAttribute(null))
-            Assert.assertEquals(current.value, result)
+            assertThat(unitUnderTest.convertToEntityAttribute(null)).isNull()
+            assertThat(result).isEqualTo(current.value)
         }
     }
 }
