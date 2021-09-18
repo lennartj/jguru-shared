@@ -98,16 +98,16 @@
             <artifactId>jackson-module-parameter-names</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.kjetland</groupId>
+            <artifactId>mbknor-jackson-jsonschema_2.12</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jdk8</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.dr</groupId>
-            <artifactId>ktjsonschema</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.victools</groupId>

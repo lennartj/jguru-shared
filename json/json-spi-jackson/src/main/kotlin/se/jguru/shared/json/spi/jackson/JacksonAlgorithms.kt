@@ -21,12 +21,13 @@
  */
 package se.jguru.shared.json.spi.jackson
 
-import com.dr.ktjsonschema.JsonSchemaGenerator
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.type.TypeFactory
+import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator
 import java.io.InputStream
 import java.io.OutputStream
+
 
 object JacksonAlgorithms {
 
@@ -70,7 +71,7 @@ object JacksonAlgorithms {
         json: String,
         keyType: Class<K>,
         valueType: Class<V>,
-        mapType: Class<MutableMap<K,V>> = HashMap::class.java as Class<MutableMap<K,V>>,
+        mapType: Class<MutableMap<K, V>> = HashMap::class.java as Class<MutableMap<K, V>>,
         objectMapper: ObjectMapper = ObjectMapperBuilder.getDefault()): MutableMap<K, V> {
 
         // Construct the MapType

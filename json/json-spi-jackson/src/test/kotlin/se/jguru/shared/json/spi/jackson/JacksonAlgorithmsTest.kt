@@ -183,7 +183,8 @@ class JacksonAlgorithmsTest {
             title = "The schema Title",
             description = "Some longwinded description"
         )
-
+        // println("Got: $result")
+        
         // Assert
         JSONAssert.assertEquals(expected, result, true)
     }
@@ -210,6 +211,7 @@ class JacksonAlgorithmsTest {
 
         // Act
         val resurrected = JacksonAlgorithms.deserialize(data, TimeFormats::class.java)
+        // println("Got: $resurrected")
 
         // Assert
         assertThat(resurrected).isNotNull
