@@ -37,7 +37,6 @@
     <modules>
         <module>persistence-spi-jpa</module>
         <module>persistence-spi-jdbc</module>
-        <module>persistence-spi-hibernate</module>
     </modules>
 
     <!--
