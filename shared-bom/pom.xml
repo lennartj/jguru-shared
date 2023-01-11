@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -10,7 +11,7 @@
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-parent</artifactId>
         <version>1.2.1-SNAPSHOT</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <groupId>se.jguru.shared.bom</groupId>
@@ -33,12 +34,11 @@
         <kotlin.jvm.target>17</kotlin.jvm.target>
         <kotlin.compiler.languageVersion>1.7</kotlin.compiler.languageVersion>
         <kotlin.compiler.apiVersion>1.7</kotlin.compiler.apiVersion>
-        
+
         <!--
             Build-controlled dependencies.
-        -->
-        <jackson.version>2.13.2</jackson.version>
-        <jsonSchema.version>1.0.29</jsonSchema.version>
+           -->
+        <jackson.version>2.14.1</jackson.version>
         <javaee.version>8.0.1</javaee.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
 
@@ -47,14 +47,14 @@
         <metro.version>2.3.2</metro.version>
         <eclipselink.version>2.7.10</eclipselink.version>
         <dbunit.version>2.7.3</dbunit.version>
-        <xmlunit.version>2.9.0</xmlunit.version>
+        <xmlunit.version>2.9.1</xmlunit.version>
 
         <osgi.version>6.0.0</osgi.version>
-        <artemis.version>2.21.0</artemis.version>
-        
-        <slf4j.version>1.7.28</slf4j.version>
-        <log4j2.version>2.17.2</log4j2.version>
-        <logback.version>1.2.3</logback.version>
+        <artemis.version>2.27.1</artemis.version>
+
+        <slf4j.version>2.0.6</slf4j.version>
+        <log4j2.version>2.19.0</log4j2.version>
+        <logback.version>1.4.5</logback.version>
         <hibernate.version>5.5.4.Final</hibernate.version>
 
         <owasp.failOnError>true</owasp.failOnError>
@@ -78,7 +78,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}.2</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
