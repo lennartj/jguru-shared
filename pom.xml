@@ -4,8 +4,7 @@
   ~ All rights reserved.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!--
@@ -17,12 +16,12 @@
         <groupId>se.jguru.codestyle.poms</groupId>
         <artifactId>jguru-codestyle-poms-reactor</artifactId>
         <version>2.0.0</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <groupId>se.jguru.shared</groupId>
     <artifactId>jguru-shared-reactor</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.2.0</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
@@ -36,7 +35,7 @@
             These can be overridden in sub-reactors to tailor releases to other locations.
         -->
         <reactor.name>jguru-shared</reactor.name>
-        <path.in.reactor/>
+        <path.in.reactor />
 
         <!--
             Define URL prefixes used in the various URL settings of the POM.
@@ -128,6 +127,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>HEAD</tag>
+        <tag>jguru-shared-1.2.0</tag>
     </scm>
 </project>
