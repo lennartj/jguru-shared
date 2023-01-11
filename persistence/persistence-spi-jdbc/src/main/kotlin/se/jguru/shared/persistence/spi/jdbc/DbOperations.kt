@@ -150,7 +150,7 @@ object DbOperations {
 
                     if (log.isDebugEnabled) {
 
-                        val buffer = StringBuilder("Retrieved result with [$colCount] columns:\n")
+                        val buffer = StringBuilder("Retrieved result with [$colCount] columns:\n")
 
                         for (index in 1..colCount) {
                             buffer.append("Column [$index/$colCount]: \"${rsMetadata.getColumnName(index)}\" " +
@@ -166,6 +166,8 @@ object DbOperations {
                         val converted = rowDataConverter.invoke(rs, index.incrementAndGet())
 
                         if (converted != null) {
+
+                            @Suppress("UNCHECKED_CAST")
                             toReturn.add(converted as T)
                         }
                     }
@@ -294,11 +296,9 @@ object DbOperations {
                             }
 
                             when (generatedPKsInThisRow.size) {
-                                0 -> {
-                                    log.warn("Expected: at least 1 generated primary key, but got 0. [${idColumnNames?.size}]"
-                                    +
-                                    " Columns: " + idColumnNames?.reduce { acc, s -> "$acc, $s" } ?: "<nothing>")
-                                }
+                                0 -> log.warn("Expected: at least 1 generated primary key, but got 0. " +
+                                               "[${idColumnNames?.size}] Columns: " +
+                                              idColumnNames?.joinToString(","))
                                 1 -> generatedPrimaryKeys.add(generatedPKsInThisRow[0]!!)
                                 else -> generatedPrimaryKeys.add(generatedPKsInThisRow)
                             }

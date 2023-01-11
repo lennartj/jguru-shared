@@ -4,7 +4,8 @@
   ~ All rights reserved.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!--
@@ -15,8 +16,8 @@
     <parent>
         <groupId>se.jguru.codestyle.poms</groupId>
         <artifactId>jguru-codestyle-poms-reactor</artifactId>
-        <version>1.2.0</version>
-        <relativePath />
+        <version>1.2.1-SNAPSHOT</version>
+        <relativePath/>
     </parent>
 
     <groupId>se.jguru.shared</groupId>
@@ -35,7 +36,7 @@
             These can be overridden in sub-reactors to tailor releases to other locations.
         -->
         <reactor.name>jguru-shared</reactor.name>
-        <path.in.reactor />
+        <path.in.reactor/>
 
         <!--
             Define URL prefixes used in the various URL settings of the POM.
@@ -63,7 +64,6 @@
         <module>shared-bom</module>
         <module>json</module>
         <module>messaging</module>
-        <!-- module>typescript</module -->
         <module>jaxb</module>
         <module>service</module>
         <module>restful</module>
