@@ -22,6 +22,7 @@
 package se.jguru.shared.algorithms.api.resources
 
 import java.io.Serializable
+import java.util.*
 
 /**
  * Simplified enum containing permitted Maven dependency scopes.
@@ -65,7 +66,7 @@ enum class DependencyScope : Serializable {
     /**
      * The maven value of this [DependencyScope]. Use this property for comparisons.
      */
-    val mavenValue = name.toLowerCase()
+    val mavenValue = name.lowercase(Locale.getDefault())
 }
 
 /**

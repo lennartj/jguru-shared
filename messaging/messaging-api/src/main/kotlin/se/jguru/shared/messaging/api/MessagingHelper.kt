@@ -26,12 +26,12 @@ import java.io.InputStream
 import java.io.Serializable
 import java.util.SortedMap
 import java.util.TreeMap
-import javax.jms.Destination
-import javax.jms.JMSContext
-import javax.jms.Message
-import javax.jms.Queue
-import javax.jms.Session
-import javax.jms.Topic
+import jakarta.jms.Destination
+import jakarta.jms.JMSContext
+import jakarta.jms.Message
+import jakarta.jms.Queue
+import jakarta.jms.Session
+import jakarta.jms.Topic
 
 /**
  * Simplified helper assisting in creating destinations and sending messages.

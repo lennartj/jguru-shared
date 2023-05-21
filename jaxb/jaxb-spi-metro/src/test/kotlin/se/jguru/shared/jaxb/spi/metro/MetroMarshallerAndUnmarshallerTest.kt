@@ -10,7 +10,7 @@ import org.xmlunit.diff.ElementSelectors
 import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.jaxb.spi.metro.people.Beverage
 import se.jguru.shared.jaxb.spi.metro.people.DrinkingPreferences
-import javax.xml.bind.JAXBContext
+import jakarta.xml.bind.JAXBContext
 
 /**
  *
@@ -26,7 +26,7 @@ class MetroMarshallerAndUnmarshallerTest {
     fun setupSharedState() {
 
         originalContextFactory = System.getProperty(JAXBContext.JAXB_CONTEXT_FACTORY)
-        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "com.sun.xml.bind.v2.ContextFactory")
+        System.setProperty(JAXBContext.JAXB_CONTEXT_FACTORY, "org.glassfish.jaxb.runtime.v2.ContextFactory")
 
         unitUnderTest = ReferenceImplementationMarshallerAndUnmarshaller()
         unitUnderTest.namespacePrefixResolver.put(Beverage.NAMESPACE, "bev")

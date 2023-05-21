@@ -27,6 +27,8 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
 
+val stockholmTimezone : ZoneId = ZoneId.of("Europe/Stockholm")
+
 /**
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
@@ -49,7 +51,7 @@ class JacksonAlgorithmsTest {
         val localTime = LocalTime.of(16, 45)
 
         timeFormats = TimeFormats(
-            ZonedDateTime.of(localDate, localTime, ZoneId.of("Europe/Stockholm")),
+            ZonedDateTime.of(localDate, localTime, stockholmTimezone),
             LocalDateTime.of(localDate, localTime),
             localDate,
             localTime,
@@ -58,7 +60,7 @@ class JacksonAlgorithmsTest {
             Period.ofYears(2).plusMonths(1).plusDays(6)
         )
 
-        collectionMap = TreeMap<Long, List<String>>()
+        collectionMap = TreeMap()
         collectionMap[1L] = listOf("a", "b", "c")
         collectionMap[2L] = listOf("d", "e", "f")
     }
@@ -215,7 +217,12 @@ class JacksonAlgorithmsTest {
 
         // Assert
         assertThat(resurrected).isNotNull
-        assertThat(resurrected).isEqualTo(timeFormats)
+        assertThat(resurrected.someDateTime).isEqualTo(timeFormats.someDateTime)
+        assertThat(resurrected.someDate).isEqualTo(timeFormats.someDate)
+        assertThat(resurrected.someTime).isEqualTo(timeFormats.someTime)
+        assertThat(resurrected.someDuration).isEqualTo(timeFormats.someDuration)
+        assertThat(resurrected.someMonthDay).isEqualTo(timeFormats.someMonthDay)
+        assertThat(resurrected.somePeriod).isEqualTo(timeFormats.somePeriod)
     }
 
     @Test

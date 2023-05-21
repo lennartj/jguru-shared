@@ -93,6 +93,7 @@ object ClassLoaders {
     // Private helpers
     //
 
+    @Suppress("removal", "DEPRECATION")
     @JvmStatic
     private fun getClassLoader(loaderRetriever: () -> ClassLoader): ClassLoader =
         when (System.getSecurityManager() == null) {

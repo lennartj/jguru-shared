@@ -1,24 +1,5 @@
 package se.jguru.shared.messaging.api
 
-import org.apache.activemq.artemis.api.core.TransportConfiguration
-import org.apache.activemq.artemis.api.jms.ActiveMQJMSClient
-import org.apache.activemq.artemis.api.jms.JMSFactoryType
-import org.apache.activemq.artemis.core.remoting.impl.invm.InVMAcceptorFactory
-import org.apache.activemq.artemis.core.remoting.impl.invm.InVMConnectorFactory
-import org.apache.activemq.artemis.core.remoting.impl.invm.TransportConstants
-import org.apache.activemq.artemis.core.server.ActiveMQServer
-import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import java.util.concurrent.atomic.AtomicInteger
-import javax.jms.Connection
-import javax.jms.JMSContext
-import javax.jms.Session
-
 
 /**
  *
@@ -26,12 +7,11 @@ import javax.jms.Session
  */
 class MessagingHelperTest {
     /*
-
     private val log : Logger = LoggerFactory.getLogger(MessagingHelperTest::class.java)
 
     private val testIndex = AtomicInteger(2000)
 
-    lateinit var service : ActiveMQServer
+    lateinit var service : EmbeddedActiveMQ
     lateinit var connectionFactory: ActiveMQConnectionFactory
 
     lateinit var connection: Connection
@@ -46,7 +26,7 @@ class MessagingHelperTest {
         // #1) Setup transport configuration
         //
         val params: MutableMap<String, Any> = HashMap()
-        params[TransportConstants.SERVER_ID_PROP_NAME] = "${testIndex.get()}"
+        params[TransportConstants.ACTIVEMQ_SERVER_NAME] = "${testIndex.get()}"
 
         val transportConfig = TransportConfiguration(InVMConnectorFactory::class.java.name, params)
 

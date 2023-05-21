@@ -1,12 +1,5 @@
 package se.jguru.shared.messaging.api
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import java.util.TreeMap
-import java.util.concurrent.atomic.AtomicInteger
-import javax.jms.JMSContext
 
 /**
  *
@@ -17,12 +10,13 @@ class MessagesTest {
     /*
     private val testIndex = AtomicInteger(1000)
 
-    lateinit var artemis : JupiterAwareArtemis
+    lateinit var artemis : EmbeddedActiveMQBroker
     lateinit var jmsContext : JMSContext
 
     @BeforeEach
     fun setupTestArtemisService() {
-        artemis = JupiterAwareArtemis(testIndex.incrementAndGet())
+
+        artemis = EmbeddedActiveMQBroker("inVm")
         jmsContext = artemis.jmsContext()
     }
 

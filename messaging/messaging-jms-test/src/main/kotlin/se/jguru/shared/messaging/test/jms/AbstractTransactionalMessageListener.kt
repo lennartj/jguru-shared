@@ -21,11 +21,11 @@
  */
 package se.jguru.shared.messaging.test.jms
 
-import javax.jms.JMSException
-import javax.jms.Message
-import javax.jms.MessageListener
-import javax.jms.MessageProducer
-import javax.jms.Session
+import jakarta.jms.JMSException
+import jakarta.jms.Message
+import jakarta.jms.MessageListener
+import jakarta.jms.MessageProducer
+import jakarta.jms.Session
 
 /**
  * Abstract [MessageListener] implementation which provides transactional mechanics.
@@ -68,7 +68,7 @@ abstract class AbstractTransactionalMessageListener(
      * @param inboundRequestMessage     The inbound request message, sent from the client side.
      * @param <T>                       The explicit Message type.
      * @return The response Message to be sent out by the JMS server side in response to the client request.
-     * @throws javax.jms.JMSException If the creating of JMS messages fails.
+     * @throws jakarta.jms.JMSException If the creating of JMS messages fails.
      */
     @Throws(JMSException::class)
     protected abstract fun <T : Message> generateResponse(inboundRequestMessage: Message): T

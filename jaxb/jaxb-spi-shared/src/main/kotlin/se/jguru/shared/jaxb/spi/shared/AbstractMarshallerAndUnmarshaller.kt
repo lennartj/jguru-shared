@@ -27,11 +27,11 @@ import se.jguru.shared.algorithms.api.xml.NamespacePrefixResolver
 import se.jguru.shared.algorithms.api.xml.SimpleNamespacePrefixResolver
 import java.io.IOException
 import java.io.StringWriter
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.JAXBException
-import javax.xml.bind.Marshaller
-import javax.xml.bind.SchemaOutputResolver
-import javax.xml.bind.Unmarshaller
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.JAXBException
+import jakarta.xml.bind.Marshaller
+import jakarta.xml.bind.SchemaOutputResolver
+import jakarta.xml.bind.Unmarshaller
 import javax.xml.transform.Result
 import javax.xml.transform.stream.StreamResult
 
@@ -81,7 +81,7 @@ abstract class AbstractMarshallerAndUnmarshaller @JvmOverloads constructor(
         }
 
         // Delegate
-        return performMarshalling(loader, format, toMarshal as Array<Any>)
+        return performMarshalling(loader, format, toMarshal)
     }
 
     override fun <T> unmarshal(loader: ClassLoader,

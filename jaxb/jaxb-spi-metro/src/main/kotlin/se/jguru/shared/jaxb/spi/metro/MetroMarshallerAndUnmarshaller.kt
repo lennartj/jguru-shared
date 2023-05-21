@@ -21,16 +21,16 @@
  */
 package se.jguru.shared.jaxb.spi.metro
 
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper
-import com.sun.xml.bind.v2.ContextFactory
 import se.jguru.shared.algorithms.api.introspection.Introspection
 import se.jguru.shared.algorithms.api.xml.MarshallingFormat
 import se.jguru.shared.algorithms.api.xml.NamespacePrefixResolver
 import se.jguru.shared.algorithms.api.xml.SimpleNamespacePrefixResolver
 import se.jguru.shared.jaxb.spi.shared.AbstractMarshallerAndUnmarshaller
 import java.io.StringReader
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.JAXBException
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.JAXBException
+import org.glassfish.jaxb.runtime.marshaller.NamespacePrefixMapper
+import org.glassfish.jaxb.runtime.v2.ContextFactory
 import javax.xml.transform.stream.StreamSource
 
 /**
@@ -82,7 +82,7 @@ open class ReferenceImplementationMarshallerAndUnmarshaller @JvmOverloads constr
 
         // Get the Marshaller
         val initialMarshaller = createMarshaller(getJaxbContext(typesToMarshal))
-        initialMarshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper",
+        initialMarshaller.setProperty("org.glassfish.jaxb.namespacePrefixMapper",
             NamespacePrefixMapperWrapper(namespacePrefixResolver))
 
         // Decorate the Marshaller as required
@@ -119,7 +119,7 @@ open class ReferenceImplementationMarshallerAndUnmarshaller @JvmOverloads constr
          * The [JAXBContextFactory] implementation class exposed by Metro.
          */
         @JvmStatic
-        val METRO_JAXB_FACTORY_CLASS = "com.sun.xml.bind.v2.ContextFactory"
+        val METRO_JAXB_FACTORY_CLASS = "org.glassfish.jaxb.runtime.v2.ContextFactory"
 
         /**
          * # Note

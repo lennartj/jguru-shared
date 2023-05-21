@@ -22,15 +22,15 @@
 package se.jguru.shared.restful.spi.jaxrs
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import jakarta.ws.rs.core.MediaType
+import jakarta.ws.rs.core.MultivaluedMap
+import jakarta.ws.rs.ext.MessageBodyReader
+import jakarta.ws.rs.ext.MessageBodyWriter
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
 import se.jguru.shared.json.spi.jackson.ObjectMapperBuilder
 import java.io.InputStream
 import java.io.OutputStream
 import java.lang.reflect.Type
-import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.MultivaluedMap
-import javax.ws.rs.ext.MessageBodyReader
-import javax.ws.rs.ext.MessageBodyWriter
 
 /**
  * ## Abstract JSON-form [MessageBodyReader] and [MessageBodyWriter] implementation

@@ -10,7 +10,7 @@ import org.xmlunit.diff.Diff
 import org.xmlunit.diff.ElementSelectors
 import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.jaxb.spi.eclipselink.MoxyMarshallerAndUnmarshaller
-import javax.xml.bind.JAXBContext
+import jakarta.xml.bind.JAXBContext
 
 /**
  *

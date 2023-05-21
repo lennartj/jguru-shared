@@ -21,7 +21,7 @@
  */
 package se.jguru.shared.messaging.api
 
-import javax.jms.Session
+import jakarta.jms.Session
 
 /**
  * Proper enumeration to wrap the only valid JMS Session acknowledge modes.

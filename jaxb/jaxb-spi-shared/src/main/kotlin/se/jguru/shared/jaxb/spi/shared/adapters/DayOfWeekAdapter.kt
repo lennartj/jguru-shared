@@ -21,10 +21,9 @@
  */
 package se.jguru.shared.jaxb.spi.shared.adapters
 
+import jakarta.xml.bind.annotation.XmlTransient
+import jakarta.xml.bind.annotation.adapters.XmlAdapter
 import java.time.DayOfWeek
-import java.time.format.DateTimeFormatter
-import javax.xml.bind.annotation.XmlTransient
-import javax.xml.bind.annotation.adapters.XmlAdapter
 
 /**
  * XML Adapter class to handle Java 8 [DayOfWeek] - which will convert to

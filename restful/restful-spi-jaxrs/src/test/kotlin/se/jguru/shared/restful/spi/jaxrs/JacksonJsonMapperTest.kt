@@ -1,16 +1,20 @@
 package se.jguru.shared.restful.spi.jaxrs
 
+import jakarta.ws.rs.core.MediaType
+import jakarta.ws.rs.core.MultivaluedHashMap
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
-import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.MultivaluedHashMap
 
 open class JacksonJsonMapperTest {
+
+    private val log : Logger = LoggerFactory.getLogger(JacksonJsonMapperTest::class.java)
 
     // Shared state
     val chesterfield = Furniture("Chesterfield", "Sofa")
@@ -49,7 +53,7 @@ open class JacksonJsonMapperTest {
 
         out.flush()
         val result = out.toString(charset.name())
-        // println("Got: $result")
+        log.debug("Got: $result")
 
         // Assert
         assertThat(isWriteable).isTrue

@@ -28,9 +28,9 @@ import java.beans.Introspector
 import java.util.Collections
 import java.util.SortedMap
 import java.util.TreeMap
-import javax.jms.JMSException
-import javax.jms.MapMessage
-import javax.jms.Message
+import jakarta.jms.JMSException
+import jakarta.jms.MapMessage
+import jakarta.jms.Message
 
 private val log: Logger = LoggerFactory.getLogger(Messages::class.java)
 

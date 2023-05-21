@@ -12,7 +12,7 @@ import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.algorithms.api.xml.MarshallingFormat
 import se.jguru.shared.jaxb.spi.eclipselink.people.Beverage
 import se.jguru.shared.jaxb.spi.eclipselink.people.DrinkingPreferences
-import javax.xml.bind.JAXBContext
+import jakarta.xml.bind.JAXBContext
 
 /**
  *

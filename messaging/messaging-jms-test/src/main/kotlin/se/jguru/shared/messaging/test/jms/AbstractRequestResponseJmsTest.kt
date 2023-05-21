@@ -24,12 +24,12 @@ package se.jguru.shared.messaging.test.jms
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.ArrayList
-import javax.jms.Connection
-import javax.jms.DeliveryMode
-import javax.jms.JMSException
-import javax.jms.Message
-import javax.jms.MessageProducer
-import javax.jms.Session
+import jakarta.jms.Connection
+import jakarta.jms.DeliveryMode
+import jakarta.jms.JMSException
+import jakarta.jms.Message
+import jakarta.jms.MessageProducer
+import jakarta.jms.Session
 
 /**
  * Abstract superclass for Request-Response-based JMS tests.

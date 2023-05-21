@@ -21,7 +21,7 @@
  */
 package se.jguru.shared.jaxb.spi.shared
 
-import javax.xml.bind.annotation.XmlTransient
+import jakarta.xml.bind.annotation.XmlTransient
 
 /**
  * Utility type holding a suite of reusable patterns, constants and algorithms.

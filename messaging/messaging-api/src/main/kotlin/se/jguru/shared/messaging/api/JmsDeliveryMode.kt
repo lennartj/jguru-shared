@@ -21,7 +21,7 @@
  */
 package se.jguru.shared.messaging.api
 
-import javax.jms.DeliveryMode
+import jakarta.jms.DeliveryMode
 
 /**
  * Enumeration to provide a type safe way to enumerate the JMS DeliveryModes.

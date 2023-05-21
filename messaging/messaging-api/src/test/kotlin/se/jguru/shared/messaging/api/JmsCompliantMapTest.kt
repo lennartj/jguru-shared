@@ -3,12 +3,16 @@ package se.jguru.shared.messaging.api
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 class JmsCompliantMapTest {
+
+    private val log : Logger = LoggerFactory.getLogger(JmsCompliantMapTest::class.java)
 
     @Test
     fun validateExceptionOnAttemptingToInsertIncorrectType() {
@@ -30,6 +34,7 @@ class JmsCompliantMapTest {
 
         // Act
         unitUnderTest["foo"] = "bar"
+        log.info("Got $unitUnderTest")
 
         // Assert
         assertThat(unitUnderTest.size).isEqualTo(1)

@@ -36,7 +36,7 @@ import java.io.File
 import java.util.HashSet
 import java.util.SortedMap
 import java.util.TreeMap
-import javax.jms.ConnectionFactory
+import jakarta.jms.ConnectionFactory
 
 /**
  * MessageBroker implementation for Apache Artemis.

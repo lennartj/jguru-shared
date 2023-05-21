@@ -206,7 +206,7 @@ object Introspection {
      *
      * @return The [CodeSource] of for the [ProtectionDomain] of the supplied [Class], or `null` for
      * system-loaded classes.
-     * @throws SecurityException if a [SecurityManager] exists and its [SecurityManager.checkPermission] method
+     * @throws SecurityException if a SecurityManager exists and its checkPermission method
      * doesn't allow getting the ProtectionDomain.
      */
     @JvmStatic
@@ -399,9 +399,9 @@ object Introspection {
     fun isJarFile(aURL: URL,
                   locale: Locale = Locale.getDefault()): Boolean {
 
-        val lcPath = aURL.path.toLowerCase(locale)
+        val lcPath = aURL.path.lowercase(locale)
 
-        return when (val lcProtocol = aURL.protocol.toLowerCase(locale)) {
+        return when (val lcProtocol = aURL.protocol.lowercase(locale)) {
             "jar" -> true
             else -> {
 
@@ -434,7 +434,7 @@ object Introspection {
         val jarPrefix = "jar:"
         val extForm = aURL.toExternalForm()
 
-        val newURL = when (aURL.protocol.toLowerCase(locale)) {
+        val newURL = when (aURL.protocol.lowercase(locale)) {
 
             "file" -> when (extForm.contains(JAR_URL_SNIPPET)) {
                 true -> "$jarPrefix$extForm"

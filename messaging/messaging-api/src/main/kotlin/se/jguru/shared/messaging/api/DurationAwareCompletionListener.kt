@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory
 import se.jguru.codestyle.annotations.UseOpenMembers
 import java.time.Duration
 import java.time.temporal.ChronoUnit
-import javax.jms.CompletionListener
-import javax.jms.Message
+import jakarta.jms.CompletionListener
+import jakarta.jms.Message
 
 /**
  * ## [CompletionListener] with time measurements capabilities
@@ -48,12 +48,12 @@ interface DurationAwareCompletionListener : CompletionListener {
      * @throws IllegalStateException if this DurationAwareCompletionListener was not started.
      */
     @Throws(IllegalStateException::class)
-    fun noteStop() : DurationAwareCompletionListener
+    fun noteStop(): DurationAwareCompletionListener
 
     /**
      * @return The duration between the noted start and stop timestamps.
      */
-    fun getDuration() : Duration
+    fun getDuration(): Duration
 }
 
 /**
@@ -62,20 +62,21 @@ interface DurationAwareCompletionListener : CompletionListener {
  * Used to simplify tracking sending durations when using an async lifecycle.
  */
 @UseOpenMembers
-open class SimpleDurationMeasuringCompletionListener : DurationAwareCompletionListener {
+class SimpleDurationMeasuringCompletionListener : DurationAwareCompletionListener {
 
-    private var startedAt : Long? = null
-    private var stoppedAt : Long? = null
+    private var startedAt: Long? = null
+    private var stoppedAt: Long? = null
 
     override fun noteStart() {
         startedAt = System.nanoTime()
     }
 
+    @Suppress("KotlinConstantConditions")
     override fun noteStop(): DurationAwareCompletionListener {
 
         stoppedAt = System.nanoTime()
 
-        if(startedAt == null || (startedAt != null && startedAt!! > stoppedAt!!)) {
+        if (startedAt == null || (startedAt != null && startedAt!! > stoppedAt!!)) {
             throw IllegalStateException("Start time must exist, and be before stop time.")
         }
 
@@ -84,9 +85,9 @@ open class SimpleDurationMeasuringCompletionListener : DurationAwareCompletionLi
 
     override fun getDuration(): Duration {
 
-        if(startedAt == null) {
+        if (startedAt == null) {
             throw IllegalStateException("Start time must exist")
-        } else if(stoppedAt == null) {
+        } else if (stoppedAt == null) {
             throw IllegalStateException("Stop time must exist")
         }
 
@@ -98,11 +99,13 @@ open class SimpleDurationMeasuringCompletionListener : DurationAwareCompletionLi
 
         noteStop()
 
-        if(log.isDebugEnabled) {
+        if (log.isDebugEnabled) {
 
-            log.debug("Message [${message?.jmsMessageID?:"<no ID>"}] of " +
-                "type ${message?.jmsType?:"<Unknown>"} successfully delivered " +
-                "in ${toHumanReadableDuration(getDuration())}")
+            log.debug(
+                "Message [${message?.jmsMessageID ?: "<no ID>"}] of " +
+                    "type ${message?.jmsType ?: "<Unknown>"} successfully delivered " +
+                    "in ${toHumanReadableDuration(getDuration())}"
+            )
         }
     }
 
@@ -110,11 +113,11 @@ open class SimpleDurationMeasuringCompletionListener : DurationAwareCompletionLi
 
         noteStop()
 
-        if(log.isDebugEnabled) {
+        if (log.isDebugEnabled) {
 
-            val messageDescription = when(message == null) {
+            val messageDescription = when (message == null) {
                 true -> "."
-                else -> "[${message.jmsMessageID?:"<no ID>"}] of type ${message.jmsType?:"<Unknown>"}."
+                else -> "[${message.jmsMessageID ?: "<no ID>"}] of type ${message.jmsType ?: "<Unknown>"}."
             }
 
             log.debug("Could not deliver Message$messageDescription in ${toHumanReadableDuration(getDuration())}")
@@ -124,10 +127,10 @@ open class SimpleDurationMeasuringCompletionListener : DurationAwareCompletionLi
     companion object {
 
         @JvmStatic
-        internal val log : Logger = LoggerFactory.getLogger(SimpleDurationMeasuringCompletionListener::class.java)
+        internal val log: Logger = LoggerFactory.getLogger(SimpleDurationMeasuringCompletionListener::class.java)
 
         @JvmStatic
-        internal fun toHumanReadableDuration(duration: Duration) : String = when {
+        internal fun toHumanReadableDuration(duration: Duration): String = when {
             duration.seconds < 0 -> "${duration.get(ChronoUnit.MILLIS)} ms"
             else -> "${duration.get(ChronoUnit.SECONDS)} s, ${duration.get(ChronoUnit.MILLIS)} ms"
         }

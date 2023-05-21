@@ -23,8 +23,8 @@ package se.jguru.shared.jaxb.spi.shared.adapters
 
 import java.time.Year
 import java.time.format.DateTimeFormatter
-import javax.xml.bind.annotation.XmlTransient
-import javax.xml.bind.annotation.adapters.XmlAdapter
+import jakarta.xml.bind.annotation.XmlTransient
+import jakarta.xml.bind.annotation.adapters.XmlAdapter
 
 /**
  * XML Adapter class to handle Java 8 [Year] - which will convert to and from Int.

@@ -25,9 +25,9 @@ package se.jguru.shared.persistence.spi.jpa.converter
 import java.io.Serializable
 import java.sql.Time
 import java.time.LocalTime
-import javax.persistence.AttributeConverter
-import javax.persistence.Converter
-import javax.xml.bind.annotation.XmlTransient
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.Converter
+import jakarta.xml.bind.annotation.XmlTransient
 
 /**
  * JPA AttributeConverter class to handle Java 8 [java.time.LocalTime] - which will

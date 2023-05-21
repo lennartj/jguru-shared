@@ -25,10 +25,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.Serializable
 import java.util.TreeMap
-import javax.persistence.EntityManagerFactory
-import javax.persistence.PersistenceException
-import javax.persistence.spi.PersistenceProvider
-import javax.persistence.spi.PersistenceProviderResolverHolder
+import jakarta.persistence.EntityManagerFactory
+import jakarta.persistence.PersistenceException
+import jakarta.persistence.spi.PersistenceProvider
+import jakarta.persistence.spi.PersistenceProviderResolverHolder
 
 /**
  * Information holder for a PersistenceProvider.
@@ -144,6 +144,6 @@ enum class CommonPersistenceProvidersInfo(private val providerClass: String) : P
         /**
          * The standard property containing the classname (or class) of a [PersistenceProvider]
          */
-        const val PERSISTENCE_CLASS_PROPERTY = "javax.persistence.provider"
+        const val PERSISTENCE_CLASS_PROPERTY = "jakarta.persistence.provider"
     }
 }

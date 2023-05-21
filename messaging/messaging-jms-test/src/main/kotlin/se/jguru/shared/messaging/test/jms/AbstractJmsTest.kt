@@ -24,10 +24,10 @@ package se.jguru.shared.messaging.test.jms
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.slf4j.LoggerFactory
-import javax.jms.Connection
-import javax.jms.ConnectionFactory
-import javax.jms.JMSException
-import javax.jms.Session
+import jakarta.jms.Connection
+import jakarta.jms.ConnectionFactory
+import jakarta.jms.JMSException
+import jakarta.jms.Session
 
 /**
  * Abstract superclass for JMS-based tests.

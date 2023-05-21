@@ -26,7 +26,7 @@ import org.junit.runner.Description
 import se.jguru.shared.algorithms.api.xml.AbstractMarshallerAndUnmarshaller
 import se.jguru.shared.algorithms.api.xml.MarshallerAndUnmarshaller
 import se.jguru.shared.algorithms.api.xml.NamespacePrefixResolver
-import javax.xml.bind.JAXBContext
+import jakarta.xml.bind.JAXBContext
 
 /**
  * Abstract [TestWatcher] implementation which wraps a [MarshallerAndUnmarshaller] to which all JAXB-related

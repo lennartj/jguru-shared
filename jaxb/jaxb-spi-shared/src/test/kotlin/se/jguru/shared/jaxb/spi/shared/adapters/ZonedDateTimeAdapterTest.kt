@@ -2,6 +2,8 @@ package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import se.jguru.shared.algorithms.api.WellKnownTimeZones
 import java.time.LocalDate
 import java.time.LocalTime
@@ -12,6 +14,8 @@ import java.time.ZonedDateTime
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 class ZoneDateTimeAdapterTest {
+
+    private val log : Logger = LoggerFactory.getLogger(ZoneDateTimeAdapterTest::class.java)
 
     private val transportForm = "2015-04-25T15:30:00+02:00[Europe/Stockholm]"
     private val objectForm = ZonedDateTime.of(
@@ -27,7 +31,7 @@ class ZoneDateTimeAdapterTest {
 
         // Act
         val result = unitUnderTest.marshal(objectForm)
-        // System.out.println("Got: " + result);
+        // log.info("Got: $result");
 
         // Assert
         assertThat(unitUnderTest.marshal(null)).isNull()
@@ -41,6 +45,7 @@ class ZoneDateTimeAdapterTest {
 
         // Act
         val result = unitUnderTest.unmarshal(transportForm)
+        // log.info("Got: $result");
 
         // Assert
         assertThat(unitUnderTest.unmarshal(null)).isNull()

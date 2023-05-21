@@ -22,8 +22,8 @@
 package se.jguru.shared.jaxb.spi.shared.adapters
 
 import java.util.TimeZone
-import javax.xml.bind.annotation.XmlTransient
-import javax.xml.bind.annotation.adapters.XmlAdapter
+import jakarta.xml.bind.annotation.XmlTransient
+import jakarta.xml.bind.annotation.adapters.XmlAdapter
 
 /**
  * XML Adapter class to handle Java 8 [TimeZone] - which will convert to

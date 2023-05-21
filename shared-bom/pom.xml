@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-parent</artifactId>
-        <version>1.1.0</version>
+        <version>2.0.1-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -29,33 +29,31 @@
         <reactor.name>jguru-shared</reactor.name>
 
         <!-- Kotlin constants -->
-        <kotlin.version>1.5.21</kotlin.version>
-        <kotlin.jvm.target>11</kotlin.jvm.target>
-        <kotlin.compiler.languageVersion>1.4</kotlin.compiler.languageVersion>
-        <kotlin.compiler.apiVersion>1.4</kotlin.compiler.apiVersion>
+        <kotlin.version>1.8.21</kotlin.version>
+        <kotlin.jvm.target>17</kotlin.jvm.target>
         
         <!--
             Build-controlled dependencies.
         -->
-        <jackson.version>2.13.0</jackson.version>
+        <jackson.version>2.15.1</jackson.version>
         <jsonSchema.version>1.0.29</jsonSchema.version>
         <javaee.version>8.0.1</javaee.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
 
-        <jakarta-xml-api.version>2.3.2</jakarta-xml-api.version>
+        <jakarta-xml-api.version>4.0.0</jakarta-xml-api.version>
         <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
-        <metro.version>2.3.2</metro.version>
-        <eclipselink.version>2.7.9</eclipselink.version>
-        <dbunit.version>2.7.2</dbunit.version>
-        <xmlunit.version>2.8.3</xmlunit.version>
+        <metro.version>4.0.2</metro.version>
+        <eclipselink.version>4.0.1</eclipselink.version>
+        <dbunit.version>2.7.3</dbunit.version>
+        <xmlunit.version>2.9.1</xmlunit.version>
 
         <osgi.version>6.0.0</osgi.version>
-        <artemis.version>2.19.0</artemis.version>
+        <artemis.version>2.28.0</artemis.version>
         
-        <slf4j.version>1.7.28</slf4j.version>
-        <log4j2.version>2.16.0</log4j2.version>
-        <logback.version>1.2.3</logback.version>
-        <hibernate.version>5.5.4.Final</hibernate.version>
+        <slf4j.version>2.0.7</slf4j.version>
+        <log4j2.version>2.20.0</log4j2.version>
+        <logback.version>1.4.7</logback.version>
+        <hibernate.version>5.6.15.Final</hibernate.version>
 
         <owasp.failOnError>true</owasp.failOnError>
     </properties>
@@ -114,7 +112,7 @@
             <dependency>
                 <groupId>com.github.victools</groupId>
                 <artifactId>jsonschema-generator</artifactId>
-                <version>4.16.0</version>
+                <version>4.31.1</version>
             </dependency>
 
             <!--
@@ -143,7 +141,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j-impl</artifactId>
+                <artifactId>log4j-slf4j2-impl</artifactId>
                 <version>${log4j2.version}</version>
                 <exclusions>
                     <exclusion>
@@ -165,29 +163,48 @@
             </dependency>
 
             <!--
-                JavaEE specification.
+                Jakarta EE specification.
             -->
             <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>${javaee-api.version}</version>
+                <groupId>jakarta.persistence</groupId>
+                <artifactId>jakarta.persistence-api</artifactId>
+                <version>3.1.0</version>
                 <scope>provided</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.sun.mail</groupId>
-                        <artifactId>javax.mail</artifactId>
-                    </exclusion>
-                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.jms</groupId>
+                <artifactId>jakarta.jms-api</artifactId>
+                <version>3.1.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.ws.rs</groupId>
+                <artifactId>jakarta.ws.rs-api</artifactId>
+                <version>3.1.0</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>jakarta.xml.bind</groupId>
                 <artifactId>jakarta.xml.bind-api</artifactId>
                 <version>${jakarta-xml-api.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>javax.validation</groupId>
-                <artifactId>validation-api</artifactId>
-                <version>${validation-api.version}</version>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>3.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.json</groupId>
+                <artifactId>jakarta.json-api</artifactId>
+                <version>2.1.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.parsson</groupId>
+                <artifactId>jakarta.json</artifactId>
+                <version>1.1.1</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
@@ -209,17 +226,17 @@
             <dependency>
                 <groupId>org.apache.openjpa</groupId>
                 <artifactId>openjpa</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.2</version>
             </dependency>
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-api-jpa</artifactId>
-                <version>5.2.5</version>
+                <version>6.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-core</artifactId>
-                <version>5.2.4</version>
+                <version>6.0.4</version>
             </dependency>
 
             <!--
@@ -234,19 +251,19 @@
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
-                <version>1.4.200</version>
+                <version>2.1.214</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.hsqldb</groupId>
                 <artifactId>hsqldb</artifactId>
-                <version>2.5.1</version>
+                <version>2.7.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
-                <version>3.4.5</version>
+                <version>5.0.1</version>
             </dependency>
 
             <!--
@@ -280,7 +297,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.11</version>
+                <version>3.12.0</version>
             </dependency>
 
             <!--
@@ -289,7 +306,7 @@
             <dependency>
                 <groupId>org.jboss</groupId>
                 <artifactId>jboss-vfs</artifactId>
-                <version>3.2.14.Final</version>
+                <version>3.2.17.Final</version>
             </dependency>
 
             <!--
@@ -298,19 +315,19 @@
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>3.20.2</version>
+                <version>3.24.2</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.7.2</version>
+                <version>5.9.3</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.7.2</version>
+                <version>5.9.3</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -335,17 +352,17 @@
                 <groupId>org.skyscreamer</groupId>
                 <artifactId>jsonassert</artifactId>
                 <scope>test</scope>
-                <version>1.5.0</version>
+                <version>1.5.1</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.activemq</groupId>
-                <artifactId>artemis-jms-client</artifactId>
+                <artifactId>artemis-jakarta-client</artifactId>
                 <version>${artemis.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
-                <artifactId>artemis-jms-server</artifactId>
+                <artifactId>artemis-jakarta-server</artifactId>
                 <version>${artemis.version}</version>
                 <exclusions>
                     <exclusion>
@@ -355,9 +372,15 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>org.apache.activemq.tooling</groupId>
+                <artifactId>activemq-junit</artifactId>
+                <version>5.18.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.activemq</groupId>
-                <artifactId>artemis-junit</artifactId>
-                <version>${artemis.version}</version>
+                <artifactId>activemq-unit-tests</artifactId>
+                <version>5.18.1</version>
                 <scope>test</scope>
                 <exclusions>
                     <exclusion>

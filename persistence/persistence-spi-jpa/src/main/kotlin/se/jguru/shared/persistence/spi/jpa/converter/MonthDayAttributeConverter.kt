@@ -23,9 +23,9 @@ package se.jguru.shared.persistence.spi.jpa.converter
 
 import java.io.Serializable
 import java.time.MonthDay
-import javax.persistence.AttributeConverter
-import javax.persistence.Converter
-import javax.xml.bind.annotation.XmlTransient
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.Converter
+import jakarta.xml.bind.annotation.XmlTransient
 
 /**
  * JPA AttributeConverter class to handle Java 8 [MonthDay] - which will convert to and from [String]s.

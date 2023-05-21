@@ -21,7 +21,7 @@
  */
 package se.jguru.shared.messaging.test.jms
 
-import javax.jms.ConnectionFactory
+import jakarta.jms.ConnectionFactory
 
 /**
  * Wrapper specification for a MessageBroker instance,

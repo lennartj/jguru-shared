@@ -1,11 +1,11 @@
 package se.jguru.shared.jaxb.spi.eclipselink.people
 
 import java.io.Serializable
-import javax.xml.bind.annotation.XmlAccessType
-import javax.xml.bind.annotation.XmlAccessorType
-import javax.xml.bind.annotation.XmlAttribute
-import javax.xml.bind.annotation.XmlElement
-import javax.xml.bind.annotation.XmlType
+import jakarta.xml.bind.annotation.XmlAccessType
+import jakarta.xml.bind.annotation.XmlAccessorType
+import jakarta.xml.bind.annotation.XmlAttribute
+import jakarta.xml.bind.annotation.XmlElement
+import jakarta.xml.bind.annotation.XmlType
 
 /**
  * A simple model of a Person
@@ -50,8 +50,7 @@ class Person(
         }
 
         // Delegate to internal state
-        val that = other as Person
-        return this.name == that.name && this.age == that.age
+        return this.name == other.name && this.age == other.age
     }
 
     override fun hashCode(): Int {

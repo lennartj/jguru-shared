@@ -15,7 +15,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms</groupId>
         <artifactId>jguru-codestyle-poms-reactor</artifactId>
-        <version>1.1.0</version>
+        <version>2.0.1-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -44,7 +44,7 @@
         <git.repo.owner>lennartj</git.repo.owner>
         <git.repo.url.prefix>https://github.com/${git.repo.owner}</git.repo.url.prefix>
         <git.scm.url.prefix>scm:git:ssh://git@github.com/${git.repo.owner}</git.scm.url.prefix>
-        <site.url.prefix>http://${git.repo.owner}.github.io</site.url.prefix>
+        <site.url.prefix>https://${git.repo.owner}.github.io</site.url.prefix>
         <site.top.url>${site.url.prefix}/${reactor.name}/Documentation/${project.version}</site.top.url>
 
         <scm.connection.url>scm:git:${git.repo.url.prefix}/${reactor.name}.git</scm.connection.url>

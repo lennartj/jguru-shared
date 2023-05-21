@@ -27,8 +27,8 @@ import se.jguru.shared.algorithms.api.introspection.Introspection
 import se.jguru.shared.algorithms.api.xml.MarshallingFormat
 import se.jguru.shared.jaxb.spi.shared.AbstractMarshallerAndUnmarshaller
 import java.io.StringReader
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.JAXBException
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.JAXBException
 import javax.xml.transform.stream.StreamSource
 
 /**
@@ -151,7 +151,7 @@ open class MoxyMarshallerAndUnmarshaller @JvmOverloads constructor(
     companion object {
 
         /**
-         * The [JAXBContextFactory] implementation class exposed by MOXy.
+         * The JAXBContextFactory implementation class exposed by MOXy.
          */
         @JvmStatic
         val MOXY_JAXB_FACTORY_CLASS = "org.eclipse.persistence.jaxb.JAXBContextFactory"

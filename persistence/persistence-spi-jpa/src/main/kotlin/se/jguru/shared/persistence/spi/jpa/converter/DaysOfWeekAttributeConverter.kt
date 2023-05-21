@@ -27,9 +27,9 @@ import java.time.DayOfWeek
 import java.util.SortedSet
 import java.util.StringTokenizer
 import java.util.TreeSet
-import javax.persistence.AttributeConverter
-import javax.persistence.Converter
-import javax.xml.bind.annotation.XmlTransient
+import jakarta.persistence.AttributeConverter
+import jakarta.persistence.Converter
+import jakarta.xml.bind.annotation.XmlTransient
 
 /**
  * Converter for [DayOfWeek] Sets, compacted into a comma-separated String
@@ -59,7 +59,7 @@ open class DaysOfWeekAttributeConverter : AttributeConverter<SortedSet<DayOfWeek
                 val currentToken = tokenizer.nextToken()
 
                 try {
-                    toReturn.add(DayOfWeek.of(Integer.parseInt(currentToken)));
+                    toReturn.add(DayOfWeek.of(Integer.parseInt(currentToken)))
                 } catch (e: Exception) {
 
                     val permittedValues = DayOfWeek.values()
