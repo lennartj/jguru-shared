@@ -10,6 +10,7 @@ import java.util.Locale
 import java.util.SortedSet
 import java.util.TreeMap
 import java.util.TreeSet
+import java.util.function.BiFunction
 import javax.sql.DataSource
 
 class DbOperationsTest : AbstractJdbcTest() {
@@ -113,16 +114,21 @@ class DbOperationsTest : AbstractJdbcTest() {
             Person(id!!, firstName, lastName)
         }
 
+        val javaTypedPersonConverter = BiFunction<ResultSet, Int, Person?> { rs, index -> personConverter.invoke(rs, index) }
+
         // Act
-        val people = DbOperations.readAndConvert(dataSource, sql, personConverter)
-            .map { Pair(it.id, it) }
-            .toMap()
+        val people = DbOperations.readAndConvert(dataSource, sql, personConverter).associateBy { it.id }
+        val javaPeople = DbOperations.readAndConvert(dataSource, sql, javaTypedPersonConverter).associateBy { it.id }
 
         // Assert
         assertThat(people.size).isEqualTo(2)
+        assertThat(javaPeople.size).isEqualTo(2)
 
         assertThat(people[1]?.lastName).isEqualTo("Jörelid")
         assertThat(people[2]?.lastName).isEqualTo("Wendels")
+
+        assertThat(javaPeople[1]?.lastName).isEqualTo("Jörelid")
+        assertThat(javaPeople[2]?.lastName).isEqualTo("Wendels")
     }
 
     @Test
@@ -202,7 +208,7 @@ class DbOperationsTest : AbstractJdbcTest() {
         val sql = "select p.id, p.firstName, p.lastName, pet.id, pet.petName, pet.petType from person p " +
             "join pet_to_person ptp on p.id = ptp.personId " +
             "join pet on pet.id = ptp.petId " +
-            "order by p.id, pet.id";
+            "order by p.id, pet.id"
 
         val personAndPetConverter = { rs: ResultSet, _: Int ->
 

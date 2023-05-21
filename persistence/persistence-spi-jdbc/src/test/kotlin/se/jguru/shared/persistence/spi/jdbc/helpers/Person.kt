@@ -9,7 +9,7 @@ class Person @JvmOverloads constructor(
     val pets : MutableSet<Pet> = mutableSetOf()) : Serializable, Comparable<Person> {
 
     override fun toString(): String {
-        val petDesc = when(pets.isNullOrEmpty()) {
+        val petDesc = when(pets.isEmpty()) {
             true -> "<no pets>"
             else -> pets.map { "${it.type}: ${it.name}" }.sorted().reduce { acc, s -> "$acc, $s" }
         }
