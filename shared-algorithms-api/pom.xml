@@ -16,7 +16,7 @@
     <groupId>se.jguru.shared.algorithms.api</groupId>
     <artifactId>jguru-shared-algorithms-api</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: Algorithms API (${project.packaging}, version ${project.version})</description>
@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.2.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

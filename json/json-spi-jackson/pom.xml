@@ -17,7 +17,7 @@
     <groupId>se.jguru.shared.json.spi.jackson</groupId>
     <artifactId>jguru-shared-json-spi-jackson</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
     <description>jGuru Shared: JSON Jackson SPI (${project.packaging}, version ${project.version})</description>
@@ -40,7 +40,7 @@
             <dependency>
                 <groupId>se.jguru.shared.bom</groupId>
                 <artifactId>jguru-shared-bom</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.2.1-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>se.jguru.shared.algorithms.api</groupId>
             <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.2.1-SNAPSHOT</version>
         </dependency>
 
         <!--
@@ -143,53 +143,7 @@
     <!-- +=============================================== -->
     <!-- | Section 3:  Build settings                     -->
     <!-- +=============================================== -->
-    <build>
-        <plugins>
 
-            <!--
-                Provides Plantuml integration into site deployments.
-
-                Why:  Convert Plantuml (*.puml) documents to png images, for use in site documentation.
-                Used: Site lifecycle, mvn site.
-            -->
-            <plugin>
-                <groupId>com.github.jeluard</groupId>
-                <artifactId>plantuml-maven-plugin</artifactId>
-                <version>7954</version>
-                <configuration>
-                    <sourceFiles>
-                        <directory>${basedir}</directory>
-                        <includes>
-                            <include>src/site/**/*.puml</include>
-                        </includes>
-                    </sourceFiles>
-                    <outputDirectory>${project.build.directory}/site/images/plantuml</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate-plantuml-diagrams</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <phase>pre-site</phase>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <!--
-                        NOTE!
-
-                        Do not upgrade the plantuml dependency above version 8030, as those plantuml releases
-                        are not binary compatible with the plugin version 7954.
-                    -->
-                    <dependency>
-                        <groupId>net.sourceforge.plantuml</groupId>
-                        <artifactId>plantuml</artifactId>
-                        <version>8030</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>
 
     <!-- +=============================================== -->
     <!-- | Section 4:  External systems                   -->

@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory
 import java.sql.ResultSet
 import java.sql.Statement
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.function.BiFunction
+import java.util.function.Function
 import javax.sql.DataSource
 
 /**
@@ -96,6 +98,29 @@ object DbOperations {
      * @param dataSource The [DataSource] used to fire the SQL
      * @param sql The SQL to fire
      * @param rowDataConverter The [RowDataConverter] used to convert each row within
+     * the [ResultSet] into a T domain object, typecast to a Java [BiFunction]
+     * @param parameters The parameters for the SQL query, or empty if no parameters are needed.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun <T> readAndConvert(dataSource: DataSource,
+                           sql: String,
+                           rowDataConverter: BiFunction<ResultSet, Int, T?>,
+                           parameters: List<Any?> = mutableListOf()): List<T> =
+        readAndConvert(dataSource,
+                       sql,
+                       object:Function2<ResultSet, Int, T?> {
+                           override fun invoke(rs: ResultSet, index: Int): T? = rowDataConverter.apply(rs, index)
+                       },
+                       parameters)
+
+    /**
+     * Fires the SQL statement into a connection obtained from the supplied DataSource,
+     * then applies the RowDataConverter to convert each row into a T product.
+     *
+     * @param dataSource The [DataSource] used to fire the SQL
+     * @param sql The SQL to fire
+     * @param rowDataConverter The [RowDataConverter] used to convert each row within
      * the [ResultSet] into a T domain object.
      * @param parameters The parameters for the SQL query, or empty if no parameters are needed.
      */
@@ -150,7 +175,7 @@ object DbOperations {
 
                     if (log.isDebugEnabled) {
 
-                        val buffer = StringBuilder("Retrieved result with [$colCount] columns:\n")
+                        val buffer = StringBuilder("Retrieved result with [$colCount] columns:\n")
 
                         for (index in 1..colCount) {
                             buffer.append("Column [$index/$colCount]: \"${rsMetadata.getColumnName(index)}\" " +
@@ -166,6 +191,8 @@ object DbOperations {
                         val converted = rowDataConverter.invoke(rs, index.incrementAndGet())
 
                         if (converted != null) {
+
+                            @Suppress("UNCHECKED_CAST")
                             toReturn.add(converted as T)
                         }
                     }
@@ -176,6 +203,32 @@ object DbOperations {
         // All Done.
         return toReturn
     }
+
+    /**
+     * Convenience method to update all data from the supplied DataImportResult into the database.
+     * Does not retrieve auto-generated Primary Keys, since no new records are created in
+     * a SQL UPDATE or SQL DELETE statement.
+     *
+     * @param dataSource The DataSource where data should be inserted.
+     * @param preparedStatementSQL The SQL for the prepared statement.
+     * @param valueHoldersToUpdate The objects containing values to update (i.e. value holder objects).
+     * @param parameterFactory a Java [Function] which should provide an array containing the arguments
+     * produced by an element to be updated within the database. The arguments should match the supplied
+     * preparedStatementSQL.
+     */
+    @JvmStatic
+    fun <T> update(dataSource: DataSource,
+                   preparedStatementSQL: String,
+                   valueHoldersToUpdate: List<T>,
+                   closeOnCompletion : Boolean = false,
+                   parameterFactory: Function<T, Array<Any?>>): DbModificationMetadata =
+        update(dataSource,
+               preparedStatementSQL,
+               valueHoldersToUpdate,
+               closeOnCompletion,
+               object:Function1<T, Array<Any?>> {
+                   override fun invoke(theObject: T): Array<Any?> = parameterFactory.apply(theObject)
+               })
 
     /**
      * Convenience method to update all data from the supplied DataImportResult into the database.
@@ -215,9 +268,45 @@ object DbOperations {
      * is given by the `ResultSet.generatedPrimaryKeys` method.
      * @param closeOnCompletion if `true`, attempt to close the ResultSet on completion.
      * @param parameterFactory A lambda extracting parameters in the order defined within the [preparedStatementSQL])
+     * from a single object within the [toInsertOrUpdate] list, typecast to a Java [Function].
+     *
+     * @return An [DbModificationMetadata] object wrapping the metadata of the DB call.
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun <T> insertOrUpdate(dataSource: DataSource,
+                           preparedStatementSQL: String,
+                           toInsertOrUpdate: List<T>,
+                           idColumnNames: Array<String>? = null,
+                           closeOnCompletion : Boolean = false,
+                           parameterFactory: Function<T, Array<Any?>>): DbModificationMetadata {
+
+
+        return insertOrUpdate(dataSource,
+                              preparedStatementSQL,
+                              toInsertOrUpdate,
+                              idColumnNames,
+                              closeOnCompletion,
+                              object:Function1<T, Array<Any?>> {
+                                  override fun invoke(theObject: T): Array<Any?> = parameterFactory.apply(theObject)
+                              })
+    }
+
+    /**
+     * Inserts or Updates database records in batched mode (i.e. using JDBC preparedStatement.executeBatch()).
+     *
+     * @param dataSource The [DataSource] to which the statements should be fired
+     * @param preparedStatementSQL The SQL of the prepared statement.
+     * @param toInsertOrUpdate The objects containing values to insert or update (i.e. value holder objects).
+     * @param idColumnNames If supplied, contains the names of ID columns whose (generated) values
+     * are returned within the [DbModificationMetadata] response. This provides a means to retrieve
+     * generated primary key values from the database after creating new records. The order of keys
+     * is given by the `ResultSet.generatedPrimaryKeys` method.
+     * @param closeOnCompletion if `true`, attempt to close the ResultSet on completion.
+     * @param parameterFactory A lambda extracting parameters in the order defined within the [preparedStatementSQL])
      * from a single object within the [toInsertOrUpdate] list.
      *
-     * @return An [DbModificationMetadata] object wrapping the
+     * @return An [DbModificationMetadata] object wrapping the metadata of the DB call.
      */
     @JvmStatic
     @JvmOverloads
@@ -294,11 +383,9 @@ object DbOperations {
                             }
 
                             when (generatedPKsInThisRow.size) {
-                                0 -> {
-                                    log.warn("Expected: at least 1 generated primary key, but got 0. [${idColumnNames?.size}]"
-                                    +
-                                    " Columns: " + idColumnNames?.reduce { acc, s -> "$acc, $s" } ?: "<nothing>")
-                                }
+                                0 -> log.warn("Expected: at least 1 generated primary key, but got 0. " +
+                                               "[${idColumnNames?.size}] Columns: " +
+                                              idColumnNames?.joinToString(","))
                                 1 -> generatedPrimaryKeys.add(generatedPKsInThisRow[0]!!)
                                 else -> generatedPrimaryKeys.add(generatedPKsInThisRow)
                             }
@@ -342,6 +429,29 @@ object DbOperations {
     }
 
     /**
+     * Retrieves the value from given column of the ResultSet supplied, taking into consideration that
+     * the retrieved value may be null.
+     *
+     * @param columnIndex The index of the column for which the value should be retrieved.
+     * @param resultSet The [ResultSet] from which the value should be retrieved.
+     * @param accessor The accessor method used to actually read the value, typecast into a [BiFunction]
+     *
+     * @return the value or `null` if the given column held a null value.
+     */
+    @JvmStatic
+    fun <T> getOrNull(columnIndex: Int,
+                      resultSet: ResultSet,
+                      accessor: BiFunction<Int, ResultSet, T>): T? {
+
+        val toReturn = accessor.apply(columnIndex, resultSet)
+
+        return when (resultSet.wasNull()) {
+            true -> null
+            else -> toReturn
+        }
+    }
+
+    /**
      * Retrieves the value from given column label of the ResultSet supplied, taking into
      * consideration that the retrieved value may be null.
      *
@@ -357,6 +467,29 @@ object DbOperations {
                       accessor: (columnLabel: String, rs: ResultSet) -> T): T? {
 
         val toReturn = accessor.invoke(columnLabel, resultSet)
+
+        return when (resultSet.wasNull()) {
+            true -> null
+            else -> toReturn
+        }
+    }
+
+    /**
+     * Retrieves the value from given column of the ResultSet supplied, taking into consideration that
+     * the retrieved value may be null.
+     *
+     * @param columnLabel The label of the column for which the value should be retrieved.
+     * @param resultSet The [ResultSet] from which the value should be retrieved.
+     * @param accessor The accessor method used to actually read the value, typecast into a [BiFunction]
+     *
+     * @return the value or `null` if the given column held a null value.
+     */
+    @JvmStatic
+    fun <T> getOrNull(columnLabel: String,
+                      resultSet: ResultSet,
+                      accessor: BiFunction<String, ResultSet, T>): T? {
+
+        val toReturn = accessor.apply(columnLabel, resultSet)
 
         return when (resultSet.wasNull()) {
             true -> null
