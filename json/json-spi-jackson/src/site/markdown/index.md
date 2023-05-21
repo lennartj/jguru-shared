@@ -26,4 +26,10 @@ However, stereotypical use of the two main operations (serialization and deseria
 #### Deserializing an object from a JSON string
 
     // Deserialize myCar from a JSON formatted String 
-    val deserialized: Car = JacksonAlgorithms.deserialize(jsonForm, Car::class.java)      
+    val deserialized: Car = JacksonAlgorithms.deserialize(jsonForm, Car::class.java)
+
+### Dependency Graph
+
+The dependency graph for this project is shown below:
+
+![Dependency Graph](./images/dependency_graph.png)

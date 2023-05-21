@@ -149,4 +149,10 @@ we want to return from an insert SQL statement. This takes the form of an array:
         val genPKs = insertNicknamesMetadata.generatedPrimaryKeys 
         
 The List of retrieved generated keys has the signature `List<Any?>` and contains the generated primary keys
-in the order returned by the database.         
+in the order returned by the database.   
+
+### Dependency Graph
+
+The dependency graph for this project is shown below:
+
+![Dependency Graph](./images/dependency_graph.png) 
