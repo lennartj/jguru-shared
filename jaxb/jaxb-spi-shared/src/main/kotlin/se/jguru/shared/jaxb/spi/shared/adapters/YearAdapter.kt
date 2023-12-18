@@ -21,15 +21,12 @@
  */
 package se.jguru.shared.jaxb.spi.shared.adapters
 
-import java.time.Year
-import java.time.format.DateTimeFormatter
 import jakarta.xml.bind.annotation.XmlTransient
 import jakarta.xml.bind.annotation.adapters.XmlAdapter
+import java.time.Year
 
 /**
  * XML Adapter class to handle Java 8 [Year] - which will convert to and from Int.
- *
- * @param formatter The [DateTimeFormatter] used to render date strings.
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */

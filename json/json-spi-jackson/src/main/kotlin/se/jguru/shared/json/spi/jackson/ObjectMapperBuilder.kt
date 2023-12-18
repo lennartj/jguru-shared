@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import se.jguru.shared.json.spi.jackson.custom.SimplifiedFormatModule
@@ -159,7 +160,14 @@ class ObjectMapperBuilder(private val toReturn: ObjectMapper = ObjectMapper()) {
             .withModule(Jdk8Module())
             .withModule(JavaTimeModule())
             .withModule(SimplifiedFormatModule())
-            .withModule(KotlinModule())
+            .withModule(KotlinModule.Builder()
+                            .withReflectionCacheSize(512)
+                            .configure(KotlinFeature.NullToEmptyCollection, false)
+                            .configure(KotlinFeature.NullToEmptyMap, false)
+                            .configure(KotlinFeature.NullIsSameAsDefault, false)
+                            .configure(KotlinFeature.SingletonSupport, false)
+                            .configure(KotlinFeature.StrictNullChecks, false)
+                            .build())
             .withTimeZone(TimeZone.getDefault())
             .build()
     }

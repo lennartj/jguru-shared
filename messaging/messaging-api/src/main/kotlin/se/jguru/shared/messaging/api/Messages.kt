@@ -57,7 +57,7 @@ object Messages {
     @JvmStatic
     fun writeToBody(from: Map<String, *>, to: MapMessage) {
 
-        from.forEach { key, value ->
+        from.forEach { (key, value) ->
             when (value) {
                 is Boolean -> to.setBoolean(key, value)
                 is Byte -> to.setByte(key, value)

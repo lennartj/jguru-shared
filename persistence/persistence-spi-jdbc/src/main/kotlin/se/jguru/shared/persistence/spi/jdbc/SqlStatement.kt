@@ -81,7 +81,7 @@ open class SqlStatement @JvmOverloads constructor(
 
 
         // Join in manual substitutions
-        SqlTemplateSubstitution.values()
+        SqlTemplateSubstitution.entries
             .filter { !it.isSynthetic }
             .forEach { allSubstitutions[it] = substitutionMap[it] ?: "" }
 

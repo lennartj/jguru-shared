@@ -24,7 +24,6 @@ package se.jguru.shared.json.jackson.example
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
-import se.jguru.shared.json.jackson.example.Car
 
 /**
  * Driver entity.

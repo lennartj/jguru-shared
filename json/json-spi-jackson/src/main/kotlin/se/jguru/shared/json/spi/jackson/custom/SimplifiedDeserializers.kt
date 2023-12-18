@@ -47,6 +47,7 @@ abstract class AbstractDateTimeFormatterDeserializer<T : TemporalAccessor>(
     private val parseMethod: (toParse: String, formatter: DateTimeFormatter) -> T
 ) : StdDeserializer<T>(handledType) {
 
+    @Suppress("UNCHECKED_CAST")
     override fun deserialize(parser: JsonParser, context: DeserializationContext): T? {
 
         if (parser.hasToken(JsonToken.VALUE_STRING)) {
@@ -171,6 +172,7 @@ open class ZonedDateTimeDeserializer(
  */
 open class DurationDeserializer : StdDeserializer<Duration>(Duration::class.java) {
 
+    @Suppress("UNCHECKED_CAST")
     override fun deserialize(parser: JsonParser, context: DeserializationContext): Duration? {
 
         if (parser.hasToken(JsonToken.VALUE_STRING)) {
@@ -206,6 +208,7 @@ open class DurationDeserializer : StdDeserializer<Duration>(Duration::class.java
  */
 open class MonthDayDeserializer : StdDeserializer<MonthDay>(MonthDay::class.java) {
 
+    @Suppress("UNCHECKED_CAST")
     override fun deserialize(parser: JsonParser, context: DeserializationContext): MonthDay? {
 
         if (parser.hasToken(JsonToken.VALUE_STRING)) {
@@ -243,6 +246,7 @@ open class MonthDayDeserializer : StdDeserializer<MonthDay>(MonthDay::class.java
  */
 open class PeriodDeserializer : StdDeserializer<Period>(Period::class.java) {
 
+    @Suppress("UNCHECKED_CAST")
     override fun deserialize(parser: JsonParser, context: DeserializationContext): Period? {
 
         if (parser.hasToken(JsonToken.VALUE_STRING)) {

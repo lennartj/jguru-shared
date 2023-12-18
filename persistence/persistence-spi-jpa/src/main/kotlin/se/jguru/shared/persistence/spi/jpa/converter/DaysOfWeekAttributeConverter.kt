@@ -62,7 +62,7 @@ open class DaysOfWeekAttributeConverter : AttributeConverter<SortedSet<DayOfWeek
                     toReturn.add(DayOfWeek.of(Integer.parseInt(currentToken)))
                 } catch (e: Exception) {
 
-                    val permittedValues = DayOfWeek.values()
+                    val permittedValues = DayOfWeek.entries.toTypedArray()
                         .sorted()
                         .map { a -> "${a.value}" }
                         .reduce { acc, current -> "$acc,$current" }

@@ -72,7 +72,7 @@ open class Person(
         }
 
         // Delegate to internal state
-        val that = other as Person
+        val that = other
         return this.name == that.name && this.age == that.age
     }
 

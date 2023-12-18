@@ -125,11 +125,11 @@ class MavenDependencyInformation(val groupID: String,
             }
 
             // Check sanity on the scope value
-            val scope = DependencyScope.values().filter { it.mavenValue.equals(scopeString, true) }
+            val scope = DependencyScope.entries.filter { it.mavenValue.equals(scopeString, true) }
             if (scope.size != 1) {
                 throw IllegalArgumentException("Could not interpret Maven scope for Group/Artifact " +
                     "[$groupID/$artifactID]. Found: $scopeString, Required one of: " +
-                    DependencyScope.values().map { it.mavenValue }.reduce { l, r -> "$l, $r" })
+                    DependencyScope.entries.map { it.mavenValue }.reduce { l, r -> "$l, $r" })
             }
 
             // All Done.

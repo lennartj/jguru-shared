@@ -28,6 +28,7 @@ import java.util.TreeMap
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
+@Suppress("RemoveRedundantQualifierName")
 class JmsCompliantMap : TreeMap<String, Any>() {
 
     /**

@@ -45,6 +45,7 @@ import javax.sql.DataSource
  * @param classLoader The [ClassLoader] used to load JPA domain classes. This should include the classpath of the
  * JARs containing your Entity domain model classes.
  */
+@Suppress("RedundantModalityModifier")
 @UseOpenMembers
 open class DataSourcePersistenceUnitInfo @JvmOverloads constructor(
     private val datasource: DataSource,

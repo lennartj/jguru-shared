@@ -21,17 +21,17 @@
  */
 package se.jguru.shared.messaging.api
 
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.io.Serializable
-import java.util.SortedMap
-import java.util.TreeMap
 import jakarta.jms.Destination
 import jakarta.jms.JMSContext
 import jakarta.jms.Message
 import jakarta.jms.Queue
 import jakarta.jms.Session
 import jakarta.jms.Topic
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
+import java.io.Serializable
+import java.util.SortedMap
+import java.util.TreeMap
 
 /**
  * Simplified helper assisting in creating destinations and sending messages.
@@ -91,6 +91,7 @@ abstract class MessagingHelper {
  *
  * @param jmsSession The JMS Session from which to acquire the JMS bound objects.
  */
+@Suppress("MemberVisibilityCanBePrivate")
 class JmsSessionMessagingHelper(val jmsSession: Session) : MessagingHelper() {
 
     override fun createQueue(name: String): Queue = jmsSession.createQueue(name)
@@ -188,6 +189,7 @@ class JmsSessionMessagingHelper(val jmsSession: Session) : MessagingHelper() {
  *
  * @param jmsContext The JMSContext from which to acquire the JMS bound objects.
  */
+@Suppress("MemberVisibilityCanBePrivate")
 class JmsContextMessagingHelper(val jmsContext: JMSContext) : MessagingHelper() {
 
     override fun createQueue(name: String): Queue = jmsContext.createQueue(name)

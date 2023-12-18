@@ -175,7 +175,7 @@ object JmxAlgorithms {
     @JvmStatic
     fun getMBeanInterfaceName(objectName: ObjectName) : String {
 
-        val info = JmxAlgorithms.getPlatformServer().getMBeanInfo(objectName)
+        val info = getPlatformServer().getMBeanInfo(objectName)
         return "" + info.descriptor.getFieldValue(JMX_INTERFACE_TYPENAME)
     }
 

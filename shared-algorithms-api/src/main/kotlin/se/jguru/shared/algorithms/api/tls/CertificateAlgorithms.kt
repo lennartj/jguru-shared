@@ -356,7 +356,7 @@ object CertificateAlgorithms {
 
         // #2) Write the KeyStore file.
         //
-        store.store(FileOutputStream(file), storePassword.toCharArray());
+        store.store(FileOutputStream(file), storePassword.toCharArray())
     }
 
     /**
