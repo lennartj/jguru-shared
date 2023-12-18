@@ -38,7 +38,7 @@ code sample below:
   
       // Send a message with the JMS headers extracted from the JmsCompliantMap and given body.
       // Since the body is a String, a JMS TextMessage will be created and sent.
-      final String jmsMessageID = messagingHelper.send(sentProperties, "This is a message body", destination);
+      final String jmsMessageID = messagingHelper.sendMessage(sentProperties, "This is a message body", destination);
       
 #### Kotlin: Sending a JMS Message
 
@@ -53,7 +53,17 @@ code sample below:
       
       // Send a message with the JMS headers extracted from the JmsCompliantMap and given body.
       // Since the body is a String, a JMS TextMessage will be created and sent.
-      val jmsMessageID = messagingHelper.send(sentProperties, "This is a message body", destination)      
+      val jmsMessageID = messagingHelper.send(sentProperties, "This is a message body", destination)
+
+#### Kotlin: Copy properties from JMS Message
+
+Use the simplified helper to extract all properties from the JMS Message to a SortedMap:
+
+      // Retrieve the JMS Message from the broker         
+      val msg : Message = ...
+      
+      // Extract the JMS properties from the Message 
+      val messageProps : JmsCompliantMap = Messages.getPropertyMap(msg)
       
 #### Java: Creating a Queue
 
