@@ -2,7 +2,7 @@
  * #%L
  * Nazgul Project: jguru-shared-persistence-spi-jpa
  * %%
- * Copyright (C) 2018 - 2020 jGuru Europe AB
+ * Copyright (C) 2018 - 2023 jGuru Europe AB
  * %%
  * Licensed under the jGuru Europe AB license (the "License"), based
  * on Apache License, Version 2.0; you may not use this file except
