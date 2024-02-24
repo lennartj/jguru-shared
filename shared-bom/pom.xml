@@ -35,19 +35,20 @@
         <!--
             Build-controlled dependencies.
         -->
-        <jackson.version>2.16.0</jackson.version>
+        <jackson.version>2.16.1</jackson.version>
         <jsonSchema.version>1.0.29</jsonSchema.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
 
         <jakarta-xml-api.version>4.0.1</jakarta-xml-api.version>
-        <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
+        <jaxb2-maven-plugin.version>3.1.0</jaxb2-maven-plugin.version>
         <metro.version>4.0.4</metro.version>
         <eclipselink.version>4.0.2</eclipselink.version>
         <dbunit.version>2.7.3</dbunit.version>
         <xmlunit.version>2.9.1</xmlunit.version>
+        <junit.version>5.10.2</junit.version>
 
         <osgi.version>6.0.0</osgi.version>
-        <artemis.version>2.31.2</artemis.version>
+        <artemis.version>2.32.0</artemis.version>
         
         <slf4j.version>2.0.9</slf4j.version>
         <log4j2.version>2.20.0</log4j2.version>
@@ -111,7 +112,7 @@
             <dependency>
                 <groupId>com.github.victools</groupId>
                 <artifactId>jsonschema-generator</artifactId>
-                <version>4.33.0</version>
+                <version>4.33.1</version>
             </dependency>
 
             <!--
@@ -314,19 +315,19 @@
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>3.24.2</version>
+                <version>3.25.3</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
-                <version>5.10.1</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.10.1</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

@@ -146,13 +146,26 @@ class ObjectMapperBuilder(private val toReturn: ObjectMapper = ObjectMapper()) {
     companion object {
 
         /**
+         * Emits a KotlinModule.Builder with default settings.
+         */
+        @JvmStatic
+        fun defaultKotlinModuleBuilder(): KotlinModule.Builder = KotlinModule.Builder()
+            .withReflectionCacheSize(512)
+            .configure(KotlinFeature.NullToEmptyCollection, false)
+            .configure(KotlinFeature.NullToEmptyMap, false)
+            .configure(KotlinFeature.NullIsSameAsDefault, false)
+            .configure(KotlinFeature.SingletonSupport, false)
+            .configure(KotlinFeature.StrictNullChecks, false)
+
+        /**
          * Retrieves a default ObjectMapper, with Kotlin, Java8 and ParameterNames module activated.
          * For Kotlin classes, use a `data class` target, to reduce the required amount of
          * annotations to `@JsonPropertyOrder`. A typical class definition is something like:
          * `@JsonPropertyOrder(value = ["name", "age"]) data class Person(val name : String, val age : Int)`
          */
         @JvmStatic
-        fun getDefault(): ObjectMapper = ObjectMapperBuilder()
+        @JvmOverloads
+        fun getDefault(kotlinModuleBuilder: KotlinModule.Builder = defaultKotlinModuleBuilder()): ObjectMapper = ObjectMapperBuilder()
             .withPrettyPrinter()
             .withNullFieldInclusion()
             .withNamingStrategy()
@@ -160,14 +173,7 @@ class ObjectMapperBuilder(private val toReturn: ObjectMapper = ObjectMapper()) {
             .withModule(Jdk8Module())
             .withModule(JavaTimeModule())
             .withModule(SimplifiedFormatModule())
-            .withModule(KotlinModule.Builder()
-                            .withReflectionCacheSize(512)
-                            .configure(KotlinFeature.NullToEmptyCollection, false)
-                            .configure(KotlinFeature.NullToEmptyMap, false)
-                            .configure(KotlinFeature.NullIsSameAsDefault, false)
-                            .configure(KotlinFeature.SingletonSupport, false)
-                            .configure(KotlinFeature.StrictNullChecks, false)
-                            .build())
+            .withModule(kotlinModuleBuilder.build())
             .withTimeZone(TimeZone.getDefault())
             .build()
     }
