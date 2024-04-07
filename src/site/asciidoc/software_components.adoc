@@ -1,6 +1,16 @@
-# Software components
+= Software components
+:toc-title: Table of Contents
+:toclevels: 3
+:sectnums:
+:sectnumlevels: 2
+:sectanchors:
+:sectlinks:
+:partnums:
+:toc:
+:icons: font
+:source-highlighter: rouge
 
-[Component-based software engineering](http://en.wikipedia.org/wiki/Component-based_software_engineering)
+http://en.wikipedia.org/wiki/Component-based_software_engineering
 defines a software component as:
 
 > An individual software component is a software package, a web service, a web resource,
@@ -9,7 +19,7 @@ defines a software component as:
 While this description is true, it is far too generic to use directly in a project. The Nazgul project structure
 therefore defines a software component in a more specific way.
 
-# Nazgul Software Components ("NSC")
+== Nazgul Software Components ("NSC")
 
 A Nazgul Software Component is implemented as a set of collaborating Maven projects,
 each with a separate role/purpose. The overall purpose of the software component is to
@@ -41,7 +51,6 @@ project - but not vice versa.
         <td><img src="../images/plantuml/modularity_components.png"
             style="margin:10px; border:1px solid black;" /></td>
     </tr>
-</table>
 
 Client projects using the code defined within an NSC should depend only on the model and API projects. As
 illustrated by the figure in the second row of the table above, a client component invokes on the Foo
@@ -49,7 +58,7 @@ component by importing a dependency on its API project (i.e. *foo_api* project).
 transitive dependency on the foo_model, all entities defined within the foo_model are also immediately availabile to
 the client project without a separate dependency import.
 
-## Maven projects of Nazgul project Software Components
+== Maven projects of Nazgul project Software Components
 
 The NSC realization defines all permissible maven project types as part of the Nazgul Tools: Codestyle project.
 Please refer to the documentation of the Codestyle project for full details.
@@ -84,14 +93,14 @@ works.
     </tr>
 </table>
 
-### POM structures: parents and dependencies
+=== POM structures: parents and dependencies
 
 While the images above may seem laden with many dependencies, they are accurate and illustrate
 the somewhat simple relations between project POM files. A parent relationship between a POM (and its parent POM) is
 shown below:
 
-<pre class="brush: xml" title="Example POM parent structure."><![CDATA[
-    ...
+[source,xml]
+----
     <parent>
         <groupId>se.jguru.nazgul.core.poms.core-api-parent</groupId>
         <artifactId>nazgul-core-api-parent</artifactId>
@@ -101,8 +110,7 @@ shown below:
 
     <groupId>se.jguru.nazgul.core.quickstart.analyzer.api</groupId>
     <artifactId>nazgul-core-analyzer-api</artifactId>
-    ...
-]]></pre>
+----
 
 In this case, the nazgul-core-analyzer-api project defines the nazgul-core-api-parent pom as its parent.
 Dependencies between POMs are marked with solid diamond-head arrows in the UML diagrams above,
@@ -110,7 +118,8 @@ and imply that one POM defines a dependency from its project's code to another a
 Three such dependencies are defined in the code snippet below (and the versions of the respective dependencies are
 defined within the parent of the pom illustrated).
 
-<pre class="brush: xml" title="Example POM dependencies."><![CDATA[
+[source,xml]
+----
      <!-- +=============================================== -->
      <!-- | Section 2:  Dependency (management) settings   -->
      <!-- +=============================================== -->
@@ -130,5 +139,5 @@ defined within the parent of the pom illustrated).
              <scope>test</scope>
          </dependency>
      </dependencies>
-]]></pre>
+----
 

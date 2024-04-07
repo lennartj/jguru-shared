@@ -13,20 +13,22 @@
         <relativePath />
     </parent>
 
-    <groupId>se.jguru.shared.json.jackson.example</groupId>
-    <artifactId>jguru-shared-json-jackson-example</artifactId>
-    <packaging>jar</packaging>
+    <groupId>se.jguru.shared.messaging.artemis.api</groupId>
+    <artifactId>jguru-shared-messaging-artemis-api</artifactId>
     <version>2.2.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
-    <description>jGuru Shared: Jackson SPI Example (${project.packaging}, version ${project.version})</description>
+    <description>jGuru Shared: Messaging Artemis API (${project.packaging}, version ${project.version})</description>
 
     <properties>
         <!--
             Define the name and type of this reactor
-        -->
-        <path.in.reactor>json/json-jackson-example</path.in.reactor>
+          -->
+        <path.in.reactor>messaging/artemis/messaging-artemis-api</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
+
+        <owasp.failOnError>true</owasp.failOnError>
     </properties>
 
     <!-- +=============================================== -->
@@ -43,21 +45,25 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <!--
             Internal dependencies.
         -->
+
+        <!--
+            External dependencies.
+        -->
         <dependency>
-            <groupId>se.jguru.shared.json.spi.jackson</groupId>
-            <artifactId>jguru-shared-json-spi-jackson</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>se.jguru.shared.algorithms.api</groupId>
-            <artifactId>jguru-shared-algorithms-api</artifactId>
-            <version>2.2.1-SNAPSHOT</version>
-            <scope>test</scope>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-core-client</artifactId>
         </dependency>
 
         <!--
@@ -73,23 +79,27 @@
             <artifactId>kotlin-test-junit5</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jakarta-server</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq.tooling</groupId>
+            <artifactId>activemq-junit</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.skyscreamer</groupId>
-            <artifactId>jsonassert</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
     </dependencies>
 
     <!-- +=============================================== -->
     <!-- | Section 3:  Build settings                     -->
     <!-- +=============================================== -->
-
 
     <!-- +=============================================== -->
     <!-- | Section 4:  External systems                   -->
