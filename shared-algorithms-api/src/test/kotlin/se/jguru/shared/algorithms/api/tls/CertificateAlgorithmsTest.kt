@@ -109,7 +109,7 @@ class CertificateAlgorithmsTest {
                 //      Subject Name: [C]: SE, [O]: AddTrust AB, [OU]: AddTrust External TTP Network, [CN]: AddTrust External CA Root
                 //      Algorithm : SHA1withRSA
                 //
-                // println("$key: $certificateClassName ($attributes) $desc")
+                println("$key: $certificateClassName ($attributes) $desc")
             }
     }
 

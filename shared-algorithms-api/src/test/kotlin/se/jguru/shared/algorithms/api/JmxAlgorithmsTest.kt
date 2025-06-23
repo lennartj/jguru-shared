@@ -12,7 +12,6 @@ import javax.management.MBeanServer
 import javax.management.ObjectInstance
 import javax.management.ObjectName
 
-
 /**
  *
  * @author <a href="mailto:lj@jguru.se">Lennart J&ouml;relid</a>, jGuru Europe AB

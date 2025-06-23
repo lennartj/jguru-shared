@@ -58,7 +58,7 @@ class NetworkAlgorithmsTest {
 
         foundLocalIPv4Addresses = allLocalIPv4Addresses!!.isNotEmpty()
         foundLocalIPv6Addresses = allLocalIPv6Addresses!!.isNotEmpty()
-        foundPublicIPv4Addresses = allLocalIPv4Addresses!!.filter { !it.isLoopbackAddress }.any()
+        foundPublicIPv4Addresses = allLocalIPv4Addresses!!.any { !it.isLoopbackAddress }
     }
 
     @Test

@@ -302,7 +302,7 @@ object Introspection {
                         loader: ClassLoader = Thread.currentThread().contextClassLoader): Manifest {
 
         val codeSource = getCodeSourceFor(aClass)
-            ?: return Manifest(loader.getResource(MANIFEST_RESOURCE).openStream())
+            ?: return Manifest(loader.getResource(MANIFEST_RESOURCE)?.openStream())
         val codeSourceLocation = codeSource.location
 
         // All Done.

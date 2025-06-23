@@ -94,4 +94,8 @@ open class DataSourcePersistenceUnitInfo @JvmOverloads constructor(
     override fun excludeUnlistedClasses(): Boolean = false
 
     override fun getValidationMode(): ValidationMode = ValidationMode.NONE
+
+    override fun getScopeAnnotationName(): String? = null
+
+    override fun getQualifierAnnotationNames(): List<String?>? = listOf()
 }
