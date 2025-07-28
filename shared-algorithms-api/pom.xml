@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- +=============================================== -->
-    <!-- | Section 1:  Project information                -->
+    <!-- | Section 1: Project information                 -->
     <!-- +=============================================== -->
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
-        <version>3.2.1</version>
+        <version>4.0.0</version>
         <relativePath />
     </parent>
 
@@ -32,7 +32,7 @@
     </properties>
 
     <!-- +=============================================== -->
-    <!-- | Section 2:  Dependency (management) settings   -->
+    <!-- | Section 2: Dependency (management) settings    -->
     <!-- +=============================================== -->
     <dependencyManagement>
         <dependencies>
@@ -72,11 +72,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test-junit5</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>
             <scope>test</scope>
@@ -85,7 +80,27 @@
         <dependency>
             <groupId>com.github.h-thurow</groupId>
             <artifactId>simple-jndi</artifactId>
-            <version>0.23.0</version>
+            <version>0.25.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -93,17 +108,11 @@
             <groupId>org.jboss</groupId>
             <artifactId>jboss-vfs</artifactId>
             <scope>test</scope>
-            <!-- exclusions>
-                <exclusion>
-                    <groupId>org.jboss.logging</groupId>
-                    <artifactId>jboss-logging</artifactId>
-                </exclusion>
-            </exclusions -->
         </dependency>
     </dependencies>
 
     <!-- +=============================================== -->
-    <!-- | Section 3:  Build settings                     -->
+    <!-- | Section 3: Build settings                      -->
     <!-- +=============================================== -->
     <build>
         <plugins>
@@ -154,7 +163,7 @@
     </build>
 
     <!-- +=============================================== -->
-    <!-- | Section 4:  External systems                   -->
+    <!-- | Section 4: External systems                    -->
     <!-- +=============================================== -->
     <!--
         Define the Continuous Build server address.

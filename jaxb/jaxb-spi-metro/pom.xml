@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-api-parent</artifactId>
-        <version>3.2.1</version>
+        <version>4.0.0</version>
         <relativePath />
     </parent>
 
@@ -27,7 +27,7 @@
         -->
         <path.in.reactor>jaxb/jaxb-spi-metro</path.in.reactor>
         <reactor.name>jguru-shared</reactor.name>
-        <jaxb.version>4.0.2</jaxb.version>
+        <jaxb.version>4.0.5</jaxb.version>
 
         <owasp.failOnError>true</owasp.failOnError>
     </properties>

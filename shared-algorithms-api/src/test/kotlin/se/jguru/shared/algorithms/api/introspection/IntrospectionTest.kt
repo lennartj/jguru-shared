@@ -4,6 +4,7 @@ import org.apache.logging.log4j.core.Core
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import se.jguru.shared.algorithms.api.Validate
+import java.util.Locale.getDefault
 import java.util.TreeMap
 
 /**
@@ -94,7 +95,7 @@ class IntrospectionTest {
     fun validateSystemPropertiesAndFiltering() {
 
         // Assemble
-        val versionFilter : (String) -> Boolean = { aKey -> aKey.toLowerCase().contains("version")}
+        val versionFilter : (String) -> Boolean = { aKey -> aKey.lowercase(getDefault()).contains("version")}
 
         // Act
         val allSystemProperties = Introspection.getSystemProperties()
