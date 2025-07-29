@@ -9,7 +9,7 @@
     <parent>
         <groupId>se.jguru.codestyle.poms.kotlin</groupId>
         <artifactId>jguru-codestyle-kotlin-parent</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.1-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -46,10 +46,9 @@
         <dbunit.version>2.8.0</dbunit.version>
         <xmlunit.version>2.10.3</xmlunit.version>
         <junit.version>5.13.1</junit.version>
-        <junit-platform.version>1.13.1</junit-platform.version>
 
         <osgi.version>6.0.0</osgi.version>
-        <artemis.version>2.41.0</artemis.version>
+        <artemis.version>2.42.0</artemis.version>
 
         <slf4j.version>2.1.0-alpha1</slf4j.version>
         <log4j2.version>2.25.0</log4j2.version>
@@ -321,26 +320,14 @@
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-launcher</artifactId>
-                <version>${junit-platform.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.platform</groupId>
-                <artifactId>junit-platform-engine</artifactId>
-                <version>${junit-platform.version}</version>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -390,22 +377,16 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>org.apache.activemq.tooling</groupId>
-                <artifactId>activemq-junit</artifactId>
-                <version>6.1.7</version>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>artemis-junit-5</artifactId>
+                <version>${artemis.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-unit-tests</artifactId>
-                <version>6.1.7</version>
+                <artifactId>artemis-unit-test-support</artifactId>
+                <version>${artemis.version}</version>
                 <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.commons</groupId>
-                        <artifactId>commons-lang3</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <!--
