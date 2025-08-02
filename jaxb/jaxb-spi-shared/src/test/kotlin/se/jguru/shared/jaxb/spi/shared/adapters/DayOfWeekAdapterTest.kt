@@ -2,12 +2,16 @@ package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.DayOfWeek
 
 /**
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 class DayOfWeekAdapterTest {
+
+    private val log : Logger = LoggerFactory.getLogger(DayOfWeekAdapterTest::class.java)
 
     private val transportForm = DayOfWeek.FRIDAY.value
     private val objectForm = DayOfWeek.FRIDAY
@@ -20,7 +24,7 @@ class DayOfWeekAdapterTest {
 
         // Act
         val result = unitUnderTest.marshal(objectForm)
-        // System.out.println("Got: " + result);
+        log.debug("Got: $result")
 
         // Assert
         assertThat(unitUnderTest.marshal(null)).isNull()

@@ -3,10 +3,14 @@ package se.jguru.shared.json.jackson.example
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.json.spi.jackson.JacksonAlgorithms
 
 class ExampleCode {
+
+    private val log : Logger = LoggerFactory.getLogger(ExampleCode::class.java)
 
     @Test
     fun showSerializationUsage() {
@@ -102,7 +106,7 @@ class ExampleCode {
         //
         // Printout the actual data.
         //
-        println("\n[$title]\n\n$actual\n")
+        log.info("\n[$title]\n\n$actual\n")
 
         //
         // Assert that the actual data is identical to the resourcePathToExpectedData

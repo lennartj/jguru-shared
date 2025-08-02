@@ -31,7 +31,7 @@ class ZoneDateTimeAdapterTest {
 
         // Act
         val result = unitUnderTest.marshal(objectForm)
-        // log.info("Got: $result");
+        // log.info("Got: $result")
 
         // Assert
         assertThat(unitUnderTest.marshal(null)).isNull()

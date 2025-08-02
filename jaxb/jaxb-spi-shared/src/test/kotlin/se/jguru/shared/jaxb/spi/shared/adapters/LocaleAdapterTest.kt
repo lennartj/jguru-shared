@@ -2,6 +2,8 @@ package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.Arrays
 import java.util.Locale
 import java.util.TreeMap
@@ -12,14 +14,16 @@ import java.util.TreeMap
  */
 class LocaleAdapterTest {
 
+    private val log : Logger = LoggerFactory.getLogger(LocaleAdapterTest::class.java)
+
     private val transportForms = arrayOf(null, "se", "se", "se-SE", "se-SE", "se-SE-x-lvariant-FI")
     private val expectedTransportForms = arrayOf(null, "se", "se", "se-SE", "se-SE", "se-SE-x-lvariant-FI")
     private val objectForms = arrayOf(null,
-            Locale("se"),
-            Locale("se"),
-            Locale("se", "SE"),
-            Locale("se", "SE"),
-            Locale("se", "SE", "FI"))
+            Locale.of("se"),
+            Locale.of("se"),
+            Locale.of("se", "SE"),
+            Locale.of("se", "SE"),
+            Locale.of("se", "SE", "FI"))
 
     private val unitUnderTest = LocaleAdapter()
 
@@ -86,7 +90,7 @@ class LocaleAdapterTest {
             val reParsedValue = parsed[key]
 
             if (value != reParsedValue) {
-                println("[$key]: $value ($reParsedValue)")
+                log.info("[$key]: $value ($reParsedValue)")
             }
 
             // Check sanity

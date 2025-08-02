@@ -2,6 +2,8 @@ package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.Currency
 
 /**
@@ -9,34 +11,36 @@ import java.util.Currency
  */
 class CurrencyAdapterTest {
 
-    private val transportForm = "SEK"
-    private val objectForm = Currency.getInstance("SEK")
-    private val unitUnderTest = CurrencyAdapter()
+  private val log : Logger = LoggerFactory.getLogger(CurrencyAdapterTest::class.java)
 
-    @Test
-    fun validateConvertingToTransportForm() {
+  private val transportForm = "SEK"
+  private val objectForm = Currency.getInstance("SEK")
+  private val unitUnderTest = CurrencyAdapter()
 
-        // Assemble
+  @Test
+  fun validateConvertingToTransportForm() {
 
-        // Act
-        val result = unitUnderTest.marshal(objectForm)
-        // System.out.println("Got: " + result);
+    // Assemble
 
-        // Assert
-        assertThat(unitUnderTest.marshal(null)).isNull()
-        assertThat(result).isEqualTo(transportForm)
-    }
+    // Act
+    val result = unitUnderTest.marshal(objectForm)
+    // log.debug("Got: $result");
 
-    @Test
-    fun validateConvertingFromTransportForm() {
+    // Assert
+    assertThat(unitUnderTest.marshal(null)).isNull()
+    assertThat(result).isEqualTo(transportForm)
+  }
 
-        // Assemble
+  @Test
+  fun validateConvertingFromTransportForm() {
 
-        // Act
-        val result = unitUnderTest.unmarshal(transportForm)
+    // Assemble
 
-        // Assert
-        assertThat(unitUnderTest.unmarshal(null)).isNull()
-        assertThat(result).isEqualTo(objectForm)
-    }
+    // Act
+    val result = unitUnderTest.unmarshal(transportForm)
+
+    // Assert
+    assertThat(unitUnderTest.unmarshal(null)).isNull()
+    assertThat(result).isEqualTo(objectForm)
+  }
 }

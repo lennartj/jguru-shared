@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.json.spi.jackson.people.DrinkingPreferences
 import se.jguru.shared.json.spi.jackson.people.Person
@@ -23,9 +25,6 @@ import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import java.util.SortedMap
 import java.util.TreeMap
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 val stockholmTimezone : ZoneId = ZoneId.of("Europe/Stockholm")
 
@@ -34,6 +33,8 @@ val stockholmTimezone : ZoneId = ZoneId.of("Europe/Stockholm")
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 class JacksonAlgorithmsTest {
+
+    private val log : Logger = LoggerFactory.getLogger(JacksonAlgorithmsTest::class.java)
 
     // Shared state
     lateinit var prefs: DrinkingPreferences
@@ -108,7 +109,7 @@ class JacksonAlgorithmsTest {
 
         // Act
         val result = JacksonAlgorithms.serialize(prefs)
-        // println("Got: $result")
+        // log.debug("Got: $result")
 
         // Assert
         JSONAssert.assertEquals(expected, result, true)
@@ -143,6 +144,7 @@ class JacksonAlgorithmsTest {
 
         // Act
         val result = JacksonAlgorithms.serialize(dog)
+        // log.debug("Got: $result")
 
         // Assert
         JSONAssert.assertEquals(data, result, true)
@@ -185,7 +187,7 @@ class JacksonAlgorithmsTest {
             title = "The schema Title",
             description = "Some longwinded description"
         )
-        // println("Got: $result")
+        // log.debug("Got: $result")
         
         // Assert
         JSONAssert.assertEquals(expected, result, true)
@@ -199,7 +201,7 @@ class JacksonAlgorithmsTest {
 
         // Act
         val result = JacksonAlgorithms.serialize(timeFormats)
-        // println("Got: $result")
+        // log.debug("Got: $result")
 
         // Assert
         JSONAssert.assertEquals(expected, result, true)
@@ -213,7 +215,7 @@ class JacksonAlgorithmsTest {
 
         // Act
         val resurrected = JacksonAlgorithms.deserialize(data, TimeFormats::class.java)
-        // println("Got: $resurrected")
+        // log.debug("Got: $resurrected")
 
         // Assert
         assertThat(resurrected).isNotNull
@@ -233,7 +235,7 @@ class JacksonAlgorithmsTest {
 
         // Act
         val result = JacksonAlgorithms.serialize(collectionMap)
-        // println("Got: $result")
+        // log.debug("Got: $result")
 
         // Assert
         JSONAssert.assertEquals(expected, result, true)
@@ -244,11 +246,11 @@ class JacksonAlgorithmsTest {
 
         // Assemble
         val data = PropertyResources.readFully("testdata/simplified/sortedMap.json")
-        val mapper = ObjectMapperBuilder.getDefault()
+        // val mapper = ObjectMapperBuilder.getDefault()
 
         // Act
         val resurrected = JacksonAlgorithms.deserializeMap(data, Long::class.java, ArrayList::class.java)
-        // println("Got: $resurrected, of type ${resurrected::class.java.simpleName}")
+        log.debug("Got: {}, of type {}", resurrected, resurrected::class.java.simpleName)
 
         // Assert
         assertThat(resurrected).isNotNull

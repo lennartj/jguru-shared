@@ -11,12 +11,16 @@ import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.jaxb.spi.metro.people.Beverage
 import se.jguru.shared.jaxb.spi.metro.people.DrinkingPreferences
 import jakarta.xml.bind.JAXBContext
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 class MetroMarshallerAndUnmarshallerTest {
+
+    private val log : Logger = LoggerFactory.getLogger(MetroMarshallerAndUnmarshallerTest::class.java)
 
     // Shared state
     private var originalContextFactory: String? = null

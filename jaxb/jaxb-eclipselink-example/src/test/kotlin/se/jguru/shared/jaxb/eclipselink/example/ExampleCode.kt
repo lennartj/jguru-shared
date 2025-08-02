@@ -11,12 +11,16 @@ import org.xmlunit.diff.ElementSelectors
 import se.jguru.shared.algorithms.api.resources.PropertyResources
 import se.jguru.shared.jaxb.spi.eclipselink.MoxyMarshallerAndUnmarshaller
 import jakarta.xml.bind.JAXBContext
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  *
  * @author [Lennart J&ouml;relid](mailto:lj@jguru.se), jGuru Europe AB
  */
 class ExampleCode {
+
+    private val log : Logger = LoggerFactory.getLogger(ExampleCode::class.java)
 
     // Shared state
     lateinit var ale: Beverage
@@ -64,7 +68,7 @@ class ExampleCode {
 
         // Act
         val result = moxyMarsh.marshal(arrayOf(prefs))
-        // println("Got: $result")
+        log.debug("Got: $result")
 
         // Assert
         val normalizedDiff: Diff = DiffBuilder.compare(expected)

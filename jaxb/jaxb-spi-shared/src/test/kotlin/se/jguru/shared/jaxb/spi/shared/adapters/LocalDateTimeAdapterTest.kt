@@ -2,6 +2,8 @@ package se.jguru.shared.jaxb.spi.shared.adapters
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -12,6 +14,8 @@ import java.time.Month
  * @author <a href="mailto:lj@jguru.se">Lennart J&ouml;relid</a>, jGuru Europe AB
  */
 class LocalDateTimeAdapterTest {
+
+    private val log : Logger = LoggerFactory.getLogger(LocalDateTimeAdapterTest::class.java)
 
     private val transportForm = "2015-04-25T15:40:00"
     private val objectForm = LocalDateTime.of(
@@ -26,7 +30,7 @@ class LocalDateTimeAdapterTest {
 
         // Act
         val result = unitUnderTest.marshal(objectForm)
-        // System.out.println("Got: " + result);
+        log.debug("Got: $result")
 
         // Assert
         assertThat(unitUnderTest.marshal(null)).isNull()
