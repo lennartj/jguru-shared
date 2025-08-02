@@ -1,9 +1,9 @@
 dist: focal
 language: java
 env:
-    - MAVEN_VERSION=3.8.1
+    - MAVEN_VERSION=3.9.10
 jdk:
-    - openjdk11
+    - temurin-21
 addons:
     apt:
         packages:
