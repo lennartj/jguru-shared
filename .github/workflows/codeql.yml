@@ -32,16 +32,23 @@ jobs:
               uses: actions/setup-java@v4
               with:
                   java-version: '21'
-                  distribution: 'temurin' # Or another distribution like 'zulu', 'adopt'
+                  distribution: 'temurin'
 
             # Initializes the CodeQL tools for scanning.
             - name: Initialize CodeQL
               uses: github/codeql-action/init@v3
               with:
                   languages: ${{ matrix.language }}
+                  setup-python-dependencies: false
+              env:
+                  JAVA_HOME: ${{ env.JAVA_HOME_21_X64 }}
 
             - name: Build with Maven
               run: mvn -B clean install -DskipTests
+              env:
+                  JAVA_HOME: ${{ env.JAVA_HOME_21_X64 }}
 
             - name: Perform CodeQL Analysis
               uses: github/codeql-action/analyze@v3
+              env:
+                  JAVA_HOME: ${{ env.JAVA_HOME_21_X64 }}
