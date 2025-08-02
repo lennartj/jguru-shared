@@ -16,9 +16,9 @@ class LocaleAdapterTest {
 
     private val log : Logger = LoggerFactory.getLogger(LocaleAdapterTest::class.java)
 
-    private val transportForms = arrayOf(null, "se", "se", "se-SE", "se-SE", "se-SE-x-lvariant-FI")
-    private val expectedTransportForms = arrayOf(null, "se", "se", "se-SE", "se-SE", "se-SE-x-lvariant-FI")
-    private val objectForms = arrayOf(null,
+    private val transportForms = listOf(null, "se", "se", "se-SE", "se-SE", "se-SE-x-lvariant-FI")
+    private val expectedTransportForms = listOf(null, "se", "se", "se-SE", "se-SE", "se-SE-x-lvariant-FI")
+    private val objectForms = listOf(null,
             Locale.of("se"),
             Locale.of("se"),
             Locale.of("se", "SE"),
