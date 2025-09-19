@@ -14,16 +14,17 @@ import java.util.TreeMap
  */
 class LocaleAdapterTest {
 
-    private val log : Logger = LoggerFactory.getLogger(LocaleAdapterTest::class.java)
+    private val log: Logger = LoggerFactory.getLogger(LocaleAdapterTest::class.java)
 
     private val transportForms = listOf(null, "se", "se", "se-SE", "se-SE", "se-SE-x-lvariant-FI")
     private val expectedTransportForms = listOf(null, "se", "se", "se-SE", "se-SE", "se-SE-x-lvariant-FI")
     private val objectForms = listOf(null,
-            Locale.of("se"),
-            Locale.of("se"),
-            Locale.of("se", "SE"),
-            Locale.of("se", "SE"),
-            Locale.of("se", "SE", "FI"))
+                                     Locale.forLanguageTag("se"),
+                                     Locale.forLanguageTag("se"),
+                                     Locale.forLanguageTag("se-SE"),
+                                     Locale.forLanguageTag("se-SE"),
+                                     Locale.forLanguageTag("se-SE-x-lvariant-FI"))
+
 
     private val unitUnderTest = LocaleAdapter()
 
@@ -68,20 +69,20 @@ class LocaleAdapterTest {
         val theOddNonMatchingLanguageTag = "nn-NO"
         val languageTag2Locale = TreeMap<String, Locale>()
         Arrays.stream(Locale.getAvailableLocales())
-                .filter { c ->
+            .filter { c ->
 
-                    val languageTag = c.toLanguageTag()
+                val languageTag = c.toLanguageTag()
 
-                    // Perform the filtering
-                    !languageTag2Locale.keys.contains(languageTag) &&
-                            !theOddNonMatchingLanguageTag.equals(languageTag, ignoreCase = true)
-                }
-                .forEach { c -> languageTag2Locale.put(c.toLanguageTag(), c) }
+                // Perform the filtering
+                !languageTag2Locale.keys.contains(languageTag) &&
+                    !theOddNonMatchingLanguageTag.equals(languageTag, ignoreCase = true)
+            }
+            .forEach { c -> languageTag2Locale[c.toLanguageTag()] = c }
 
         // Act
         // languageTag2Locale.forEach((key1, value1) -> System.out.println("[" + key1 + "]: " + value1));
         val parsed = TreeMap<String, Locale>()
-        languageTag2Locale.keys.forEach { k -> parsed.put(k, Locale.forLanguageTag(k)) }
+        languageTag2Locale.keys.forEach { k -> parsed[k] = Locale.forLanguageTag(k) }
 
         // Assert
         assertThat(parsed.size.toLong()).isEqualTo(languageTag2Locale.size.toLong())
