@@ -21,7 +21,7 @@
 
     <groupId>se.jguru.shared</groupId>
     <artifactId>jguru-shared-reactor</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <url>${site.top.url}/${path.in.reactor}</url>
@@ -128,6 +128,6 @@
         <connection>${scm.connection.url}</connection>
         <developerConnection>${scm.devConnection.url}</developerConnection>
         <url>${scm.url}</url>
-        <tag>jguru-shared-3.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 </project>
